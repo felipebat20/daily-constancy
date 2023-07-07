@@ -12,10 +12,13 @@
       <div class="column">
         <div class="is-flex is-align-items-center is-justify-content-space-between">
           <section>
-            <strong>00:00:00</strong>
+            <strong>{{ getTimer }}</strong>
           </section>
 
-          <button class="button">
+          <button
+            class="button"
+            @click="startTimer"
+          >
             <span class="icon">
               <i class="fas fa-play"></i>
             </span>
@@ -23,7 +26,10 @@
             <span>play</span>
           </button>
 
-          <button class="button">
+          <button
+            class="button"
+            @click="stopTimer"
+          >
             <span class="icon">
               <i class="fas fa-stop"></i>
             </span>
@@ -39,5 +45,25 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
 
-  export default defineComponent({ name: 'VForm' })
+  export default defineComponent({
+    name: 'VForm',
+    data: () => ({ timeInSeconds: 0 }),
+    computed: {
+      getTimer(): string {
+        return new Date(this.timeInSeconds * 1000).toISOString().substring(11, 19);
+      },
+    },
+
+    methods: {
+      startTimer() {
+        setInterval(() => {
+          this.timeInSeconds += 1;
+        }, 1000);
+      },
+
+      stopTimer() {
+        return console.log('stopped');
+      },
+    },
+  });
 </script>
