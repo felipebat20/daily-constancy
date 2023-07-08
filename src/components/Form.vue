@@ -11,9 +11,7 @@
 
       <div class="column">
         <div class="is-flex is-align-items-center is-justify-content-space-between">
-          <section>
-            <strong>{{ getTimer }}</strong>
-          </section>
+          <Timer :timeInSeconds="timeInSeconds" />
 
           <button
             class="button"
@@ -45,18 +43,15 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
 
+  import Timer from './Timer.vue';
+
   export default defineComponent({
     name: 'VForm',
+    components: { Timer },
     data: () => ({
       timeInSeconds: 0,
       timer: 0,
     }),
-
-    computed: {
-      getTimer(): string {
-        return new Date(this.timeInSeconds * 1000).toISOString().substring(11, 19);
-      },
-    },
 
     methods: {
       startTimer() {
