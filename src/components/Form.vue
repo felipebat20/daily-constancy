@@ -47,7 +47,11 @@
 
   export default defineComponent({
     name: 'VForm',
-    data: () => ({ timeInSeconds: 0 }),
+    data: () => ({
+      timeInSeconds: 0,
+      timer: 0,
+    }),
+
     computed: {
       getTimer(): string {
         return new Date(this.timeInSeconds * 1000).toISOString().substring(11, 19);
@@ -56,13 +60,13 @@
 
     methods: {
       startTimer() {
-        setInterval(() => {
+        this.timer = setInterval(() => {
           this.timeInSeconds += 1;
         }, 1000);
       },
 
       stopTimer() {
-        return console.log('stopped');
+        clearInterval(this.timer);
       },
     },
   });
