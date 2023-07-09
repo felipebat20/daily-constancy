@@ -6,35 +6,12 @@
           type="text"
           class="input"
           placeholder="Which task would you like start?"
+          v-model="description"
         />
       </div>
 
       <div class="column">
-        <div class="is-flex is-align-items-center is-justify-content-space-between">
-          <Timer :timeInSeconds="timeInSeconds" />
-
-          <button
-            class="button"
-            @click="startTimer"
-          >
-            <span class="icon">
-              <i class="fas fa-play"></i>
-            </span>
-
-            <span>play</span>
-          </button>
-
-          <button
-            class="button"
-            @click="stopTimer"
-          >
-            <span class="icon">
-              <i class="fas fa-stop"></i>
-            </span>
-
-            <span>stop</span>
-          </button>
-        </div>
+        <Timer @timeIsFinished="finishTask" />
       </div>
     </div>
   </div>
@@ -48,21 +25,11 @@
   export default defineComponent({
     name: 'VForm',
     components: { Timer },
-    data: () => ({
-      timeInSeconds: 0,
-      timer: 0,
-    }),
-
+    data: () => ({ description: '' }),
     methods: {
-      startTimer() {
-        this.timer = setInterval(() => {
-          this.timeInSeconds += 1;
-        }, 1000);
+      finishTask(time: number): void {
+        this.description = '';
       },
-
-      stopTimer() {
-        clearInterval(this.timer);
-      },
-    },
+    }
   });
 </script>
