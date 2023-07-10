@@ -1,7 +1,6 @@
 <template>
   <button
       class="button"
-      @click="$emit('click')"
       :disabled="button.disabled"
     >
       <span class="icon">
