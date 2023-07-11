@@ -26,8 +26,14 @@
     name: 'VForm',
     components: { Timer },
     data: () => ({ description: '' }),
+    emits: ['save-task'],
     methods: {
       finishTask(time: number): void {
+        this.$emit('save-task', {
+          description: this.description,
+          time_spent: time,
+        });
+
         this.description = '';
       },
     }

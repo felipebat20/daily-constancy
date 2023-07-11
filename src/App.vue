@@ -5,10 +5,14 @@
     </div>
 
     <div class="column is-three-quarter">
-      <Form />
+      <Form @save-task="saveTask" />
 
       <div class="list">
-        <Task />
+        <Task
+          v-for="(task, index) in tasks"
+          :key="index"
+          :task="task"
+        />
       </div>
     </div>
   </main>
@@ -21,12 +25,26 @@
   import Form from './components/Form.vue';
   import Task from './components/Task.vue';
 
+  import TaskInterface from './interfaces/Task.interface';
+
   export default defineComponent({
     name: 'App',
     components: {
       SideBar,
       Form,
       Task,
+    },
+
+    data() {
+      return {
+        tasks: [] as TaskInterface[],
+      };
+    },
+
+    methods: {
+      saveTask(task: TaskInterface) {
+        this.tasks.push(task);
+      },
     }
   });
 </script>
