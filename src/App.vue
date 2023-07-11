@@ -6,6 +6,10 @@
 
     <div class="column is-three-quarter">
       <Form />
+
+      <div class="list">
+        <Task />
+      </div>
     </div>
   </main>
 </template>
@@ -15,13 +19,18 @@
 
   import SideBar from './components/SideBar.vue';
   import Form from './components/Form.vue';
-
+  import Task from './components/Task.vue';
 
   export default defineComponent({
     name: 'App',
     components: {
       SideBar,
       Form,
+      Task,
     }
   });
 </script>
+
+<style scoped>
+  .list { padding: 1.25rem; }
+</style>
