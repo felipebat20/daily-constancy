@@ -13,6 +13,10 @@
           :key="index"
           :task="task"
         />
+
+        <Box v-if="! tasks.length">
+          Are you kidding with your future? :(
+        </Box>
       </div>
     </div>
   </main>
@@ -24,6 +28,7 @@
   import SideBar from './components/SideBar.vue';
   import Form from './components/Form.vue';
   import Task from './components/Task.vue';
+  import Box from './components/shared/Box.vue';
 
   import TaskInterface from './interfaces/Task.interface';
 
@@ -33,6 +38,7 @@
       SideBar,
       Form,
       Task,
+      Box,
     },
 
     data() {

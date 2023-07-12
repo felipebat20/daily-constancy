@@ -1,27 +1,32 @@
 <template>
-  <div class="box has-text-weight-bold">
+  <Box>
     <div class="columns">
       <div class="column is-7">
-        {{ task.description }}
+        {{ task.description || 'Unnamed Task' }}
       </div>
 
       <div class="column">
         <TimerDisplay :timeInSeconds="task.time_spent" />
       </div>
     </div>
-  </div>
+  </Box>
 </template>
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue';
 
   import TimerDisplay from './TimerDisplay.vue'
+  import Box from './shared/Box.vue';
 
   import TaskInterface from '../interfaces/Task.interface';
 
   export default defineComponent({
     name: 'ATTask',
-    components: { TimerDisplay },
+    components: {
+      TimerDisplay,
+      Box,
+    },
+
     props: {
       task: {
         type: Object as PropType<TaskInterface>,
