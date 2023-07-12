@@ -1,10 +1,10 @@
 <template>
-  <main class="columns is-gapless is-multiline">
+  <main class="columns is-gapless is-multiline dark-theme">
     <div class="column is-one-quarter">
       <SideBar />
     </div>
 
-    <div class="column is-three-quarter">
+    <div class="column is-three-quarter content">
       <Form @save-task="saveTask" />
 
       <div class="list">
@@ -57,4 +57,19 @@
 
 <style scoped>
   .list { padding: 1.25rem; }
+
+  main {
+    --bg-primary: #FFF;
+    --text-primary: #000;
+  }
+
+  main.dark-theme {
+    --bg-primary: #2b2d42;
+    --text-primary: #ddd;
+  }
+
+  .content {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
 </style>

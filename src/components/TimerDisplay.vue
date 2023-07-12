@@ -1,6 +1,8 @@
 <template>
   <section>
-    <strong>{{ getTimer }}</strong>
+    <strong class="display">
+      {{ getTimer }}
+    </strong>
   </section>
 </template>
 
@@ -23,3 +25,9 @@
     },
   });
 </script>
+
+<style scoped>
+  .display {
+    color: var(--text-primary);
+  }
+</style>

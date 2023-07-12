@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box form">
     <div class="columns">
       <div class="column is-8" role="form" aria-label="Form to create new task">
         <input
@@ -39,3 +39,10 @@
     }
   });
 </script>
+
+<style>
+  .form {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+</style>
