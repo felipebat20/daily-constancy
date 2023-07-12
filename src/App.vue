@@ -1,7 +1,10 @@
 <template>
-  <main class="columns is-gapless is-multiline dark-theme">
+  <main
+    class="columns is-gapless is-multiline"
+    :class="{'dark-theme': dark_theme }"
+  >
     <div class="column is-one-quarter">
-      <SideBar />
+      <SideBar @on-switch-theme="switchDarkTheme" />
     </div>
 
     <div class="column is-three-quarter content">
@@ -44,6 +47,7 @@
     data() {
       return {
         tasks: [] as TaskInterface[],
+        dark_theme: false,
       };
     },
 
@@ -51,7 +55,11 @@
       saveTask(task: TaskInterface) {
         this.tasks.push(task);
       },
-    }
+
+      switchDarkTheme(theme: boolean) {
+        this.dark_theme = theme;
+      }
+    },
   });
 </script>
 
