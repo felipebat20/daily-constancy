@@ -20,7 +20,7 @@
   import TimerDisplay from './TimerDisplay.vue'
   import Button from './shared/Button.vue'
 
-  import ButtonInterface from '@/interfaces/Button.interface';
+  import ButtonInterface from '../interfaces/Button.interface';
 
   export default defineComponent({
     name: 'ATTimer',

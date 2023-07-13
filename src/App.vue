@@ -20,10 +20,7 @@
 
   export default defineComponent({
     name: 'App',
-    components: {
-      SideBar,
-    },
-
+    components: { SideBar },
     data() {
       return {
         dark_theme: false,
