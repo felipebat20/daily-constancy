@@ -8,19 +8,7 @@
     </div>
 
     <div class="column is-three-quarter content">
-      <Form @save-task="saveTask" />
-
-      <div class="list">
-        <Task
-          v-for="(task, index) in tasks"
-          :key="index"
-          :task="task"
-        />
-
-        <Box v-if="! tasks.length">
-          Are you kidding with your future? :(
-        </Box>
-      </div>
+      <router-view></router-view>
     </div>
   </main>
 </template>
@@ -29,33 +17,20 @@
   import { defineComponent } from 'vue';
 
   import SideBar from './components/SideBar.vue';
-  import Form from './components/Form.vue';
-  import Task from './components/Task.vue';
-  import Box from './components/shared/Box.vue';
-
-  import TaskInterface from './interfaces/Task.interface';
 
   export default defineComponent({
     name: 'App',
     components: {
       SideBar,
-      Form,
-      Task,
-      Box,
     },
 
     data() {
       return {
-        tasks: [] as TaskInterface[],
         dark_theme: false,
       };
     },
 
     methods: {
-      saveTask(task: TaskInterface) {
-        this.tasks.push(task);
-      },
-
       switchDarkTheme(theme: boolean) {
         this.dark_theme = theme;
       }
@@ -64,8 +39,6 @@
 </script>
 
 <style scoped>
-  .list { padding: 1.25rem; }
-
   main {
     --bg-primary: #FFF;
     --text-primary: #000;
@@ -74,10 +47,5 @@
   main.dark-theme {
     --bg-primary: #2b2d42;
     --text-primary: #ddd;
-  }
-
-  .content {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
   }
 </style>

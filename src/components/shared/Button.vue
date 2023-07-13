@@ -14,12 +14,7 @@
 <script lang="ts">
   import { defineComponent, PropType } from 'vue';
 
-  interface Button {
-    disabled: boolean
-    icon: string
-    label: string
-  }
-
+  import Button from '@/interfaces/Button.interface';
 
   export default defineComponent({
     name: 'ATButton',
