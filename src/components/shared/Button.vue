@@ -14,13 +14,13 @@
 <script lang="ts">
   import { defineComponent, PropType } from 'vue';
 
-  import Button from '../../interfaces/Button.interface';
+  import ButtonInterface from '../../interfaces/Button.interface';
 
   export default defineComponent({
     name: 'ATButton',
     props: {
       button: {
-        type: Object as PropType<Button>,
+        type: Object as PropType<ButtonInterface>,
         required: true,
       },
     },
