@@ -15,7 +15,7 @@
 <script lang="ts">
   import { defineComponent, PropType } from 'vue';
 
-  import TimerDisplay from './TimerDisplay.vue'
+  import TimerDisplay from '@/components/TimerDisplay.vue'
   import Box from './shared/Box.vue';
 
   import TaskInterface from '../interfaces/Task.interface';

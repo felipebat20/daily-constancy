@@ -8,7 +8,7 @@
           Project name
         </label>
 
-        <input v-model="project_name" type="text" class="input" id="projectName" />
+        <input v-model="project_name" type="text" class="input" id="projectName" autofocus />
       </div>
 
       <div class="field">
@@ -27,16 +27,44 @@
 
   export default defineComponent({
     name: 'ATProjectsForm',
+    props: {
+      id: {
+        type: String,
+        default: '',
+      },
+    },
+
     data: () => ({
       project_name: '' as string,
     }),
 
+    mounted() {
+      console.log(this.id);
+
+      if (this.id) {
+        const project = this.store.state.projects.find(proj => proj.id === this.id)
+
+        console.log(project);
+
+
+        this.project_name = project?.name || '';
+      }
+    },
+
     methods: {
       submitForm() {
-        this.store.commit('ADD_PROJECT', this.project_name);
+        this.saveOrUpdateProject();
         this.project_name = '';
         this.$router.push('/projects')
       },
+
+      saveOrUpdateProject() {
+        if (this.id) {
+          return this.store.commit('EDIT_PROJECT', { id: this.id, name: this.project_name });
+        }
+
+        return this.store.commit('ADD_PROJECT', this.project_name);
+      }
     },
 
     setup () {

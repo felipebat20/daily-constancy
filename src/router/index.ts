@@ -23,7 +23,8 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/projects/:id',
     name: 'EditProjects',
-    component: Projects,
+    component: ProjectsForm,
+    props: true,
   },
 ];
 
