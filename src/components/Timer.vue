@@ -29,6 +29,13 @@
       Button,
     },
 
+    props: {
+      task_name: {
+        type: String,
+        default: '',
+      }
+    },
+
     emits: ['timeIsFinished'],
     data: () => ({
       timeInSeconds: 0,
@@ -61,6 +68,9 @@
       startTimer() {
         this.timer = setInterval(() => {
           this.timeInSeconds += 1;
+          const display_timer = new Date(this.timeInSeconds * 1000).toISOString().substring(11, 19);
+
+          document.title = `${display_timer} - ${this.task_name}`;
         }, 1000);
       },
 

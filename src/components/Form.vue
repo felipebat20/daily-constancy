@@ -26,7 +26,10 @@
       </div>
 
       <div class="column">
-        <Timer @timeIsFinished="finishTask" />
+        <Timer
+          :task_name="description"
+          @timeIsFinished="finishTask"
+        />
       </div>
     </div>
   </div>

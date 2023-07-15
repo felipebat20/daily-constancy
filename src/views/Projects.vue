@@ -49,26 +49,29 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
 
-  import ProjectInterface from '../interfaces/Project.interface';
+  import { useStore } from '../store';
 
   export default defineComponent({
     name: 'ATProjects',
     data: () => ({
       project_name: '' as string,
-      projects: [] as ProjectInterface[],
     }),
 
     methods: {
       submitForm() {
-        const project: ProjectInterface = {
-          id: new Date().toISOString(),
-          name: this.project_name,
-        };
-
-        this.projects.push(project);
+        this.store.commit('ADD_PROJECT', this.project_name);
         this.project_name = '';
       },
-    }
+    },
+
+    setup () {
+      const store = useStore();
+
+      return {
+        store,
+        projects: store.state.projects,
+      };
+    },
   });
 </script>
 
