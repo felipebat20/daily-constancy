@@ -21,6 +21,8 @@
 
   import { useStore } from '@/store';
 
+  import { EDIT_PROJECT, ADD_PROJECT } from '@/store/types/mutations';
+
   export default defineComponent({
     name: 'ATProjectsForm',
     props: {
@@ -56,10 +58,10 @@
 
       saveOrUpdateProject() {
         if (this.id) {
-          return this.store.commit('EDIT_PROJECT', { id: this.id, name: this.project_name });
+          return this.store.commit(EDIT_PROJECT, { id: this.id, name: this.project_name });
         }
 
-        return this.store.commit('ADD_PROJECT', this.project_name);
+        return this.store.commit(ADD_PROJECT, this.project_name);
       }
     },
 

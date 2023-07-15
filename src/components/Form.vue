@@ -7,6 +7,7 @@
           class="input"
           placeholder="Which task would you like start?"
           v-model="description"
+          autofocus
         />
       </div>
 
@@ -39,7 +40,7 @@
   import { computed, defineComponent } from 'vue';
 
   import Timer from './Timer.vue';
-  import { useStore } from '../store';
+  import { useStore } from '@/store';
 
   export default defineComponent({
     name: 'VForm',
