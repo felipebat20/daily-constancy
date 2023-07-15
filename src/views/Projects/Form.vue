@@ -1,23 +1,19 @@
 <template>
-  <section class="projects">
-    <h1 class="title">Projects</h1>
+  <form @submit.prevent="submitForm">
+    <div class="field">
+      <label for="projectName" class="label">
+        Project name
+      </label>
 
-    <form @submit.prevent="submitForm">
-      <div class="field">
-        <label for="projectName" class="label">
-          Project name
-        </label>
+      <input v-model="project_name" type="text" class="input" id="projectName" autofocus />
+    </div>
 
-        <input v-model="project_name" type="text" class="input" id="projectName" autofocus />
-      </div>
-
-      <div class="field">
-        <button class="button" type="submit">
-          Save
-        </button>
-      </div>
-    </form>
-  </section>
+    <div class="field">
+      <button class="button" type="submit">
+        Save
+      </button>
+    </div>
+  </form>
 </template>
 
 <script lang="ts">
@@ -76,9 +72,3 @@
     },
   });
 </script>
-
-<style scoped>
-  .projects {
-    padding: 1.25rem;
-  }
-</style>
