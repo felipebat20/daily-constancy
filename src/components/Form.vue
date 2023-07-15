@@ -37,10 +37,9 @@
 
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-  import { useStore } from 'vuex';
 
   import Timer from './Timer.vue';
-  import { key } from '../store';
+  import { useStore } from '../store';
 
   export default defineComponent({
     name: 'VForm',
@@ -64,7 +63,7 @@
     },
 
     setup() {
-      const store = useStore(key);
+      const store = useStore();
 
       return {
         projects: computed(() => store.state.projects),

@@ -2,21 +2,13 @@
   <section class="projects">
     <h1 class="title">Projects</h1>
 
-    <form @submit.prevent="submitForm">
-      <div class="field">
-        <label for="projectName" class="label">
-          Project name
-        </label>
+    <router-link to="/projects/create" class="button">
+      <span class="icon is-small">
+        <i class="fas fa-plus"></i>
+      </span>
 
-        <input v-model="project_name" type="text" class="input" id="projectName" />
-      </div>
-
-      <div class="field">
-        <button class="button" type="submit">
-          Save
-        </button>
-      </div>
-    </form>
+      <span>New project</span>
+    </router-link>
 
     <table class="table is-fullwidth">
       <thead>
@@ -27,6 +19,10 @@
 
           <th>
             Name
+          </th>
+
+          <th>
+            Actions
           </th>
         </tr>
       </thead>
@@ -40,6 +36,14 @@
           <td>
             {{ project.name }}
           </td>
+
+          <td>
+            <router-link :to="`/projects/${project.id}`" class="button">
+              <span class="icon is-small">
+                <i class="fas fa-pencil-alt"></i>
+              </span>
+            </router-link>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -47,29 +51,17 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, computed } from 'vue';
 
   import { useStore } from '../store';
 
   export default defineComponent({
     name: 'ATProjects',
-    data: () => ({
-      project_name: '' as string,
-    }),
-
-    methods: {
-      submitForm() {
-        this.store.commit('ADD_PROJECT', this.project_name);
-        this.project_name = '';
-      },
-    },
-
     setup () {
       const store = useStore();
 
       return {
-        store,
-        projects: store.state.projects,
+        projects: computed(() => store.state.projects),
       };
     },
   });

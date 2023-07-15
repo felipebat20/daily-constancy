@@ -52,9 +52,4 @@
 
 <style scoped>
   .list { padding: 1.25rem; }
-
-  .content {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-  }
 </style>

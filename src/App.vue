@@ -45,4 +45,9 @@
     --bg-primary: #2b2d42;
     --text-primary: #ddd;
   }
+
+  .content {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
 </style>
