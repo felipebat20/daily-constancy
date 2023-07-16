@@ -1,42 +1,53 @@
 <template>
   <div class="notification">
-    <article class="message is-success">
+    <article
+      v-for="notification in notifications"
+      :key="notification.id"
+      class="message"
+      :class="getNotificationTypeClass(notification)"
+    >
       <div class="message-header">
-        Atention
+        {{ notification.title }}
       </div>
 
       <div class="message-body">
-        Here we go a nice notification text
-      </div>
-    </article>
-
-    <article class="message is-warning">
-      <div class="message-header">
-        Atention
-      </div>
-
-      <div class="message-body">
-        Here we go a nice notification text
-      </div>
-    </article>
-
-    <article class="message is-danger">
-      <div class="message-header">
-        Atention
-      </div>
-
-      <div class="message-body">
-        Here we go a nice notification text
+        {{ notification.content }}
       </div>
     </article>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent } from 'vue';
+
+  import { useStore } from '@/store';
+  import { Notification as NotificationInterface, NotificationType } from '../interfaces/Notification.interface';
 
   export default defineComponent({
     name: 'ATNotification',
+    setup() {
+      const store = useStore();
+
+      return {
+        notifications: computed(() => store.state.notifications),
+      };
+    },
+
+    methods: {
+      getNotificationTypeClass(notification: NotificationInterface) {
+        const types = {
+          [NotificationType.SUCCESS]: () => 'is-success',
+          [NotificationType.WARNING]: () => 'is-warning',
+          [NotificationType.FAILED]: () => 'is-danger',
+        }
+
+        if (types[notification.type]) {
+          return types[notification.type]();
+        }
+
+        return 'is-success';
+      },
+    },
   });
 </script>
 

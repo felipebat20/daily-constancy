@@ -1,12 +1,14 @@
 import { createStore, Store, useStore as vuexUseStore } from 'vuex';
 import { InjectionKey } from 'vue';
 
-import Project from "../interfaces/Project.interface";
+import Project from "@/interfaces/Project.interface";
+import { NotificationType, Notification as NotificationInterface } from "@/interfaces/Notification.interface";
 
 import { ADD_PROJECT, EDIT_PROJECT, DELETE_PROJECT } from '@/store/types/mutations';
 
 interface State {
   projects: Project[],
+  notifications: NotificationInterface[]
 }
 
 export const key : InjectionKey<Store<State>> = Symbol();
@@ -14,6 +16,14 @@ export const key : InjectionKey<Store<State>> = Symbol();
 export const store = createStore<State>({
   state: {
     projects: [],
+    notifications: [
+      {
+        id: 1,
+        title: 'Attention',
+        content: 'Test content',
+        type: NotificationType.WARNING,
+      }
+    ],
   },
 
   mutations: {
