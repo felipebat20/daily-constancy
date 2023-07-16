@@ -22,6 +22,8 @@
   import { useStore } from '@/store';
 
   import { EDIT_PROJECT, ADD_PROJECT } from '@/store/types/mutations';
+import { DELETE_NOTIFICATION, NEW_NOTIFICATION } from '../../store/types/mutations';
+import { NotificationType } from '../../interfaces/Notification.interface';
 
   export default defineComponent({
     name: 'ATProjectsForm',
@@ -37,13 +39,8 @@
     }),
 
     mounted() {
-      console.log(this.id);
-
       if (this.id) {
         const project = this.store.state.projects.find(proj => proj.id === this.id)
-
-        console.log(project);
-
 
         this.project_name = project?.name || '';
       }
@@ -60,6 +57,14 @@
         if (this.id) {
           return this.store.commit(EDIT_PROJECT, { id: this.id, name: this.project_name });
         }
+
+        this.store.commit(NEW_NOTIFICATION, {
+          title: 'New project saved',
+          content: 'Your new project is already available! ;)',
+          type: NotificationType.SUCCESS,
+        });
+
+        this.store.commit(DELETE_NOTIFICATION, );
 
         return this.store.commit(ADD_PROJECT, this.project_name);
       }

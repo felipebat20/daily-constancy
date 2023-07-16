@@ -18,7 +18,7 @@
   import { defineComponent } from 'vue';
 
   import SideBar from './components/SideBar.vue';
-  import Notification from './components/Notification.vue';
+  import Notification from './components/Notifications.vue';
 
   export default defineComponent({
     name: 'App',
