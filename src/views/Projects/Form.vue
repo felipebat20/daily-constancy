@@ -21,12 +21,14 @@
 
   import { useStore } from '@/store';
 
-  import { EDIT_PROJECT, ADD_PROJECT } from '@/store/types/mutations';
-import { DELETE_NOTIFICATION, NEW_NOTIFICATION } from '../../store/types/mutations';
-import { NotificationType } from '../../interfaces/Notification.interface';
+  import { EDIT_PROJECT, ADD_PROJECT, DELETE_NOTIFICATION } from '@/store/types/mutations';
+  import { NotificationType } from '../../interfaces/Notification.interface';
+
+  import { notifyMixin } from '@/mixins/Notify'
 
   export default defineComponent({
     name: 'ATProjectsForm',
+    mixins: [notifyMixin],
     props: {
       id: {
         type: String,
@@ -58,16 +60,12 @@ import { NotificationType } from '../../interfaces/Notification.interface';
           return this.store.commit(EDIT_PROJECT, { id: this.id, name: this.project_name });
         }
 
-        this.store.commit(NEW_NOTIFICATION, {
-          title: 'New project saved',
-          content: 'Your new project is already available! ;)',
-          type: NotificationType.SUCCESS,
-        });
+        this.notify(NotificationType.SUCCESS, 'Great', 'You are fabulous');
 
-        this.store.commit(DELETE_NOTIFICATION, );
+        this.store.commit(DELETE_NOTIFICATION);
 
         return this.store.commit(ADD_PROJECT, this.project_name);
-      }
+      },
     },
 
     setup () {

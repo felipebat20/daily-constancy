@@ -53,10 +53,12 @@
     emits: ['save-task'],
     methods: {
       finishTask(time: number): void {
+        const project = this.projects.find(project => project.id === this.project_id);
+
         this.$emit('save-task', {
           description: this.description,
           time_spent: time,
-          project: this.projects.find(project => project.id === this.project_id),
+          project,
         });
 
         this.description = '';
