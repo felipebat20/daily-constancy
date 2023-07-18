@@ -23,12 +23,10 @@
 
   import { EDIT_PROJECT, ADD_PROJECT, DELETE_NOTIFICATION } from '@/store/types/mutations';
   import { NotificationType } from '../../interfaces/Notification.interface';
-
-  import { notifyMixin } from '@/mixins/Notify'
+  import useNotify from '@/hooks/notify';
 
   export default defineComponent({
     name: 'ATProjectsForm',
-    mixins: [notifyMixin],
     props: {
       id: {
         type: String,
@@ -70,9 +68,11 @@
 
     setup () {
       const store = useStore();
+      const { notify } = useNotify();
 
       return {
         store,
+        notify,
       };
     },
   });
