@@ -10,7 +10,12 @@ import {
   DELETE_PROJECT,
   NEW_NOTIFICATION,
   DELETE_NOTIFICATION,
+  SET_PROJECTS,
 } from '@/store/types/mutations';
+
+import { FETCH_PROJECTS } from '@/store/types/actions';
+
+import http from '@/http';
 
 interface State {
   projects: Project[],
@@ -34,11 +39,19 @@ export const store = createStore<State>({
 
       return project_edited;
     }),
+    [SET_PROJECTS]: (state, projects: Project[]) => state.projects = projects,
 
     [DELETE_PROJECT]: (state, project_id: string) => state.projects = state.projects.filter(project => project.id !== project_id),
     [NEW_NOTIFICATION]: (state, notification: NotificationInterface) => state.notifications.push({ ...notification, id: new Date().getTime()}),
     [DELETE_NOTIFICATION]: (state, notification_id: number) => state.notifications = state.notifications.filter(notification => notification.id !== notification_id),
   },
+
+  actions: {
+    [FETCH_PROJECTS]: ({ commit }) : Promise<void> => {
+      return http.get('projects')
+        .then(resp => commit(SET_PROJECTS, resp.data));
+    }
+  }
 });
 
 export function useStore(): Store<State> {

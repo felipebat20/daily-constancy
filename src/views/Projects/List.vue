@@ -59,11 +59,14 @@
 
   import { useStore } from '@/store';
   import { DELETE_PROJECT } from '@/store/types/mutations';
+  import { FETCH_PROJECTS } from '@/store/types/actions';
 
   export default defineComponent({
     name: 'ATProjectsList',
     setup () {
       const store = useStore();
+      
+      store.dispatch(FETCH_PROJECTS);
 
       return {
         store,
