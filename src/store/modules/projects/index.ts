@@ -19,7 +19,6 @@ import {
 
 import http from "@/http";
 
-
 export interface ProjectState {
   projects: Project[],
 }
