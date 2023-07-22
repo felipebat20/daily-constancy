@@ -21,8 +21,9 @@
 
   import { useStore } from '@/store';
 
-  import { EDIT_PROJECT, ADD_PROJECT, DELETE_NOTIFICATION } from '@/store/types/mutations';
-  import { NotificationType } from '../../interfaces/Notification.interface';
+  import { CREATE_NEW_PROJECT, EDIT_PROJECT } from '@/store/types/actions';
+
+  import { NotificationType } from '@/interfaces/Notification.interface';
   import useNotify from '@/hooks/notify';
 
   export default defineComponent({
@@ -48,21 +49,19 @@
 
     methods: {
       submitForm() {
-        this.saveOrUpdateProject();
-        this.project_name = '';
-        this.$router.push('/projects')
+        this.saveOrUpdateProject().then(() => {
+          this.project_name = '';
+          this.notify(NotificationType.SUCCESS, 'Great', 'You are fabulous');
+          this.$router.push('/projects')
+        });
       },
 
       saveOrUpdateProject() {
         if (this.id) {
-          return this.store.commit(EDIT_PROJECT, { id: this.id, name: this.project_name });
+          return this.store.dispatch(EDIT_PROJECT, { id: this.id, name: this.project_name });
         }
 
-        this.notify(NotificationType.SUCCESS, 'Great', 'You are fabulous');
-
-        this.store.commit(DELETE_NOTIFICATION);
-
-        return this.store.commit(ADD_PROJECT, this.project_name);
+        return this.store.dispatch(CREATE_NEW_PROJECT, this.project_name);
       },
     },
 

@@ -58,8 +58,7 @@
   import ProjectInterface from '@/interfaces/Project.interface';
 
   import { useStore } from '@/store';
-  import { DELETE_PROJECT } from '@/store/types/mutations';
-  import { FETCH_PROJECTS } from '@/store/types/actions';
+  import { FETCH_PROJECTS, DELETE_PROJECT } from '@/store/types/actions';
 
   export default defineComponent({
     name: 'ATProjectsList',
@@ -78,7 +77,7 @@
       deleteTask(project: ProjectInterface) {
         const { id } = project;
 
-        return this.store.commit(DELETE_PROJECT, id)
+        return this.store.dispatch(DELETE_PROJECT, { id });
       },
     }
   });
