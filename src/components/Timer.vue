@@ -1,6 +1,6 @@
 <template>
   <div class="is-flex is-align-items-center is-justify-content-space-between">
-    <TimerDisplay :timeInSeconds="timeInSeconds" />
+    <TimerDisplay :time-in-seconds="timeInSeconds" />
 
     <Button
       :button="getPlayButton"
@@ -30,7 +30,7 @@
     },
 
     props: {
-      task_name: {
+      taskName: {
         type: String,
         default: '',
       }
@@ -70,7 +70,7 @@
           this.timeInSeconds += 1;
           const display_timer = new Date(this.timeInSeconds * 1000).toISOString().substring(11, 19);
 
-          document.title = `${display_timer} - ${this.task_name}`;
+          document.title = `${display_timer} - ${this.taskName}`;
         }, 1000);
       },
 
@@ -79,6 +79,7 @@
         this.timer = 0;
         this.$emit('timeIsFinished', this.timeInSeconds)
         this.timeInSeconds = 0;
+        document.title = 'Alura tracker';
       },
     },
   });

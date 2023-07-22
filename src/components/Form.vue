@@ -1,20 +1,26 @@
 <template>
   <div class="box form">
     <div class="columns">
-      <div class="column is-5" role="form" aria-label="Form to create new task">
+      <div
+        class="column is-5"
+        role="form"
+        aria-label="Form to create new task"
+      >
         <input
           type="text"
           class="input"
           placeholder="Which task would you like start?"
           v-model="description"
           autofocus
-        />
+        >
       </div>
 
       <div class="column is-3">
         <div class="select">
           <select v-model="project_id">
-            <option value="">Select a project</option>
+            <option value="">
+              Select a project
+            </option>
             <option
               v-for="project in projects"
               :key="project.id"
@@ -28,8 +34,8 @@
 
       <div class="column">
         <Timer
-          :task_name="description"
-          @timeIsFinished="finishTask"
+          :task-name="description"
+          @time-is-finished="finishTask"
         />
       </div>
     </div>

@@ -1,6 +1,9 @@
 <template>
   <Box>
-    <div class="columns">
+    <div
+      class="columns is-clickable"
+      @click="selectTask"
+    >
       <div class="column is-4">
         {{ task.description || 'Unnamed Task' }}
       </div>
@@ -10,7 +13,7 @@
       </div>
 
       <div class="column">
-        <TimerDisplay :timeInSeconds="task.time_spent" />
+        <TimerDisplay :time-in-seconds="task.time_spent" />
       </div>
     </div>
   </Box>
@@ -31,12 +34,19 @@
       Box,
     },
 
+    emits: ['selected-task'],
     props: {
       task: {
         type: Object as PropType<TaskInterface>,
         required: true,
       },
     },
+
+    methods: {
+      selectTask() {
+        this.$emit('selected-task', this.task);
+      }
+    }
   });
 </script>
 

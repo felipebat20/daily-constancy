@@ -1,14 +1,14 @@
 <template>
   <button
-      class="button"
-      :disabled="button.disabled"
-    >
-      <span class="icon">
-        <i :class="button.icon"></i>
-      </span>
+    class="button"
+    :disabled="button.disabled"
+  >
+    <span class="icon">
+      <i :class="button.icon" />
+    </span>
 
-      <span>{{ button.label }}</span>
-    </button>
+    <span>{{ button.label }}</span>
+  </button>
 </template>
 
 <script lang="ts">

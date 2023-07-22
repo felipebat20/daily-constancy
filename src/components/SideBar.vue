@@ -4,7 +4,7 @@
       <img
         src="../assets/logo.png"
         alt="logo"
-      />
+      >
     </h1>
 
     <button
@@ -21,7 +21,7 @@
             to="/"
             class="link"
           >
-            <i class="fas fa-tasks"></i>
+            <i class="fas fa-tasks" />
 
             tasks
           </router-link>
@@ -31,7 +31,7 @@
             to="/projects"
             class="link"
           >
-            <i class="fas fa-project-diagram"></i>
+            <i class="fas fa-project-diagram" />
 
             projects
           </router-link>
@@ -70,11 +70,12 @@
   });
 </script>
 
-<style>
+<style scoped>
   header {
     padding: 1rem;
     background: #0d3b66;
-    width: 100%;
+    width: 355px;
+    position: fixed;
     height: 100vh;
     text-align: center;
   }

@@ -11,9 +11,8 @@
   ],
   "tasks": [
     {
-      "description": "Testado ",
-      "time_spent": 1,
-      "id": 1
+      "id": 1,
+      "description": "Testado e aprovado"
     },
     {
       "description": "Alura tracker",
@@ -23,6 +22,25 @@
         "name": "Meta diária"
       },
       "id": 2
+    },
+    {
+      "description": "Testando edit task",
+      "time_spent": 0,
+      "id": 3
+    },
+    {
+      "description": "teste",
+      "time_spent": 4,
+      "id": 4
+    },
+    {
+      "description": "test",
+      "time_spent": 1,
+      "project": {
+        "id": 1,
+        "name": "Alura tracker"
+      },
+      "id": 5
     }
   ]
 }

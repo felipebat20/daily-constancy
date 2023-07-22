@@ -9,7 +9,7 @@
 
     <div class="column is-three-quarter content">
       <Notification />
-      <router-view></router-view>
+      <router-view />
     </div>
   </main>
 </template>

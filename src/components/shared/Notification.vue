@@ -10,7 +10,13 @@
     <div class="message-body position-relative">
       {{ notification.content }}
 
-      <progress class="progress is-primary is-small" :value="progress_width" max="100">15%</progress>
+      <progress
+        class="progress is-primary is-small"
+        :value="progress_width"
+        max="100"
+      >
+        15%
+      </progress>
     </div>
   </article>
 </template>

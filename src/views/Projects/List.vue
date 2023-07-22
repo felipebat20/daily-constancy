@@ -1,7 +1,10 @@
 <template>
-  <router-link to="/projects/create" class="button">
+  <router-link
+    to="/projects/create"
+    class="button"
+  >
     <span class="icon is-small">
-      <i class="fas fa-plus"></i>
+      <i class="fas fa-plus" />
     </span>
 
     <span>New project</span>
@@ -25,7 +28,10 @@
     </thead>
 
     <tbody>
-      <tr v-for="project in projects" :key="project.id">
+      <tr
+        v-for="project in projects"
+        :key="project.id"
+      >
         <td>
           {{ project.id }}
         </td>
@@ -35,15 +41,21 @@
         </td>
 
         <td>
-          <router-link :to="`/projects/${project.id}`" class="button">
+          <router-link
+            :to="`/projects/${project.id}`"
+            class="button"
+          >
             <span class="icon is-small">
-              <i class="fas fa-pencil-alt"></i>
+              <i class="fas fa-pencil-alt" />
             </span>
           </router-link>
 
-          <button class="button ml-2 is-danger" @click="deleteTask(project)">
+          <button
+            class="button ml-2 is-danger"
+            @click="deleteTask(project)"
+          >
             <span class="icon is-small">
-              <i class="fas fa-trash"></i>
+              <i class="fas fa-trash" />
             </span>
           </button>
         </td>

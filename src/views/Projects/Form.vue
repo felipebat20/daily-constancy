@@ -1,15 +1,27 @@
 <template>
   <form @submit.prevent="submitForm">
     <div class="field">
-      <label for="projectName" class="label">
+      <label
+        for="projectName"
+        class="label"
+      >
         Project name
       </label>
 
-      <input v-model="project_name" type="text" class="input" id="projectName" autofocus />
+      <input
+        v-model="project_name"
+        type="text"
+        class="input"
+        id="projectName"
+        autofocus
+      >
     </div>
 
     <div class="field">
-      <button class="button" type="submit">
+      <button
+        class="button"
+        type="submit"
+      >
         Save
       </button>
     </div>

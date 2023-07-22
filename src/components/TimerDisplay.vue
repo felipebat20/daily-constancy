@@ -1,8 +1,14 @@
 <template>
   <section>
-    <strong class="display">
-      {{ getTimer }}
-    </strong>
+    <span class="icon-text">
+      <span class="icon">
+        <i class="far fa-clock" />
+      </span>
+
+      <strong class="display">
+        {{ getTimer }}
+      </strong>
+    </span>
   </section>
 </template>
 
