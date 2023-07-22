@@ -32,10 +32,10 @@
   import { defineComponent } from 'vue';
 
   import { useStore } from '@/store';
-
   import { CREATE_NEW_PROJECT, EDIT_PROJECT } from '@/store/types/actions';
 
   import { NotificationType } from '@/interfaces/Notification.interface';
+
   import useNotify from '@/hooks/notify';
 
   export default defineComponent({
@@ -53,7 +53,7 @@
 
     mounted() {
       if (this.id) {
-        const project = this.store.state.projects.find(proj => proj.id === this.id)
+        const project = this.store.state.project.projects.find(proj => proj.id === this.id)
 
         this.project_name = project?.name || '';
       }
