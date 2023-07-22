@@ -15,13 +15,15 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent } from 'vue';
 
-  import Form from '../components/Form.vue';
-  import Task from '../components/Task.vue';
-  import Box from '../components/shared/Box.vue';
+  import Form from '@/components/Form.vue';
+  import Task from '@/components/Task.vue';
+  import Box from '@/components/shared/Box.vue';
 
-  import TaskInterface from '../interfaces/Task.interface';
+  import TaskInterface from '@/interfaces/Task.interface';
+  import { useStore } from '@/store';
+  import { CREATE_NEW_TASK, FETCH_TASKS } from '@/store/types/actions';
 
   export default defineComponent({
     name: 'App',
@@ -31,21 +33,20 @@
       Box,
     },
 
-    data() {
+    setup() {
+      const store = useStore();
+      store.dispatch(FETCH_TASKS);
+
       return {
-        tasks: [] as TaskInterface[],
-        dark_theme: false,
+        store,
+        tasks: computed(() => store.state.tasks),
       };
     },
 
     methods: {
       saveTask(task: TaskInterface) {
-        this.tasks.push(task);
+        this.store.dispatch(CREATE_NEW_TASK, task);
       },
-
-      switchDarkTheme(theme: boolean) {
-        this.dark_theme = theme;
-      }
     },
   });
 </script>

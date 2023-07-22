@@ -64,7 +64,7 @@
     name: 'ATProjectsList',
     setup () {
       const store = useStore();
-      
+
       store.dispatch(FETCH_PROJECTS);
 
       return {

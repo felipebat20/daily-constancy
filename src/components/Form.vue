@@ -40,7 +40,9 @@
   import { computed, defineComponent } from 'vue';
 
   import Timer from './Timer.vue';
+
   import { useStore } from '@/store';
+  import { FETCH_PROJECTS } from '@/store/types/actions';
 
   export default defineComponent({
     name: 'VForm',
@@ -67,6 +69,7 @@
 
     setup() {
       const store = useStore();
+      store.dispatch(FETCH_PROJECTS);
 
       return {
         projects: computed(() => store.state.projects),

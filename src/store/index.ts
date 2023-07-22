@@ -11,20 +11,26 @@ import {
   NEW_NOTIFICATION,
   DELETE_NOTIFICATION,
   SET_PROJECTS,
+  NEW_TASKS,
+  NEW_TASK,
 } from '@/store/types/mutations';
 
-import { 
+import {
   FETCH_PROJECTS,
   CREATE_NEW_PROJECT,
   EDIT_PROJECT,
-  DELETE_PROJECT, 
+  DELETE_PROJECT,
+  FETCH_TASKS,
+  CREATE_NEW_TASK,
 } from '@/store/types/actions';
 
 import http from '@/http';
+import TaskInterface from '@/interfaces/Task.interface';
 
 interface State {
   projects: Project[],
-  notifications: NotificationInterface[]
+  notifications: NotificationInterface[],
+  tasks: TaskInterface[],
 }
 
 export const key : InjectionKey<Store<State>> = Symbol();
@@ -33,6 +39,7 @@ export const store = createStore<State>({
   state: {
     projects: [],
     notifications: [],
+    tasks: [],
   },
 
   mutations: {
@@ -44,11 +51,13 @@ export const store = createStore<State>({
 
       return proj;
     }),
-    [SET_PROJECTS]: (state, projects: Project[]) => state.projects = projects,
 
+    [SET_PROJECTS]: (state, projects: Project[]) => state.projects = projects,
     [REMOVE_PROJECT]: (state, project_id: string) => state.projects = state.projects.filter(project => project.id !== project_id),
     [NEW_NOTIFICATION]: (state, notification: NotificationInterface) => state.notifications.push({ ...notification, id: new Date().getTime()}),
     [DELETE_NOTIFICATION]: (state, notification_id: number) => state.notifications = state.notifications.filter(notification => notification.id !== notification_id),
+    [NEW_TASKS]: (state, tasks: TaskInterface[]) => state.tasks = tasks,
+    [NEW_TASK]: (state, task: TaskInterface) => state.tasks.push(task),
   },
 
   actions: {
@@ -59,7 +68,7 @@ export const store = createStore<State>({
 
     [CREATE_NEW_PROJECT]: ({ commit }, project_name: string) => {
       const project = { name: project_name };
-      
+
       return http.post('projects', project)
         .then(resp => commit(ADD_PROJECT, resp.data));
     },
@@ -70,8 +79,18 @@ export const store = createStore<State>({
 
     [DELETE_PROJECT]: ({ commit }, { id: project_id }) => {
       return http.delete(`projects/${project_id}`).then(() => commit(REMOVE_PROJECT, project_id));
-    }
-  }
+    },
+
+    [FETCH_TASKS]: ({ commit }) : Promise<void> => {
+      return http.get('tasks')
+        .then(resp => commit(NEW_TASKS, resp.data));
+    },
+
+    [CREATE_NEW_TASK]: ({ commit }, task: TaskInterface) : Promise<void> => {
+      return http.post('tasks', task)
+        .then(resp => commit(NEW_TASK, resp.data));
+    },
+  },
 });
 
 export function useStore(): Store<State> {

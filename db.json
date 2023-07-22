@@ -5,20 +5,24 @@
       "name": "Alura tracker"
     },
     {
-      "id": "2023-07-21T23:40:20.332Z",
-      "name": "NI 2.0"
+      "id": 2,
+      "name": "Meta diária"
+    }
+  ],
+  "tasks": [
+    {
+      "description": "Testado ",
+      "time_spent": 1,
+      "id": 1
     },
     {
-      "name": "test",
+      "description": "Alura tracker",
+      "time_spent": 4,
+      "project": {
+        "id": 2,
+        "name": "Meta diária"
+      },
       "id": 2
-    },
-    {
-      "name": "teast",
-      "id": 3
-    },
-    {
-      "name": "teast",
-      "id": 4
     }
   ]
 }
