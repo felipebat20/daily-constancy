@@ -81,6 +81,5 @@
         this.timeInSeconds = 0;
       },
     },
-  })
-
+  });
 </script>
