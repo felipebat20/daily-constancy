@@ -55,7 +55,7 @@
     components: { Timer },
     data: () => ({
       description: '' as string,
-      project_id: '' as string,
+      project_id: '' as number | string,
     }),
 
     emits: ['save-task'],

@@ -103,7 +103,7 @@
 
       return {
         store,
-        tasks: computed(() => store.state?.task?.tasks || []),
+        tasks: computed(() => store.state.task.tasks || []),
       };
     },
 

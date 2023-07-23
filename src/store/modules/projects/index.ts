@@ -24,6 +24,10 @@ export interface ProjectState {
 }
 
 export const project: Module<ProjectState, State> = {
+  state: {
+    projects: [],
+  },
+
   mutations: {
     [ADD_PROJECT]: (state, project: Project) => state.projects.push(project),
     [UPDATE_EDITED_PROJECT]: (state, project_edited: Project) => state.projects = state.projects.map(proj => {
@@ -35,7 +39,7 @@ export const project: Module<ProjectState, State> = {
     }),
 
     [SET_PROJECTS]: (state, projects: Project[]) => state.projects = projects,
-    [REMOVE_PROJECT]: (state, project_id: string) => state.projects = state.projects.filter(project => project.id !== project_id),
+    [REMOVE_PROJECT]: (state, project_id: number) => state.projects = state.projects.filter(project => project.id !== project_id),
   },
 
   actions: {

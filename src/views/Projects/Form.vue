@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref } from 'vue';
 
   import { useStore } from '@/store';
   import { CREATE_NEW_PROJECT, EDIT_PROJECT } from '@/store/types/actions';
@@ -45,18 +45,6 @@
         type: String,
         default: '',
       },
-    },
-
-    data: () => ({
-      project_name: '' as string,
-    }),
-
-    mounted() {
-      if (this.id) {
-        const project = this.store.state.project.projects.find(proj => proj.id === this.id)
-
-        this.project_name = project?.name || '';
-      }
     },
 
     methods: {
@@ -77,13 +65,22 @@
       },
     },
 
-    setup () {
+    setup (props) {
       const store = useStore();
       const { notify } = useNotify();
+      const project_name = ref('');
+
+      if (props.id) {
+        const project = store.state.project.projects
+          .find(proj => proj.id == parseInt(props.id));
+
+        project_name.value = project?.name || '';
+      }
 
       return {
         store,
         notify,
+        project_name,
       };
     },
   });
