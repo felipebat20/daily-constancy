@@ -3,7 +3,7 @@
 
   <div class="list">
     <div class="field">
-      <p class="control has-icons-left has-icons-right is-loading">
+      <p class="control has-icons-left has-icons-right">
         <input
           v-model="task_filter"
           class="input"
@@ -13,9 +13,6 @@
         <span class="icon is-small is-left">
           <i class="fas fa-search" />
         </span>
-        <!-- <span class="icon is-small is-right">
-          <i class="fas fa-check" />
-        </span> -->
       </p>
     </div>
 

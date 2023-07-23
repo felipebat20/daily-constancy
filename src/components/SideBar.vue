@@ -74,7 +74,6 @@
   header {
     padding: 1rem;
     background: #0d3b66;
-    width: 355px;
     position: fixed;
     height: 100vh;
     text-align: center;
