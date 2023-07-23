@@ -2,6 +2,23 @@
   <Form @save-task="saveTask" />
 
   <div class="list">
+    <div class="field">
+      <p class="control has-icons-left has-icons-right is-loading">
+        <input
+          v-model="task_filter"
+          class="input"
+          type="text"
+          placeholder="Search a task"
+        >
+        <span class="icon is-small is-left">
+          <i class="fas fa-search" />
+        </span>
+        <!-- <span class="icon is-small is-right">
+          <i class="fas fa-check" />
+        </span> -->
+      </p>
+    </div>
+
     <Task
       v-for="(task, index) in tasks"
       :key="index"
@@ -73,7 +90,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
+  import { computed, defineComponent, ref } from 'vue';
 
   import Form from '@/components/Form.vue';
   import Task from '@/components/Task.vue';
@@ -99,11 +116,18 @@
 
     setup() {
       const store = useStore();
+      const task_filter = ref('');
+      const tasks = computed(
+        () => store.state.task.tasks
+          .filter(task => ! task_filter.value || task.description.includes(task_filter.value))
+        );
+
       store.dispatch(FETCH_TASKS);
 
       return {
         store,
-        tasks: computed(() => store.state.task.tasks || []),
+        tasks,
+        task_filter,
       };
     },
 
