@@ -16,69 +16,66 @@
       </p>
     </div>
 
+    <Modal
+      v-if="selected_task"
+      :show="!! selected_task"
+    >
+      <template #header>
+        <p class="modal-card-title mb-0">
+          Edit your task
+        </p>
+
+        <button
+          class="delete"
+          aria-label="close"
+          @click="clearSelectedTask"
+        />
+      </template>
+
+      <template #body>
+        <form @submit.prevent.stop="updateTask">
+          <div class="field">
+            <label
+              for="projectName"
+              class="label"
+            >
+              Description
+            </label>
+
+            <input
+              v-model="selected_task.description"
+              type="text"
+              class="input"
+              id="projectName"
+              autofocus
+            >
+          </div>
+        </form>
+      </template>
+
+      <template #footer>
+        <button
+          @click="updateTask"
+          class="button is-success"
+        >
+          Save task
+        </button>
+
+        <button
+          class="button"
+          @click="clearSelectedTask"
+        >
+          Cancel
+        </button>
+      </template>
+    </Modal>
+
     <Task
       v-for="(task, index) in tasks"
       :key="index"
       :task="task"
       @selected-task="updateSelectedTask"
     />
-
-    <div
-      v-if="selected_task"
-      class="modal"
-      :class="{'is-active': !! selected_task}"
-    >
-      <div class="modal-background" />
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">
-            Edit your task
-          </p>
-
-          <button
-            class="delete"
-            aria-label="close"
-            @click="clearSelectedTask"
-          />
-        </header>
-
-        <section class="modal-card-body">
-          <form @submit.prevent.stop="updateTask">
-            <div class="field">
-              <label
-                for="projectName"
-                class="label"
-              >
-                Description
-              </label>
-
-              <input
-                v-model="selected_task.description"
-                type="text"
-                class="input"
-                id="projectName"
-                autofocus
-              >
-            </div>
-          </form>
-        </section>
-        <footer class="modal-card-foot">
-          <button
-            @click="updateTask"
-            class="button is-success"
-          >
-            Save task
-          </button>
-
-          <button
-            class="button"
-            @click="clearSelectedTask"
-          >
-            Cancel
-          </button>
-        </footer>
-      </div>
-    </div>
 
     <Box v-if="! tasks.length">
       Are you kidding with your future? :(
@@ -92,6 +89,7 @@
   import Form from '@/components/Form.vue';
   import Task from '@/components/Task.vue';
   import Box from '@/components/shared/Box.vue';
+  import Modal from '@/components/shared/Modal.vue';
 
   import TaskInterface from '@/interfaces/Task.interface';
   import { useStore } from '@/store';
@@ -103,6 +101,7 @@
       Form,
       Task,
       Box,
+      Modal,
     },
 
     data() {
