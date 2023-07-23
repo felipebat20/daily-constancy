@@ -3,7 +3,7 @@
     class="columns is-gapless is-multiline"
     :class="{'dark-theme': dark_theme }"
   >
-    <div class="column is-one-quarter">
+    <div class="column is-one-quarter content">
       <SideBar @on-switch-theme="switchDarkTheme" />
     </div>
 
@@ -42,6 +42,7 @@
 
 <style scoped>
   main {
+    min-height: 100vh;
     --bg-primary: #FFF;
     --text-primary: #000;
   }

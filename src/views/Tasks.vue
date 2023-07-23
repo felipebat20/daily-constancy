@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, watchEffect } from 'vue';
+  import { computed, defineComponent, ref, watch } from 'vue';
 
   import Form from '@/components/Form.vue';
   import Task from '@/components/Task.vue';
@@ -116,7 +116,7 @@
       const task_filter = ref('');
 
       store.dispatch(FETCH_TASKS);
-      watchEffect(() =>{
+      watch(task_filter, () =>{
         store.dispatch(FETCH_TASKS, task_filter.value);
       });
 
