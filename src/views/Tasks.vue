@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref, watchEffect } from 'vue';
 
   import Form from '@/components/Form.vue';
   import Task from '@/components/Task.vue';
@@ -114,16 +114,15 @@
     setup() {
       const store = useStore();
       const task_filter = ref('');
-      const tasks = computed(
-        () => store.state.task.tasks
-          .filter(task => ! task_filter.value || task.description.includes(task_filter.value))
-        );
 
       store.dispatch(FETCH_TASKS);
+      watchEffect(() =>{
+        store.dispatch(FETCH_TASKS, task_filter.value);
+      });
 
       return {
         store,
-        tasks,
+        tasks: computed(() => store.state.task.tasks),
         task_filter,
       };
     },

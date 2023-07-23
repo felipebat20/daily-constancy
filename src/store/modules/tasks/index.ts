@@ -39,8 +39,14 @@ export const task: Module<TaskState, State> = {
   },
 
   actions: {
-    [FETCH_TASKS]: ({ commit }) : Promise<void> => {
-      return http.get('tasks')
+    [FETCH_TASKS]: ({ commit }, task_name: string) : Promise<void> => {
+      let query = 'tasks';
+
+      if (task_name) {
+        query += `?description_like=${task_name}`
+      }
+
+      return http.get(query)
         .then(resp => commit(NEW_TASKS, resp.data));
     },
 

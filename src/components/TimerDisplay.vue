@@ -33,7 +33,15 @@
 </script>
 
 <style scoped>
-  .display {
+  .display { color: var(--text-primary); }
+  .icon-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
     color: var(--text-primary);
+    background-color: var(--bg-primary);
+    padding: 2px 5px;
+    border-radius: 5px;
   }
 </style>
