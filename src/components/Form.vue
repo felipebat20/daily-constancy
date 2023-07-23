@@ -18,7 +18,7 @@
       <div class="column is-3">
         <div class="select">
           <select v-model="project_id">
-            <option value="">
+            <option :value="0">
               Select a project
             </option>
             <option
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
+  import { computed, defineComponent, ref } from 'vue';
 
   import Timer from './Timer.vue';
 
@@ -53,32 +53,32 @@
   export default defineComponent({
     name: 'VForm',
     components: { Timer },
-    data: () => ({
-      description: '' as string,
-      project_id: '' as number | string,
-    }),
-
     emits: ['save-task'],
-    methods: {
-      finishTask(time: number): void {
-        const project = this.projects.find(project => project.id === this.project_id);
+    setup(props, { emit }) {
+      const store = useStore();
+      const description = ref('');
+      const project_id = ref(0);
+      const projects = computed(() => store.state.project.projects);
 
-        this.$emit('save-task', {
-          description: this.description,
+      store.dispatch(FETCH_PROJECTS);
+
+      const finishTask = (time: number): void => {
+        const project = projects.value.find(project => project.id === project_id.value);
+
+        emit('save-task', {
+          description: description.value,
           time_spent: time,
           project,
         });
 
-        this.description = '';
-      },
-    },
-
-    setup() {
-      const store = useStore();
-      store.dispatch(FETCH_PROJECTS);
+        description.value = '';
+      }
 
       return {
-        projects: computed(() => store.state.project.projects),
+        description,
+        project_id,
+        projects,
+        finishTask,
       };
     },
   });

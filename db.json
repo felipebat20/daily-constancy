@@ -10,7 +10,7 @@
     },
     {
       "id": 3,
-      "name": "NI 2.0"
+      "name": "NI 2.3"
     }
   ],
   "tasks": [
@@ -54,6 +54,15 @@
         "name": "Meta diária"
       },
       "id": 6
+    },
+    {
+      "description": "testasdfas",
+      "time_spent": 5,
+      "project": {
+        "id": 2,
+        "name": "Meta diária"
+      },
+      "id": 7
     }
   ]
 }

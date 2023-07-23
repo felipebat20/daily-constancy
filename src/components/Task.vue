@@ -34,7 +34,6 @@
       Box,
     },
 
-    emits: ['selected-task'],
     props: {
       task: {
         type: Object as PropType<TaskInterface>,
@@ -42,11 +41,14 @@
       },
     },
 
-    methods: {
-      selectTask() {
-        this.$emit('selected-task', this.task);
-      }
-    }
+    emits: ['selected-task'],
+    setup(props, { emit }) {
+      const selectTask = () => {
+        emit('selected-task', props.task);
+      };
+
+      return { selectTask }
+    },
   });
 </script>
 

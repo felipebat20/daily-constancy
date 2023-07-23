@@ -30,9 +30,14 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
+  import { useRouter } from 'vue-router';
 
   import { useStore } from '@/store';
-  import { CREATE_NEW_PROJECT, EDIT_PROJECT } from '@/store/types/actions';
+  import {
+    CREATE_NEW_PROJECT,
+    EDIT_PROJECT,
+    FETCH_PROJECTS,
+  } from '@/store/types/actions';
 
   import { NotificationType } from '@/interfaces/Notification.interface';
 
@@ -47,40 +52,40 @@
       },
     },
 
-    methods: {
-      submitForm() {
-        this.saveOrUpdateProject().then(() => {
-          this.project_name = '';
-          this.notify(NotificationType.SUCCESS, 'Great', 'You are fabulous');
-          this.$router.push('/projects')
-        });
-      },
-
-      saveOrUpdateProject() {
-        if (this.id) {
-          return this.store.dispatch(EDIT_PROJECT, { id: this.id, name: this.project_name });
-        }
-
-        return this.store.dispatch(CREATE_NEW_PROJECT, this.project_name);
-      },
-    },
-
     setup (props) {
       const store = useStore();
       const { notify } = useNotify();
       const project_name = ref('');
+      const router = useRouter();
 
       if (props.id) {
-        const project = store.state.project.projects
-          .find(proj => proj.id == parseInt(props.id));
+        store.dispatch(FETCH_PROJECTS).then(() => {
+          const project = store.state.project.projects
+            .find(proj => proj.id == parseInt(props.id));
 
-        project_name.value = project?.name || '';
+          project_name.value = project?.name || '';
+        });
       }
 
+      const submitForm = () => {
+        saveOrUpdateProject().then(() => {
+          project_name.value = '';
+          notify(NotificationType.SUCCESS, 'Great', 'Your project is available!');
+          router.push('/projects')
+        });
+      };
+
+      const saveOrUpdateProject = () => {
+        if (props.id) {
+          return store.dispatch(EDIT_PROJECT, { id: props.id, name: project_name.value });
+        }
+
+        return store.dispatch(CREATE_NEW_PROJECT, project_name.value);
+      };
+
       return {
-        store,
-        notify,
         project_name,
+        submitForm,
       };
     },
   });
