@@ -12,12 +12,14 @@ import {
   FETCH_TASKS,
   CREATE_NEW_TASK,
   UPDATE_TASK,
+  DELETE_TASK,
 } from "@/store/types/actions"
 
 import {
   NEW_TASKS,
   NEW_TASK,
   NEW_UPDATED_TASK,
+  REMOVE_TASK,
 } from "@/store/types/mutations"
 
 export interface TaskState {
@@ -39,6 +41,7 @@ export const task: Module<TaskState, State> = {
 
       return task;
     }),
+    [REMOVE_TASK]: (state, deleted_task: TaskInterface) => state.tasks = state.tasks.filter(task => task.id !== deleted_task.id),
   },
 
   actions: {
@@ -86,6 +89,18 @@ export const task: Module<TaskState, State> = {
         .doc({ id: task.id })
         .update({ ...task, project: { ...task.project } })
         .then(() => commit(NEW_UPDATED_TASK, task));
+    },
+
+    [DELETE_TASK]: ({ commit }, task: TaskInterface) => {
+      if (hasApi()) {
+        return http.delete(`tasks/${task.id}`)
+          .then(resp => commit(REMOVE_TASK, resp.data));
+      }
+
+      return db.collection('tasks')
+        .doc({ id: task.id })
+        .delete()
+        .then(() => commit(REMOVE_TASK, task));
     },
   },
 }

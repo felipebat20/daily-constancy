@@ -2,7 +2,6 @@
   <Box>
     <div
       class="columns is-clickable"
-      @click="selectTask"
     >
       <div class="column is-4">
         {{ task.description || 'Unnamed Task' }}
@@ -15,6 +14,26 @@
       <div class="column">
         <TimerDisplay :time-in-seconds="task.time_spent" />
       </div>
+
+      <div class="column">
+        <button
+          class="button"
+          @click="selectTask"
+        >
+          <span class="icon is-small">
+            <i class="fas fa-pencil-alt" />
+          </span>
+        </button>
+
+        <button
+          class="button ml-2 is-danger"
+          @click="deleteTask"
+        >
+          <span class="icon is-small">
+            <i class="fas fa-trash" />
+          </span>
+        </button>
+      </div>
     </div>
   </Box>
 </template>
@@ -26,6 +45,8 @@
   import Box from './shared/Box.vue';
 
   import TaskInterface from '../interfaces/Task.interface';
+  import { useStore } from '@/store';
+  import { DELETE_TASK } from '@/store/types/actions';
 
   export default defineComponent({
     name: 'ATTask',
@@ -43,11 +64,20 @@
 
     emits: ['selected-task'],
     setup(props, { emit }) {
+      const store = useStore();
+
       const selectTask = () => {
         emit('selected-task', props.task);
       };
 
-      return { selectTask }
+      const deleteTask = () => {
+        store.dispatch(DELETE_TASK, props.task);
+      }
+
+      return {
+        deleteTask,
+        selectTask,
+      }
     },
   });
 </script>
