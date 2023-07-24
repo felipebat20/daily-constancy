@@ -5,6 +5,9 @@ import { State } from "@/store"
 
 import http from "@/http"
 
+import { db } from '@/hooks/database';
+import { hasApi } from '@/hooks/verify_api';
+
 import {
   FETCH_TASKS,
   CREATE_NEW_TASK,
@@ -40,24 +43,49 @@ export const task: Module<TaskState, State> = {
 
   actions: {
     [FETCH_TASKS]: ({ commit }, task_name: string) : Promise<void> => {
-      let query = 'tasks';
+      if (hasApi()) {
+        let query = 'tasks';
 
-      if (task_name) {
-        query += `?description_like=${task_name}`
+        if (task_name) {
+          query += `?description_like=${task_name}`
+        }
+
+        return http.get(query)
+          .then(resp => commit(NEW_TASKS, resp.data));
       }
 
-      return http.get(query)
-        .then(resp => commit(NEW_TASKS, resp.data));
+      return db.collection('tasks')
+        .get()
+        .then((resp: TaskInterface[]) => {
+          if (task_name) {
+            return commit(NEW_TASKS, resp.filter(task => task.description.includes(task_name)));
+          }
+
+          return commit(NEW_TASKS, resp);
+        });
     },
 
     [CREATE_NEW_TASK]: ({ commit }, task: TaskInterface) : Promise<void> => {
-      return http.post('tasks', task)
-        .then(resp => commit(NEW_TASK, resp.data));
+      if (hasApi()) {
+        return http.post('tasks', task)
+          .then(resp => commit(NEW_TASK, resp.data));
+      }
+
+      return db.collection('tasks')
+        .add({ ...task, project: { ...task.project } })
+        .then(() => commit(NEW_TASK, task));
     },
 
     [UPDATE_TASK]: ({ commit }, task: TaskInterface) => {
-      return http.put(`tasks/${task.id}`, task)
-        .then(resp => commit(NEW_UPDATED_TASK, resp.data));
+      if (hasApi()) {
+        return http.put(`tasks/${task.id}`, task)
+          .then(resp => commit(NEW_UPDATED_TASK, resp.data));
+      }
+
+      return db.collection('tasks')
+        .doc({ id: task.id })
+        .update(task)
+        .then(() => commit(NEW_UPDATED_TASK, task));
     },
   },
 }

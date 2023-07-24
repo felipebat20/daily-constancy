@@ -128,7 +128,10 @@
 
     methods: {
       saveTask(task: TaskInterface): void {
-        this.store.dispatch(CREATE_NEW_TASK, task);
+        this.store.dispatch(CREATE_NEW_TASK, {
+          ...task,
+          id: new Date().getTime(),
+        });
       },
 
       updateSelectedTask(task: TaskInterface): void {

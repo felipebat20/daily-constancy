@@ -20,6 +20,9 @@
   import SideBar from './components/SideBar.vue';
   import Notification from './components/Notifications.vue';
 
+  import { useStore } from './store';
+  import { VERIFY_API } from '@/store/types/actions';
+
   export default defineComponent({
     name: 'App',
     components: {
@@ -30,6 +33,13 @@
       return {
         dark_theme: false,
       };
+    },
+
+    setup() {
+      document.title = 'Alura tracker';
+      const store = useStore();
+
+      store.dispatch(VERIFY_API);
     },
 
     methods: {

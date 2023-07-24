@@ -77,7 +77,7 @@
 
       const saveOrUpdateProject = () => {
         if (props.id) {
-          return store.dispatch(EDIT_PROJECT, { id: props.id, name: project_name.value });
+          return store.dispatch(EDIT_PROJECT, { id: parseInt(props.id), name: project_name.value });
         }
 
         return store.dispatch(CREATE_NEW_PROJECT, project_name.value);
