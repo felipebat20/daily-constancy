@@ -84,7 +84,7 @@ export const task: Module<TaskState, State> = {
 
       return db.collection('tasks')
         .doc({ id: task.id })
-        .update(task)
+        .update({ ...task, project: { ...task.project } })
         .then(() => commit(NEW_UPDATED_TASK, task));
     },
   },
