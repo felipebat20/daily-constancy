@@ -43,36 +43,57 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref, watch } from 'vue';
 
   import Timer from './Timer.vue';
 
   import { useStore } from '@/store';
-  import { FETCH_PROJECTS } from '@/store/types/actions';
+  import { CREATE_NEW_TASK, FETCH_PROJECTS, SET_ACTIVE_TASK, UPDATE_TASK } from '@/store/types/actions';
 
   export default defineComponent({
     name: 'VForm',
     components: { Timer },
     emits: ['save-task'],
-    setup(props, { emit }) {
+    setup() {
       const store = useStore();
       const description = ref('');
       const project_id = ref(0);
       const projects = computed(() => store.state.project.projects);
+      const active_task = computed(() => store.state.task.active_task);
 
       store.dispatch(FETCH_PROJECTS);
 
-      const finishTask = (time: number): void => {
+      const finishTask = (time: number): Promise<any> => {
         const project = projects.value.find(project => project.id === project_id.value);
-
-        emit('save-task', {
-          description: description.value,
-          time_spent: time,
-          project,
-        });
+        const task_name = description.value;
 
         description.value = '';
+
+        if (active_task.value.id) {
+          return store.dispatch(UPDATE_TASK, {
+            ...active_task.value,
+            description: task_name,
+            project,
+            time_spent: time,
+          }).then(() => store.dispatch(SET_ACTIVE_TASK, {}));
+        }
+
+        return store.dispatch(CREATE_NEW_TASK, {
+          description: task_name,
+          time_spent: time,
+          id: new Date().getTime(),
+          project,
+        });
       }
+
+      watch(active_task, (state, prev_state) => {
+        if (state.id && state.id !== prev_state.id) {
+          description.value = active_task.value.description;
+          if (state.project?.id) {
+            project_id.value = state.project.id;
+          }
+        }
+      });
 
       return {
         description,

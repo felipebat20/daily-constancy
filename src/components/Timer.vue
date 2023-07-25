@@ -15,10 +15,12 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, computed, watch, ref } from 'vue';
 
   import TimerDisplay from './TimerDisplay.vue'
   import Button from './shared/Button.vue'
+
+  import { useStore } from '@/store';
 
   import ButtonInterface from '../interfaces/Button.interface';
 
@@ -37,11 +39,6 @@
     },
 
     emits: ['timeIsFinished'],
-    data: () => ({
-      timeInSeconds: 0,
-      timer: 0,
-    }),
-
     computed: {
       getTimeIsRunning(): boolean {
         return !! this.timer;
@@ -64,23 +61,48 @@
       },
     },
 
-    methods: {
-      startTimer() {
-        this.timer = setInterval(() => {
-          this.timeInSeconds += 1;
-          const display_timer = new Date(this.timeInSeconds * 1000).toISOString().substring(11, 19);
+    setup(props, { emit }) {
+      const store = useStore();
+      const timer = ref(0);
+      const timeInSeconds = ref(0);
 
-          document.title = `${display_timer} - ${this.taskName}`;
-        }, 1000);
-      },
+      const active_task = computed(() => store.state.task.active_task);
 
-      stopTimer(): void {
-        clearInterval(this.timer);
-        this.timer = 0;
-        this.$emit('timeIsFinished', this.timeInSeconds)
-        this.timeInSeconds = 0;
+      const stopTimer = (): void => {
+        clearInterval(timer.value);
+        timer.value = 0;
+        emit('timeIsFinished', timeInSeconds.value)
+        timeInSeconds.value = 0;
         document.title = 'Alura tracker';
-      },
+      };
+
+
+      const startTimer = () => {
+        timer.value = setInterval(() => {
+          timeInSeconds.value = timeInSeconds.value + 1;
+          const display_timer = new Date(timeInSeconds.value * 1000).toISOString().substring(11, 19);
+
+          document.title = `${display_timer} - ${props.taskName}`;
+        }, 1000);
+      };
+
+      watch(active_task, (state, prev_state) => {
+        if (state.id && state.id !== prev_state.id) {
+          clearInterval(timer.value);
+          timeInSeconds.value = active_task.value.time_spent;
+          startTimer();
+        }
+      });
+
+      return {
+        stopTimer,
+        startTimer,
+        timeInSeconds,
+        timer,
+      };
+    },
+
+    methods: {
     },
   });
 </script>

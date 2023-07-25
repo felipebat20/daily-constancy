@@ -3,6 +3,17 @@
     <div
       class="columns is-clickable"
     >
+      <div class="column is-1">
+        <button
+          class="button"
+          @click="setActiveTask"
+        >
+          <span class="icon is-small">
+            <i class="fas fa-play" />
+          </span>
+        </button>
+      </div>
+
       <div class="column is-4">
         {{ task.description || 'Unnamed Task' }}
       </div>
@@ -46,7 +57,7 @@
 
   import TaskInterface from '../interfaces/Task.interface';
   import { useStore } from '@/store';
-  import { DELETE_TASK } from '@/store/types/actions';
+  import { DELETE_TASK, SET_ACTIVE_TASK } from '@/store/types/actions';
 
   export default defineComponent({
     name: 'ATTask',
@@ -74,9 +85,14 @@
         store.dispatch(DELETE_TASK, props.task);
       }
 
+      const setActiveTask = () => {
+        store.dispatch(SET_ACTIVE_TASK, props.task);
+      }
+
       return {
         deleteTask,
         selectTask,
+        setActiveTask,
       }
     },
   });

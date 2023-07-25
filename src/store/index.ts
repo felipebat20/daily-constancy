@@ -14,6 +14,7 @@ import { project, ProjectState } from './modules/projects';
 import { task,TaskState } from './modules/tasks';
 
 import httpClient from '@/http';
+import TaskInterface from '@/interfaces/Task.interface';
 
 export interface State {
   notifications: NotificationInterface[],
@@ -31,7 +32,7 @@ export const store = createStore<State>({
 
   state: {
     notifications: [],
-    task: { tasks: [] },
+    task: { tasks: [], active_task: {} as TaskInterface },
     project: { projects: [] },
   },
 

@@ -13,6 +13,7 @@ import {
   CREATE_NEW_TASK,
   UPDATE_TASK,
   DELETE_TASK,
+  SET_ACTIVE_TASK,
 } from "@/store/types/actions"
 
 import {
@@ -20,15 +21,18 @@ import {
   NEW_TASK,
   NEW_UPDATED_TASK,
   REMOVE_TASK,
+  NEW_ACTIVE_TASK,
 } from "@/store/types/mutations"
 
 export interface TaskState {
   tasks: TaskInterface[],
+  active_task: TaskInterface,
 }
 
 export const task: Module<TaskState, State> = {
   state: {
-    tasks: []
+    tasks: [],
+    active_task: {} as TaskInterface,
   },
 
   mutations: {
@@ -42,6 +46,7 @@ export const task: Module<TaskState, State> = {
       return task;
     }),
     [REMOVE_TASK]: (state, deleted_task: TaskInterface) => state.tasks = state.tasks.filter(task => task.id !== deleted_task.id),
+    [NEW_ACTIVE_TASK]: (state, task: TaskInterface) => state.active_task = task,
   },
 
   actions: {
@@ -102,5 +107,7 @@ export const task: Module<TaskState, State> = {
         .delete()
         .then(() => commit(REMOVE_TASK, task));
     },
+
+    [SET_ACTIVE_TASK]: ({ commit }, task: TaskInterface) => commit(NEW_ACTIVE_TASK, task),
   },
 }

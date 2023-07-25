@@ -1,5 +1,5 @@
 <template>
-  <Form @save-task="saveTask" />
+  <Form />
 
   <div class="list">
     <div class="field">
@@ -93,7 +93,7 @@
 
   import TaskInterface from '@/interfaces/Task.interface';
   import { useStore } from '@/store';
-  import { CREATE_NEW_TASK, FETCH_TASKS, UPDATE_TASK } from '@/store/types/actions';
+  import {  FETCH_TASKS, UPDATE_TASK } from '@/store/types/actions';
 
   export default defineComponent({
     name: 'App',
@@ -127,13 +127,6 @@
     },
 
     methods: {
-      saveTask(task: TaskInterface): void {
-        this.store.dispatch(CREATE_NEW_TASK, {
-          ...task,
-          id: new Date().getTime(),
-        });
-      },
-
       updateSelectedTask(task: TaskInterface): void {
         this.selected_task = task;
       },
