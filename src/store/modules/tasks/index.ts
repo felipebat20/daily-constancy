@@ -66,7 +66,7 @@ export const task: Module<TaskState, State> = {
         .get()
         .then((resp: TaskInterface[]) => {
           if (task_name) {
-            return commit(NEW_TASKS, resp.filter(task => task.description.includes(task_name)));
+            return commit(NEW_TASKS, resp.filter(task => task.description.toLocaleLowerCase().includes(task_name.toLowerCase())));
           }
 
           return commit(NEW_TASKS, resp);
