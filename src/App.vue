@@ -3,11 +3,14 @@
     class="columns is-gapless is-multiline"
     :class="{'dark-theme': dark_theme }"
   >
-    <div class="column is-one-quarter content">
+    <div
+      ref="side_bar"
+      class="column is-2 content-side-bar"
+    >
       <SideBar @on-switch-theme="switchDarkTheme" />
     </div>
 
-    <div class="column is-three-quarter content">
+    <div class="column content-side-bar">
       <Notification />
       <router-view />
     </div>
@@ -62,7 +65,7 @@
     --text-primary: #ddd;
   }
 
-  .content {
+  .content-side-bar {
     background-color: var(--bg-primary);
     color: var(--text-primary);
   }

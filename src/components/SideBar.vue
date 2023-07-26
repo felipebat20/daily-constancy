@@ -1,43 +1,47 @@
 <template>
   <header>
-    <h1>
+    <div>
       <img
-        src="../assets/logo.png"
+        src="../assets/treker_logo.png"
         alt="logo"
+        class="mt-2"
       >
-    </h1>
+    </div>
 
-    <button
-      class="button"
-      @click="switchTheme"
-    >
-      {{ getThemeText }}
-    </button>
-
-    <nav class="panel mt-5">
-      <ul>
+    <aside class="menu">
+      <ul class="menu-list text-left">
         <li>
           <router-link
             to="/"
             class="link"
+            :class="{ 'is-active': getIsActive('/') }"
           >
             <i class="fas fa-tasks" />
 
-            tasks
+            Tasks
           </router-link>
         </li>
+
         <li>
           <router-link
             to="/projects"
             class="link"
+            :class="{ 'is-active': getIsActive('/projects') }"
           >
             <i class="fas fa-project-diagram" />
 
-            projects
+            Projects
           </router-link>
         </li>
       </ul>
-    </nav>
+    </aside>
+
+    <button
+      class="switch-theme button mt-auto"
+      @click="switchTheme"
+    >
+      {{ getThemeText }}
+    </button>
   </header>
 </template>
 
@@ -66,6 +70,11 @@
         this.dark_theme = ! this.dark_theme;
         this.$emit('onSwitchTheme', this.dark_theme)
       },
+
+
+      getIsActive(path: string) {
+        return this.$route.path === path;
+      },
     },
   });
 </script>
@@ -76,8 +85,13 @@
     background: #0d3b66;
     position: fixed;
     height: 100vh;
-    text-align: center;
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
+
+  header h1, header button { text-align: center; }
 
   @media only screen and (max-width: 768px) {
     header {
@@ -86,18 +100,8 @@
     }
   }
 
-  .panel li {
-    margin: 8px 0;
-    text-align: left;
-  }
 
   .link {
       color: #fff;
-  }
-  .link:hover {
-      color: #FAF0CA;
-  }
-  .link.router-link-active {
-      color: #FAF0CA;
   }
 </style>
