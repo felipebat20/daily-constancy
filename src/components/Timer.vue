@@ -101,8 +101,5 @@
         timer,
       };
     },
-
-    methods: {
-    },
   });
 </script>
