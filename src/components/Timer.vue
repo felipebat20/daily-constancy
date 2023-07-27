@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, watch, ref } from 'vue';
+  import { defineComponent, computed, watch, ref, onBeforeUnmount } from 'vue';
 
   import TimerDisplay from './TimerDisplay.vue'
   import Button from './shared/Button.vue'
@@ -86,6 +86,7 @@
         }, 1000);
       };
 
+      onBeforeUnmount(() => stopTimer());
       watch(active_task, (state, prev_state) => {
         if (state.id && state.id !== prev_state.id) {
           clearInterval(timer.value);
