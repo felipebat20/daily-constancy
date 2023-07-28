@@ -86,7 +86,11 @@
         }, 1000);
       };
 
-      onBeforeUnmount(() => stopTimer());
+      onBeforeUnmount(() => {
+        if (timer.value) {
+          stopTimer()
+        }
+      });
       watch(active_task, (state, prev_state) => {
         if (state.id && state.id !== prev_state.id) {
           clearInterval(timer.value);
