@@ -1,11 +1,17 @@
 <template>
   <section>
-    <span class="icon-text">
+    <span
+      class="icon-text"
+      :class="{ 'with-dark-theme': hasDarkTheme }"
+    >
       <span class="icon">
         <i class="far fa-clock" />
       </span>
 
-      <strong class="display">
+      <strong
+        class="display"
+        :class="{ 'with-dark-theme': hasDarkTheme }"
+      >
         {{ getTimer }}
       </strong>
     </span>
@@ -22,6 +28,11 @@
         type: Number,
         default: 0,
       },
+
+      hasDarkTheme: {
+        type: Boolean,
+        required: true,
+      },
     },
 
     computed: {
@@ -33,15 +44,19 @@
 </script>
 
 <style scoped>
-  .display { color: var(--text-primary); }
+  /* .display { color: var(--text-primary); } */
   .icon-text {
     display: flex;
     justify-content: center;
     align-items: center;
     width: fit-content;
-    color: var(--text-primary);
-    background-color: var(--bg-primary);
+    color: #000;
     padding: 2px 5px;
     border-radius: 5px;
+  }
+
+  .with-dark-theme {
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
   }
 </style>

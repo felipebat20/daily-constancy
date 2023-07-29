@@ -70,12 +70,14 @@
       </template>
     </Modal>
 
-    <Task
-      v-for="(task, index) in tasks"
-      :key="index"
-      :task="task"
-      @selected-task="updateSelectedTask"
-    />
+    <div :class="{'task-container': false}">
+      <Task
+        v-for="(task, index) in tasks"
+        :key="index"
+        :task="task"
+        @selected-task="updateSelectedTask"
+      />
+    </div>
 
     <Box v-if="! tasks.length">
       Are you kidding with your future? :(
@@ -87,7 +89,7 @@
   import { computed, defineComponent, ref, watch } from 'vue';
 
   import Form from '@/components/Form.vue';
-  import Task from '@/components/Task.vue';
+  import Task from '@/components/ATTask.vue';
   import Box from '@/components/shared/Box.vue';
   import Modal from '@/components/shared/Modal.vue';
 
@@ -145,4 +147,10 @@
 
 <style scoped>
   .list { padding: 1.25rem; }
+  .task-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 </style>

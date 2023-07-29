@@ -1,6 +1,9 @@
 <template>
   <div class="is-flex is-align-items-center is-justify-content-space-between">
-    <TimerDisplay :time-in-seconds="timeInSeconds" />
+    <TimerDisplay
+      :time-in-seconds="timeInSeconds"
+      :has-dark-theme="true"
+    />
 
     <Button
       :button="getPlayButton"
