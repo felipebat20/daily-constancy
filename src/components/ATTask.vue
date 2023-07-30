@@ -214,7 +214,8 @@
 <style scoped>
   .box { background-color: #FAF0CA; }
   .task-card {
-    width: 287px;
+    min-width: 287px;
+    max-width: 387px;
     display: flex;
     flex-direction: column;
   }

@@ -8,10 +8,7 @@
         <i class="far fa-clock" />
       </span>
 
-      <strong
-        class="display"
-        :class="{ 'with-dark-theme': hasDarkTheme }"
-      >
+      <strong :class="{ 'with-dark-theme': hasDarkTheme }">
         {{ getTimer }}
       </strong>
     </span>
@@ -44,7 +41,6 @@
 </script>
 
 <style scoped>
-  /* .display { color: var(--text-primary); } */
   .icon-text {
     display: flex;
     justify-content: center;
