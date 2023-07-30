@@ -69,6 +69,7 @@
         const task_name = description.value;
 
         description.value = '';
+        project_id.value = 0;
 
         if (active_task.value.id) {
           return store.dispatch(UPDATE_TASK, {
