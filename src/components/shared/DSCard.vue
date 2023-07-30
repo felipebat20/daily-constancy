@@ -6,7 +6,7 @@
       </p>
     </header>
 
-    <div class="card-content">
+    <div class="card-content p-4">
       <div class="content">
         <slot name="content" />
       </div>
@@ -21,5 +21,10 @@
 <script setup lang="ts" />
 
 <style scoped>
-  .card {background: #FAF0CA;}
+  .card {
+    background: #FAF0CA;
+    color: #000;
+  }
+
+  .card-footer { border-color: #adb5bd; }
 </style>
