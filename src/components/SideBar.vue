@@ -33,6 +33,18 @@
             Projects
           </router-link>
         </li>
+
+        <li>
+          <router-link
+            to="/reports"
+            class="link"
+            :class="{ 'is-active': getIsActive('/reports') }"
+          >
+            <i class="fa-solid fa-chart-pie" />
+
+            Reports
+          </router-link>
+        </li>
       </ul>
     </aside>
 

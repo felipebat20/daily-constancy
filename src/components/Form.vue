@@ -49,6 +49,7 @@
 
   import { useStore } from '@/store';
   import { CREATE_NEW_TASK, FETCH_PROJECTS, SET_ACTIVE_TASK, UPDATE_TASK } from '@/store/types/actions';
+  import { AxiosResponse } from 'axios';
 
   export default defineComponent({
     name: 'VForm',
@@ -63,7 +64,7 @@
 
       store.dispatch(FETCH_PROJECTS);
 
-      const finishTask = (time: number): Promise<any> => {
+      const finishTask = (time: number): Promise<AxiosResponse> => {
         const project = projects.value.find(project => project.id === project_id.value);
         const task_name = description.value;
 
