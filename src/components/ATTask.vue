@@ -70,7 +70,7 @@
         </div>
 
         <div class="task-info-container">
-          Time in focus:D
+          Time in focus:
 
           <TimerDisplay
             :time-in-seconds="task.time_spent"
