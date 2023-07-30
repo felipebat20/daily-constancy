@@ -1,5 +1,5 @@
 <template>
-  <Box>
+  <Box v-if="isGridLayout">
     <div class="columns is-clickable">
       <div class="column is-1">
         <button
@@ -21,7 +21,10 @@
       </div>
 
       <div class="column">
-        <TimerDisplay :time-in-seconds="task.time_spent" />
+        <TimerDisplay
+          :time-in-seconds="task.time_spent"
+          :has-dark-theme="false"
+        />
       </div>
 
       <div class="column">
@@ -47,7 +50,7 @@
   </Box>
 
   <DSCard
-    v-if="false"
+    v-else
     class="task-card"
   >
     <template #title>
@@ -173,6 +176,11 @@
   const props = defineProps({
     task: {
       type: Object as PropType<TaskInterface>,
+      required: true,
+    },
+
+    isGridLayout: {
+      type: Boolean,
       required: true,
     },
   });

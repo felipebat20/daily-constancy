@@ -2,18 +2,35 @@
   <Form />
 
   <div class="list">
-    <div class="field">
-      <p class="control has-icons-left has-icons-right">
-        <input
-          v-model="task_filter"
-          class="input"
-          type="text"
-          placeholder="Search a task"
-        >
-        <span class="icon is-small is-left">
-          <i class="fas fa-search" />
-        </span>
-      </p>
+    <div class="search-container">
+      <div class="field">
+        <p class="control has-icons-left has-icons-right">
+          <input
+            v-model="task_filter"
+            class="input"
+            type="text"
+            placeholder="Search a task"
+          >
+          <span class="icon is-small is-left">
+            <i class="fas fa-search" />
+          </span>
+        </p>
+      </div>
+
+      <div
+        class="change-view-container"
+        @click="updateLayout"
+      >
+        <i
+          v-if="is_grid_layout"
+          class="fa-solid fa-grip"
+        />
+
+        <i
+          v-else
+          class="fa-solid fa-bars"
+        />
+      </div>
     </div>
 
     <Modal
@@ -70,11 +87,12 @@
       </template>
     </Modal>
 
-    <div :class="{'task-container': false}">
+    <div :class="{'task-container': ! is_grid_layout}">
       <Task
         v-for="(task, index) in tasks"
         :key="index"
         :task="task"
+        :is-grid-layout="is_grid_layout"
         @selected-task="updateSelectedTask"
       />
     </div>
@@ -97,6 +115,13 @@
   import { useStore } from '@/store';
   import {  FETCH_TASKS, UPDATE_TASK } from '@/store/types/actions';
 
+  import {
+    isGridLayout,
+    updateTaskLayout,
+    GRID_LAYOUT,
+    CARD_LAYOUT,
+  } from '@/hooks/layout';
+
   export default defineComponent({
     name: 'App',
     components: {
@@ -115,6 +140,7 @@
     setup() {
       const store = useStore();
       const task_filter = ref('');
+      const is_grid_layout = ref(isGridLayout());
 
       store.dispatch(FETCH_TASKS);
       watch(task_filter, () =>{
@@ -125,6 +151,7 @@
         store,
         tasks: computed(() => store.state.task.tasks),
         task_filter,
+        is_grid_layout,
       };
     },
 
@@ -141,6 +168,18 @@
         return this.store.dispatch(UPDATE_TASK, this.selected_task)
           .then(() => this.clearSelectedTask());
       },
+
+      updateLayout() {
+        if (isGridLayout()) {
+          updateTaskLayout(CARD_LAYOUT);
+
+          return this.is_grid_layout = false;
+        }
+
+        updateTaskLayout(GRID_LAYOUT);
+
+        return this.is_grid_layout = true;
+      },
     },
   });
 </script>
@@ -153,4 +192,27 @@
     flex-wrap: wrap;
     gap: 10px;
   }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .search-container .field { width: 100%; }
+  .change-view-container {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem;
+    background-color: #ced4da;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .change-view-container:hover { background-color: #adb5bd; }
 </style>
