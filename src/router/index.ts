@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 
 import Tasks from '../views/Tasks.vue';
-import Reports from '../views/Reports.vue';
+import Reports from '../views/ATReports.vue';
 import Projects from '../views/Projects.vue';
 import ProjectsForm from '../views/Projects/Form.vue';
 import ProjectsList from '../views/Projects/List.vue';
