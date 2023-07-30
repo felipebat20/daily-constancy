@@ -67,6 +67,31 @@
               autofocus
             >
           </div>
+
+          <div class="field">
+            <label
+              for="projectName"
+              class="label"
+            >
+              Project
+            </label>
+
+            <div class="select">
+              <select v-model="project_id">
+                <option :value="0">
+                  Select a project
+                </option>
+
+                <option
+                  v-for="project in projects"
+                  :key="project.id"
+                  :value="project.id"
+                >
+                  {{ project.name }}
+                </option>
+              </select>
+            </div>
+          </div>
         </form>
       </template>
 
@@ -142,6 +167,9 @@
       const task_filter = ref('');
       const is_grid_layout = ref(isGridLayout());
 
+      const projects = computed(() => store.state.project.projects);
+      const project_id = ref(0);
+
       store.dispatch(FETCH_TASKS);
       watch(task_filter, () =>{
         store.dispatch(FETCH_TASKS, task_filter.value);
@@ -152,11 +180,14 @@
         tasks: computed(() => store.state.task.tasks),
         task_filter,
         is_grid_layout,
+        projects,
+        project_id,
       };
     },
 
     methods: {
       updateSelectedTask(task: TaskInterface): void {
+        this.project_id = task.project?.id || 0;
         this.selected_task = task;
       },
 
@@ -165,8 +196,12 @@
       },
 
       updateTask() {
-        return this.store.dispatch(UPDATE_TASK, this.selected_task)
-          .then(() => this.clearSelectedTask());
+        const project = this.projects.find(proj => proj.id === this.project_id);
+
+        return this.store.dispatch(UPDATE_TASK, {
+          ...this.selected_task,
+          project,
+        }).then(() => this.clearSelectedTask());
       },
 
       updateLayout() {
