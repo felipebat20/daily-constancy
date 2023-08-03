@@ -10,7 +10,7 @@
       <SideBar @on-switch-theme="switchDarkTheme" />
     </div>
 
-    <div class="column content-side-bar">
+    <div class="column is-10 content-side-bar">
       <Notification />
       <router-view />
     </div>
