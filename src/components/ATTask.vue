@@ -83,36 +83,53 @@
     <template #footer>
       <div class="footer-container">
         <div>
-          <button
+          <q-btn
             class="button"
+            color="white"
+            text-color="black"
             @click="setActiveTask"
           >
             <span class="icon is-small">
               <i class="fas fa-play" />
             </span>
-          </button>
+
+            <q-tooltip>
+              Play
+            </q-tooltip>
+          </q-btn>
         </div>
 
         <div>
-          <button
+          <q-btn
             class="button"
             @click="selectTask"
+            color="white"
+            text-color="black"
           >
             <span class="icon is-small">
               <i class="fas fa-pencil-alt" />
             </span>
-          </button>
+
+            <q-tooltip>
+              Edit
+            </q-tooltip>
+          </q-btn>
         </div>
 
         <div>
-          <button
-            class="button is-danger"
+          <q-btn
+            color="white"
+            text-color="negative"
             @click="handleDeleteButtonClick"
           >
             <span class="icon is-small">
               <i class="fas fa-trash" />
             </span>
-          </button>
+
+            <q-tooltip>
+              Delete
+            </q-tooltip>
+          </q-btn>
         </div>
       </div>
     </template>
