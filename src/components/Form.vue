@@ -16,20 +16,27 @@
       </div>
 
       <div class="column is-3">
-        <div class="select">
-          <select v-model="project_id">
-            <option :value="0">
-              Select a project
-            </option>
-            <option
-              v-for="project in projects"
-              :key="project.id"
-              :value="project.id"
+        <q-select
+          :options="getParsedProjects"
+          v-model="project_id"
+          label="Select a project"
+          outlined
+          emit-value
+          map-options
+          dense
+          options-dense
+        >
+          <template #option="scope">
+            <q-item
+              v-bind="scope.itemProps"
+              dense
             >
-              {{ project.name }}
-            </option>
-          </select>
-        </div>
+              <q-item-section>
+                <q-item-label>{{ scope.opt.label }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
       </div>
 
       <div class="column">
@@ -51,6 +58,11 @@
   import { CREATE_NEW_TASK, FETCH_PROJECTS, SET_ACTIVE_TASK, UPDATE_TASK } from '@/store/types/actions';
   import { AxiosResponse } from 'axios';
 
+  interface projectOptions {
+    label: string;
+    value: null | number;
+  }
+
   export default defineComponent({
     name: 'VForm',
     components: { Timer },
@@ -58,7 +70,7 @@
     setup() {
       const store = useStore();
       const description = ref('');
-      const project_id = ref(0);
+      const project_id = ref<number | null>(null);
       const projects = computed(() => store.state.project.projects);
       const active_task = computed(() => store.state.task.active_task);
 
@@ -69,7 +81,7 @@
         const task_name = description.value;
 
         description.value = '';
-        project_id.value = 0;
+        project_id.value = null;
 
         if (active_task.value.id) {
           return store.dispatch(UPDATE_TASK, {
@@ -97,11 +109,31 @@
         }
       });
 
+      const getParsedProjects = computed(() => {
+        const parsed_projects : projectOptions[] = [
+          {
+            value: null,
+            label: 'Select a project',
+          },
+        ];
+
+        parsed_projects.push(
+          ...projects.value.map((project) => ({
+            label: project.name,
+            value: project.id,
+          }))
+        );
+
+
+        return parsed_projects;
+      });
+
       return {
         description,
         project_id,
         projects,
         finishTask,
+        getParsedProjects,
       };
     },
   });
@@ -111,5 +143,9 @@
   .form {
     background-color: var(--bg-primary);
     color: var(--text-primary);
+  }
+
+  .height-1 {
+    height: 20px;
   }
 </style>
