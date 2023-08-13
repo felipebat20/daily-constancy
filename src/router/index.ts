@@ -18,6 +18,11 @@ const routes: RouteRecordRaw[] = [
     component: Reports,
   },
   {
+    path: '/streaks',
+    name: 'Streaks',
+    component: Reports,
+  },
+  {
     component: Projects,
     path: '/projects',
     children: [

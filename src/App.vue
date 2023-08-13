@@ -1,16 +1,16 @@
 <template>
   <main
-    class="columns is-gapless is-multiline"
+    class="is-flex is-flex-direction-row"
     :class="{'dark-theme': dark_theme }"
   >
     <div
       ref="side_bar"
-      class="column is-2 content-side-bar"
+      class="content-side-bar"
     >
       <SideBar @on-switch-theme="switchDarkTheme" />
     </div>
 
-    <div class="column is-10 content-side-bar">
+    <div class="margin-menu content-side-bar">
       <Notification />
       <router-view />
     </div>
@@ -68,5 +68,10 @@
   .content-side-bar {
     background-color: var(--bg-primary);
     color: var(--text-primary);
+  }
+
+  .margin-menu {
+    margin-left: 4rem;
+    width: 100%;
   }
 </style>

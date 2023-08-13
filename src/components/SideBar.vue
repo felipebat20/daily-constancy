@@ -1,11 +1,17 @@
 <template>
   <header>
-    <div>
-      <img
-        src="../assets/treker_logo.png"
-        alt="logo"
-        class="mt-2"
+    <div class="is-flex justify-center">
+      <router-link
+        style="{ height: 32px; width: 32px;}"
+        to="/"
       >
+        <q-img
+          src="../assets/treker.png"
+          alt="logo"
+          class="mt-2"
+          style="max-width: 32px;"
+        />
+      </router-link>
     </div>
 
     <aside class="menu">
@@ -13,47 +19,87 @@
         <li>
           <router-link
             to="/"
-            class="link"
+            class="link is-flex justify-center"
             :class="{ 'is-active': getIsActive('/') }"
           >
-            <i class="fas fa-tasks" />
+            <q-icon name="tasks" />
 
-            Tasks
+            <q-tooltip
+              anchor="center right"
+              self="center left"
+              :offset="[8, 8]"
+              class="bg-dark"
+            >
+              Tasks
+            </q-tooltip>
           </router-link>
         </li>
 
         <li>
           <router-link
             to="/projects"
-            class="link"
+            class="link is-flex justify-center"
             :class="{ 'is-active': getIsActive('/projects') }"
           >
             <i class="fas fa-project-diagram" />
 
-            Projects
+            <q-tooltip
+              anchor="center right"
+              self="center left"
+              :offset="[8, 8]"
+              class="bg-dark"
+            >
+              Projects
+            </q-tooltip>
           </router-link>
         </li>
 
         <li>
           <router-link
             to="/reports"
-            class="link"
+            class="link is-flex justify-center"
             :class="{ 'is-active': getIsActive('/reports') }"
           >
             <i class="fa-solid fa-chart-pie" />
 
-            Reports
+            <q-tooltip
+              anchor="center right"
+              self="center left"
+              :offset="[8, 8]"
+              class="bg-dark"
+            >
+              Reports
+            </q-tooltip>
           </router-link>
         </li>
       </ul>
     </aside>
 
-    <button
+    <q-btn
       class="switch-theme button mt-auto"
       @click="switchTheme"
     >
-      {{ getThemeText }}
-    </button>
+      <q-icon
+        v-if="! dark_theme"
+        name="dark_mode"
+        color="white"
+      />
+
+      <q-icon
+        v-else
+        name="light_mode"
+        color="white"
+      />
+
+      <q-tooltip
+        anchor="center right"
+        self="center left"
+        :offset="[8, 8]"
+        class="bg-dark"
+      >
+        {{ getThemeText }}
+      </q-tooltip>
+    </q-btn>
   </header>
 </template>
 
@@ -93,11 +139,11 @@
 
 <style scoped>
   header {
-    padding: 1rem;
+    padding: .5rem;
     background: #0d3b66;
     position: fixed;
     height: 100vh;
-    width: inherit;
+    width: 64px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -114,6 +160,6 @@
 
 
   .link {
-      color: #fff;
+    color: #fff;
   }
 </style>
