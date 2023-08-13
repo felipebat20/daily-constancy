@@ -30,7 +30,7 @@
               :offset="[8, 8]"
               class="bg-dark"
             >
-              Tasks
+              Timers
             </q-tooltip>
           </router-link>
         </li>
