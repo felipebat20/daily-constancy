@@ -2,14 +2,14 @@
   <header>
     <div class="is-flex justify-center">
       <router-link
-        style="{ height: 32px; width: 32px;}"
+        style="{ height: 2rem; width: 2rem;}"
         to="/"
       >
         <q-img
           src="../assets/treker.png"
           alt="logo"
           class="mt-2"
-          style="max-width: 32px;"
+          style="max-width: 2rem;"
         />
       </router-link>
     </div>
@@ -22,7 +22,10 @@
             class="link is-flex justify-center"
             :class="{ 'is-active': getIsActive('/') }"
           >
-            <q-icon name="tasks" />
+            <q-icon
+              size="24px"
+              name="tasks"
+            />
 
             <q-tooltip
               anchor="center right"
@@ -30,7 +33,7 @@
               :offset="[8, 8]"
               class="bg-dark"
             >
-              Timers
+              Tasks
             </q-tooltip>
           </router-link>
         </li>
@@ -41,7 +44,10 @@
             class="link is-flex justify-center"
             :class="{ 'is-active': getIsActive('/projects') }"
           >
-            <i class="fas fa-project-diagram" />
+            <q-icon
+              size="24px"
+              name="account_tree"
+            />
 
             <q-tooltip
               anchor="center right"
@@ -60,7 +66,10 @@
             class="link is-flex justify-center"
             :class="{ 'is-active': getIsActive('/reports') }"
           >
-            <i class="fa-solid fa-chart-pie" />
+            <q-icon
+              size="24px"
+              name="analytics"
+            />
 
             <q-tooltip
               anchor="center right"
@@ -72,6 +81,28 @@
             </q-tooltip>
           </router-link>
         </li>
+
+        <li v-if="false">
+          <router-link
+            to="/reports"
+            class="link is-flex justify-center"
+            :class="{ 'is-active': getIsActive('/streaks') }"
+          >
+            <q-icon
+              size="24px"
+              name="whatshot"
+            />
+
+            <q-tooltip
+              anchor="center right"
+              self="center left"
+              :offset="[8, 8]"
+              class="bg-dark"
+            >
+              Streaks
+            </q-tooltip>
+          </router-link>
+        </li>
       </ul>
     </aside>
 
@@ -80,12 +111,14 @@
       @click="switchTheme"
     >
       <q-icon
+        size="24px"
         v-if="! dark_theme"
         name="dark_mode"
         color="white"
       />
 
       <q-icon
+        size="24px"
         v-else
         name="light_mode"
         color="white"
