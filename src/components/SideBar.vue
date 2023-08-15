@@ -25,6 +25,7 @@
             <q-icon
               size="24px"
               name="tasks"
+              style="display: inline-block;"
             />
 
             <q-tooltip
