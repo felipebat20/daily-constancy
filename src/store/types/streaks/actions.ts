@@ -1,0 +1,2 @@
+export const CREATE_STREAK = 'CREATE_STREAK';
+export const FETCH_STREAKS = 'FETCH_STREAKS';

@@ -5,6 +5,7 @@ import Reports from '../views/ATReports.vue';
 import Projects from '../views/Projects.vue';
 import ProjectsForm from '../views/Projects/Form.vue';
 import ProjectsList from '../views/Projects/List.vue';
+import Streaks from '@/views/Streaks/StreaksIndex.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -20,7 +21,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/streaks',
     name: 'Streaks',
-    component: Reports,
+    component: Streaks,
   },
   {
     component: Projects,
