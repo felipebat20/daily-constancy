@@ -1,9 +1,9 @@
 <template>
   <Box v-if="isGridLayout">
     <div class="columns is-clickable">
-      <div class="column is-1">
+      <div class="column is-1 is-flex">
         <button
-          class="button"
+          class="button is-inline-block"
           @click="setActiveTask"
         >
           <span class="icon is-small">
@@ -12,22 +12,22 @@
         </button>
       </div>
 
-      <div class="column is-4">
+      <div class="column is-4 justify-center">
         {{ task.description || 'Unnamed Task' }}
       </div>
 
-      <div class="column is-3">
+      <div class="column is-3 justify-center">
         {{ task.project?.name ?? 'N/D' }}
       </div>
 
-      <div class="column">
+      <div class="column justify-center">
         <TimerDisplay
           :time-in-seconds="task.time_spent"
           :has-dark-theme="false"
         />
       </div>
 
-      <div class="column">
+      <div class="column is-flex is-flex-direction-row">
         <button
           class="button"
           @click="selectTask"
