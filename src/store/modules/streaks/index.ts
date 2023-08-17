@@ -4,16 +4,35 @@ import { State } from "@/store"
 
 import StreakInterface from '@/interfaces/Streak.interface';
 
+import { CREATE_STREAK, FETCH_STREAKS } from '@/store/types/streaks/actions';
+import { db } from '@/hooks/database';
+import { NEW_STREAK, NEW_STREAKS } from '@/store/types/streaks/mutations';
+
 export interface StreakState {
   streaks: StreakInterface[]
 }
 
-export const Streak: Module<StreakState, State> = {
+export const streak: Module<StreakState, State> = {
   state: {
     streaks: [],
   },
 
-  actions: {
+  mutations: {
+    [NEW_STREAK]: (state, streak: StreakInterface) => state.streaks.push(streak),
+    [NEW_STREAKS]: (state, streaks: StreakInterface[]) => state.streaks = streaks,
+  },
 
+  actions: {
+    [CREATE_STREAK]: ({ commit }, streak: StreakInterface) => {
+      db.collection('streaks')
+        .add({ ...streak })
+        .then(() => commit(NEW_STREAK, streak));
+    },
+
+    [FETCH_STREAKS]: ({ commit }) => {
+      db.collection('streaks')
+        .get()
+        .then((resp: StreakInterface[]) => commit(NEW_STREAKS, resp));
+    },
   },
 };
