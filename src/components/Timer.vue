@@ -68,19 +68,26 @@
       const store = useStore();
       const timer = ref(0);
       const timeInSeconds = ref(0);
+      const started_at = ref('');
 
       const active_task = computed(() => store.state.task.active_task);
 
       const stopTimer = (): void => {
         clearInterval(timer.value);
         timer.value = 0;
-        emit('timeIsFinished', timeInSeconds.value)
+        emit('timeIsFinished', {
+          value: timeInSeconds.value,
+          started_at: started_at.value,
+          finished_at: new Date().toISOString(),
+        });
+
         timeInSeconds.value = 0;
         document.title = 'Alura tracker';
       };
 
 
       const startTimer = () => {
+        started_at.value = new Date().toISOString();
         timer.value = setInterval(() => {
           timeInSeconds.value = timeInSeconds.value + 1;
           const display_timer = new Date(timeInSeconds.value * 1000).toISOString().substring(11, 19);

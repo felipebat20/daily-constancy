@@ -76,7 +76,7 @@
 
       store.dispatch(FETCH_PROJECTS);
 
-      const finishTask = (time: number): Promise<AxiosResponse> => {
+      const finishTask = (timer: { value: number, started_at: string, finished_at: string }): Promise<AxiosResponse> => {
         const project = projects.value.find(project => project.id === project_id.value);
         const task_name = description.value;
 
@@ -88,13 +88,13 @@
             ...active_task.value,
             description: task_name,
             project,
-            time_spent: time,
+            time_spent: timer.value,
           }).then(() => store.dispatch(SET_ACTIVE_TASK, {}));
         }
 
         return store.dispatch(CREATE_NEW_TASK, {
           description: task_name,
-          time_spent: time,
+          time_spent: timer.value,
           id: new Date().getTime(),
           project,
         });
@@ -123,7 +123,6 @@
             value: project.id,
           }))
         );
-
 
         return parsed_projects;
       });

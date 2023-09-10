@@ -17,7 +17,5 @@
 </script>
 
 <style scoped>
-  .projects {
-    padding: 1.25rem;
-  }
+  .projects { padding: 1.25rem; }
 </style>

@@ -14,6 +14,8 @@ import {
   UPDATE_TASK,
   DELETE_TASK,
   SET_ACTIVE_TASK,
+  CREATE_STREAK,
+  CREATE_TASK_SESSION,
 } from "@/store/types/actions"
 
 import {
@@ -23,6 +25,7 @@ import {
   REMOVE_TASK,
   NEW_ACTIVE_TASK,
 } from "@/store/types/mutations"
+import { TaskSession } from "@/interfaces/TaskSession.interface";
 
 export interface TaskState {
   tasks: TaskInterface[],
@@ -73,10 +76,21 @@ export const task: Module<TaskState, State> = {
         });
     },
 
-    [CREATE_NEW_TASK]: ({ commit }, task: TaskInterface) : Promise<void> => {
+    [CREATE_NEW_TASK]: ({ commit, dispatch }, task: TaskInterface) : Promise<void> => {
       if (hasApi()) {
         return http.post('tasks', task)
           .then(resp => commit(NEW_TASK, resp.data));
+      }
+
+      if (task.project) {
+        dispatch(CREATE_STREAK, {
+          id: new Date().getTime(),
+          created_at: new Date().getTime(),
+          updated_at: new Date().getTime(),
+          time_spent_today: task.time_spent,
+          project: task.project,
+          tasks: [task]
+        });
       }
 
       return db.collection('tasks')
@@ -109,5 +123,13 @@ export const task: Module<TaskState, State> = {
     },
 
     [SET_ACTIVE_TASK]: ({ commit }, task: TaskInterface) => commit(NEW_ACTIVE_TASK, task),
+    [CREATE_TASK_SESSION]: ({ commit }, session: TaskSession) => {
+      db.collection('task_sessions')
+        .add({
+          ...session,
+          project: { ...session.project },
+          task: { ...session.task },
+        });
+    },
   },
 }
