@@ -1,6 +1,9 @@
 <template>
   <div class="login-container">
-    <div class="sign-up-form bg-grey-1 shadow-3">
+    <form
+      @submit="handleLogin"
+      class="sign-up-form bg-grey-1 shadow-3"
+    >
       <span class="text-weight-medium">
         Conecte-se
       </span>
@@ -10,7 +13,8 @@
         label="Entrar com email"
         dense
         outlined
-        autocomplete="email"
+        name="email"
+        autocomplete="on"
         type="email"
       />
 
@@ -19,7 +23,8 @@
         label="Digite a senha"
         dense
         outlined
-        autocomplete="password"
+        autocomplete="on"
+        name="password"
         type="password"
       />
 
@@ -28,12 +33,17 @@
         label="Conecte-se"
         @click="handleLogin"
       />
-    </div>
+    </form>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
+
+  import { api } from '@/libs/api';
+
+  const router = useRouter();
 
   const email = ref('');
   const password = ref('');
@@ -44,24 +54,16 @@
       password: password.value,
     };
 
-    console.log(body);
-
-
     try {
-      const response = await fetch('https://daily-const-backend.vercel.app/login', {
-        method: 'POST',
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+      const { token } = await api.post('/login', body);
 
-      return await response.json();
+      localStorage.setItem('DC_JWT_TOKEN', token);
+
+      router.push({ path: '/' });
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 </script>
 
 <style scoped lang="scss">
@@ -75,9 +77,9 @@
     width: 350px;
     padding: 2rem;
     margin: auto;
+    font-size: 1.25rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    font-size: 1.25rem;
   }
 </style>
