@@ -71,7 +71,7 @@
         saveOrUpdateProject().then(() => {
           project_name.value = '';
           notify(NotificationType.SUCCESS, 'Great', 'Your project is available!');
-          router.push('/projects')
+          router.push('/projects');
         });
       };
 

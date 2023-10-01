@@ -1,16 +1,9 @@
-
-const BASE_URL = 'https://daily-const-backend.vercel.app';
+const BASE_URL = process.env.VUE_APP_ROOT_API || 'https://daily-const-backend.vercel.app';
 
 class ApiClient {
-  // constructor(parameters) {
-
-  // }
-
-  // async get() {
-
-  // }
-
   async post(resource: string, body: object) {
+    console.log(process.env.VUE_APP_ROOT_API);
+
     const url = new URL(resource, BASE_URL);
 
     try {

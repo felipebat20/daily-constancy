@@ -60,7 +60,7 @@
     },
 
     mounted() {
-      this.initProgress()
+      this.initProgress();
     },
 
     methods: {
@@ -70,7 +70,7 @@
 
           if (this.progress_width > 100) {
             clearInterval(this.interval);
-            return this.store.commit(DELETE_NOTIFICATION, this.notification.id)
+            return this.store.commit(DELETE_NOTIFICATION, this.notification.id);
           }
         }, 50);
       },
@@ -88,7 +88,10 @@
     background: none;
   }
 
-  .message-body { position: relative; overflow: hidden; }
+  .message-body {
+    position: relative;
+    overflow: hidden;
+  }
 
   .progress {
     position: absolute;

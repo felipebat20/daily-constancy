@@ -20,8 +20,8 @@
 <script lang="ts">
   import { defineComponent, computed, watch, ref, onBeforeUnmount } from 'vue';
 
-  import TimerDisplay from './TimerDisplay.vue'
-  import Button from './shared/Button.vue'
+  import TimerDisplay from './TimerDisplay.vue';
+  import Button from './shared/Button.vue';
 
   import { useStore } from '@/store';
 
@@ -74,11 +74,10 @@
       const stopTimer = (): void => {
         clearInterval(timer.value);
         timer.value = 0;
-        emit('timeIsFinished', timeInSeconds.value)
+        emit('timeIsFinished', timeInSeconds.value);
         timeInSeconds.value = 0;
         document.title = 'Alura tracker';
       };
-
 
       const startTimer = () => {
         timer.value = setInterval(() => {
@@ -91,7 +90,7 @@
 
       onBeforeUnmount(() => {
         if (timer.value) {
-          stopTimer()
+          stopTimer();
         }
       });
 

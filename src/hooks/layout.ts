@@ -10,6 +10,6 @@ export const isGridLayout = () => {
   }
 
   return  true;
-}
+};
 
 export const updateTaskLayout = (layout: string) => localStorage.setItem(TASK_LAYOUT, layout);

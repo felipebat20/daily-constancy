@@ -8,8 +8,8 @@
 
   const route = useRoute();
   const getComponent = computed(() => {
-    return route.meta.layoutComponent
-  })
+    return route.meta.layoutComponent;
+  });
 </script>
 
 <style scoped lang="scss">

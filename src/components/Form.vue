@@ -98,7 +98,7 @@
           id: new Date().getTime(),
           project,
         });
-      }
+      };
 
       watch(active_task, (state, prev_state) => {
         if (state.id && state.id !== prev_state.id) {
@@ -123,7 +123,6 @@
             value: project.id,
           }))
         );
-
 
         return parsed_projects;
       });

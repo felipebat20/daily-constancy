@@ -40,10 +40,13 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
+  import { useQuasar } from 'quasar';
 
   import { api } from '@/libs/api';
+  import { jwt } from '@/static/storage-keys';
 
   const router = useRouter();
+  const $q = useQuasar();
 
   const email = ref('');
   const password = ref('');
@@ -54,15 +57,29 @@
       password: password.value,
     };
 
-    try {
-      const { token } = await api.post('/login', body);
+    const { token } = await api.post('/login', body);
 
-      localStorage.setItem('DC_JWT_TOKEN', token);
+    if (token) {
+      $q.notify({
+        progress: true,
+        type: 'positive',
+        message: 'Logado com sucesso.',
+        icon: 'done',
+      position: 'top-right',
+      });
 
-      router.push({ path: '/' });
-    } catch (err) {
-      console.log(err);
+      $q.cookies.set(jwt, token, { expires: '1d' });
+
+      return router.push({ path: '/' });
     }
+
+    return $q.notify({
+      progress: true,
+      type: 'negative',
+      message: 'Não foi possível realizar o login.',
+      icon: 'error_outline',
+      position: 'top-right',
+    });
   };
 </script>
 

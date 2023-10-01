@@ -179,7 +179,7 @@
 <script setup lang="ts">
   import { PropType, ref } from 'vue';
 
-  import TimerDisplay from '@/components/TimerDisplay.vue'
+  import TimerDisplay from '@/components/TimerDisplay.vue';
   import Box from './shared/Box.vue';
   import DSCard from './shared/DSCard.vue';
 
@@ -213,19 +213,19 @@
 
   const handleDeleteButtonClick = () => {
     show_modal.value = true;
-  }
+  };
 
   const deleteTask = () => {
     store.dispatch(DELETE_TASK, props.task).then(() => closeModal());
-  }
+  };
 
   const setActiveTask = () => {
     store.dispatch(SET_ACTIVE_TASK, props.task);
-  }
+  };
 
   const closeModal = () => {
     show_modal.value = false;
-  }
+  };
 </script>
 
 <style scoped>

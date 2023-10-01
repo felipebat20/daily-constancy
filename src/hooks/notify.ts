@@ -6,7 +6,7 @@ import { store } from '@/store';
 
 type Notify = {
   notify: (type: NotificationType, title: string, content: string) => void
-}
+};
 
 export default () : Notify => {
   const notify = (type: NotificationType, title: string, content: string) : void => {
@@ -15,7 +15,7 @@ export default () : Notify => {
       title,
       content,
     });
-  }
+  };
 
   return { notify };
-}
+};

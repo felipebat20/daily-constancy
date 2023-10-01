@@ -1,4 +1,4 @@
-import { NotificationType } from '@/interfaces/Notification.interface'
+import { NotificationType } from '@/interfaces/Notification.interface';
 
 import { store } from '@/store';
 

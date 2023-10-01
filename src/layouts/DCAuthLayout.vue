@@ -32,9 +32,6 @@
 </script>
 
 <style scoped lang="scss">
-  .container {
-    // background-color: ;
-  }
   .auth-container {
     max-width: 1140px;
     margin: 0 auto;
