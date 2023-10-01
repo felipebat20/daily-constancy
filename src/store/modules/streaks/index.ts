@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 
-import { State } from "@/store"
+import { State } from "@/store";
 
 import StreakInterface from '@/interfaces/Streak.interface';
 

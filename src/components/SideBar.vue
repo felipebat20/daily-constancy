@@ -160,9 +160,8 @@
     methods: {
       switchTheme () {
         this.dark_theme = ! this.dark_theme;
-        this.$emit('onSwitchTheme', this.dark_theme)
+        this.$emit('onSwitchTheme', this.dark_theme);
       },
-
 
       getIsActive(path: string) {
         return this.$route.path === path;
@@ -191,7 +190,6 @@
       height: auto;
     }
   }
-
 
   .link {
     color: #fff;

@@ -16,6 +16,9 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'eol-last': ["error", "always"]
+    'eol-last': ["error", "always"],
+    "semi": "off",
+    "@typescript-eslint/semi": ["error"],
+    'no-multiple-empty-lines': ["error", { "max": 1, "maxBOF": 0, "maxEOF": 0 }],
   }
-}
+};

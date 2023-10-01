@@ -1,6 +1,9 @@
 <template>
   <div class="login-container">
-    <div class="sign-up-form bg-grey-1 shadow-3">
+    <form
+      @submit="handleLogin"
+      class="sign-up-form bg-grey-1 shadow-3"
+    >
       <span class="text-weight-medium">
         Conecte-se
       </span>
@@ -10,7 +13,8 @@
         label="Entrar com email"
         dense
         outlined
-        autocomplete="email"
+        name="email"
+        autocomplete="on"
         type="email"
       />
 
@@ -19,7 +23,8 @@
         label="Digite a senha"
         dense
         outlined
-        autocomplete="password"
+        autocomplete="on"
+        name="password"
         type="password"
       />
 
@@ -28,12 +33,20 @@
         label="Conecte-se"
         @click="handleLogin"
       />
-    </div>
+    </form>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { useQuasar } from 'quasar';
+
+  import { api } from '@/libs/api';
+  import { jwt } from '@/static/storage-keys';
+
+  const router = useRouter();
+  const $q = useQuasar();
 
   const email = ref('');
   const password = ref('');
@@ -44,24 +57,30 @@
       password: password.value,
     };
 
-    console.log(body);
+    const { token } = await api.post('/login', body);
 
-
-    try {
-      const response = await fetch('https://daily-const-backend.vercel.app/login', {
-        method: 'POST',
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
+    if (token) {
+      $q.notify({
+        progress: true,
+        type: 'positive',
+        message: 'Logado com sucesso.',
+        icon: 'done',
+      position: 'top-right',
       });
 
-      return await response.json();
-    } catch (err) {
-      console.log(err);
+      $q.cookies.set(jwt, token, { expires: '1d' });
+
+      return router.push({ path: '/' });
     }
-  }
+
+    return $q.notify({
+      progress: true,
+      type: 'negative',
+      message: 'Não foi possível realizar o login.',
+      icon: 'error_outline',
+      position: 'top-right',
+    });
+  };
 </script>
 
 <style scoped lang="scss">
@@ -75,9 +94,9 @@
     width: 350px;
     padding: 2rem;
     margin: auto;
+    font-size: 1.25rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    font-size: 1.25rem;
   }
 </style>

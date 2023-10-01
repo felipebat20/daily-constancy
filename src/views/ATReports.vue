@@ -41,7 +41,7 @@ import {
 
 import VChart, { THEME_KEY } from 'vue-echarts';
 import { ref, provide, computed, onMounted } from 'vue';
-import type { Ref } from 'vue'
+import type { Ref } from 'vue';
 
 import { useStore } from '@/store';
 import { FETCH_PROJECTS, FETCH_TASKS } from '@/store/types/actions';
@@ -75,14 +75,13 @@ onMounted(async () => {
     store.dispatch(FETCH_TASKS),
   ]);
 
-
   const chart_data = computed(() => {
     const chart_data_value: Ref<chart_data_interface[]> = ref([]);
 
     projects.value.forEach(proj => {
       const total_project_time_spent = tasks.value.reduce((accumulator: number, current_value: TaskInterface) => {
         if (proj.id === current_value.project.id) {
-          return accumulator + current_value.time_spent
+          return accumulator + current_value.time_spent;
         }
 
         return accumulator + 0;
@@ -131,7 +130,6 @@ onMounted(async () => {
     ],
   };
 });
-
 
 </script>
 

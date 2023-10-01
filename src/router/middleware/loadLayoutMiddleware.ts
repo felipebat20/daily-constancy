@@ -5,7 +5,7 @@ export default async function name(route: RouteLocationNormalized) {
     if (route.meta) {
       const layout = route.meta?.layout;
 
-      const layoutComponent = await import(`@/layouts/${layout}.vue`)
+      const layoutComponent = await import(`@/layouts/${layout}.vue`);
 
       Object.assign(route.meta, { layoutComponent: layoutComponent.default });
     }

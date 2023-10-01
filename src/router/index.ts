@@ -15,20 +15,24 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'Tasks',
     component: Tasks,
+    meta: { layout: 'DCDefault' }
   },
   {
     path: '/reports',
     name: 'Reports',
     component: Reports,
+    meta: { layout: 'DCDefault' }
   },
   {
     path: '/streaks',
     name: 'Streaks',
     component: Streaks,
+    meta: { layout: 'DCDefault' }
   },
   {
     component: Projects,
     path: '/projects',
+    meta: { layout: 'DCDefault' },
     children: [
       {
         path: '',
@@ -64,6 +68,6 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(loadLayoutMiddleware)
+router.beforeEach(loadLayoutMiddleware);
 
 export default router;

@@ -1,9 +1,9 @@
-import { Module } from "vuex"
+import { Module } from "vuex";
 
-import TaskInterface from "@/interfaces/Task.interface"
-import { State } from "@/store"
+import TaskInterface from "@/interfaces/Task.interface";
+import { State } from "@/store";
 
-import http from "@/http"
+import http from "@/http";
 
 import { db } from '@/hooks/database';
 import { hasApi } from '@/hooks/verify_api';
@@ -14,7 +14,7 @@ import {
   UPDATE_TASK,
   DELETE_TASK,
   SET_ACTIVE_TASK,
-} from "@/store/types/actions"
+} from "@/store/types/actions";
 
 import {
   NEW_TASKS,
@@ -22,7 +22,7 @@ import {
   NEW_UPDATED_TASK,
   REMOVE_TASK,
   NEW_ACTIVE_TASK,
-} from "@/store/types/mutations"
+} from "@/store/types/mutations";
 
 export interface TaskState {
   tasks: TaskInterface[],
@@ -55,7 +55,7 @@ export const task: Module<TaskState, State> = {
         let query = 'tasks';
 
         if (task_name) {
-          query += `?description_like=${task_name}`
+          query += `?description_like=${task_name}`;
         }
 
         return http.get(query)
@@ -110,4 +110,4 @@ export const task: Module<TaskState, State> = {
 
     [SET_ACTIVE_TASK]: ({ commit }, task: TaskInterface) => commit(NEW_ACTIVE_TASK, task),
   },
-}
+};
