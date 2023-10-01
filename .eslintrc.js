@@ -19,6 +19,6 @@ module.exports = {
     'eol-last': ["error", "always"],
     "semi": "off",
     "@typescript-eslint/semi": ["error"],
-    'no-multiple-empty-lines': ["error", { "max": 1, "maxBOF": 0, "maxEOF": 0 }]
+    'no-multiple-empty-lines': ["error", { "max": 1, "maxBOF": 0, "maxEOF": 0 }],
   }
 };
