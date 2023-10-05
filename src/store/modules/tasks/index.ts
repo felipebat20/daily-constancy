@@ -52,11 +52,7 @@ export const task: Module<TaskState, State> = {
   actions: {
     [FETCH_TASKS]: ({ commit }, task_name: string) : Promise<void> => {
       if (hasApi()) {
-        let query = 'tasks';
-
-        if (task_name) {
-          query += `?description_like=${task_name}`;
-        }
+        const query = 'tasks';
 
         return http.get(query)
           .then(resp => commit(NEW_TASKS, resp.data));
@@ -73,10 +69,24 @@ export const task: Module<TaskState, State> = {
         });
     },
 
-    [CREATE_NEW_TASK]: ({ commit }, task: TaskInterface) : Promise<void> => {
+    [CREATE_NEW_TASK]: async ({ commit }, task: TaskInterface) => {
       if (hasApi()) {
-        return http.post('tasks', task)
-          .then(resp => commit(NEW_TASK, resp.data));
+        const task_parsed = {
+          description: task.description,
+        };
+
+        const session = { time_spent: task.time_spent };
+
+        if (task.project) {
+          Object.assign(task_parsed, { project_id: task.project.id });
+          Object.assign(session, { project_id: task.project.id });
+        }
+
+        const { data: new_task }: { data: TaskInterface} = await http.post('tasks', task_parsed);
+
+        const new_session = await http.post(`tasks/${new_task.id}/sessions`, session);
+
+        return new_task;
       }
 
       return db.collection('tasks')
@@ -84,9 +94,13 @@ export const task: Module<TaskState, State> = {
         .then(() => commit(NEW_TASK, task));
     },
 
-    [UPDATE_TASK]: ({ commit }, task: TaskInterface) => {
+    [UPDATE_TASK]: async ({ commit }, task: TaskInterface) => {
       if (hasApi()) {
-        return http.put(`tasks/${task.id}`, task)
+        if (task.time_spent) {
+          await http.post(`tasks/${task.id}/sessions`, { project_id: task.project?.id, time_spent: task.time_spent });
+        }
+
+        return http.put(`tasks/${task.id}`, { description: task.description, project_id: task.project?.id })
           .then(resp => commit(NEW_UPDATED_TASK, resp.data));
       }
 

@@ -88,7 +88,7 @@
             ...active_task.value,
             description: task_name,
             project,
-            time_spent: time,
+            time_spent: time - (active_task.value.total_time_spent || 0),
           }).then(() => store.dispatch(SET_ACTIVE_TASK, {}));
         }
 
