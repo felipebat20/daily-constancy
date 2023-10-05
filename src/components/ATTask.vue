@@ -22,7 +22,7 @@
 
       <div class="column justify-center">
         <TimerDisplay
-          :time-in-seconds="task.total_time_spent"
+          :time-in-seconds="getTaskTime(task)"
           :has-dark-theme="false"
         />
       </div>
@@ -73,7 +73,7 @@
           Time in focus:
 
           <TimerDisplay
-            :time-in-seconds="task.total_time_spent"
+            :time-in-seconds="getTaskTime(task)"
             :has-dark-theme="false"
           />
         </div>
@@ -154,7 +154,7 @@
       </p>
 
       <p>
-        You already spent {{ formatTimer(task.total_time_spent) }} of total time, this progress cannot be recovered.
+        You already spent {{ formatTimer(getTaskTime(task)) }} of total time, this progress cannot be recovered.
       </p>
     </template>
 
@@ -225,6 +225,10 @@
 
   const closeModal = () => {
     show_modal.value = false;
+  };
+
+  const getTaskTime = (task: TaskInterface) => {
+    return task.total_time_spent || task.time_spent;
   };
 </script>
 

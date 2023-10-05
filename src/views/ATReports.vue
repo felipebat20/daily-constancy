@@ -81,7 +81,7 @@ onMounted(async () => {
     projects.value.forEach(proj => {
       const total_project_time_spent = tasks.value.reduce((accumulator: number, current_value: TaskInterface) => {
         if (proj.id === current_value.project?.id) {
-          return accumulator + current_value.total_time_spent;
+          return accumulator + (current_value.total_time_spent || current_value.time_spent || 0);
         }
 
         return accumulator + 0;
