@@ -31,6 +31,7 @@
       <q-btn
         color="primary"
         label="Conecte-se"
+        :loading="request_pending"
         @click="handleLogin"
       />
     </form>
@@ -50,6 +51,7 @@
 
   const email = ref('');
   const password = ref('');
+  const request_pending = ref(false);
 
   const handleLogin = async() => {
     const body = {
@@ -57,7 +59,9 @@
       password: password.value,
     };
 
+    request_pending.value = true;
     const { token } = await api.post('/login', body);
+    request_pending.value = false;
 
     if (token) {
       $q.notify({

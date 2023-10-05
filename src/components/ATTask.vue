@@ -22,7 +22,7 @@
 
       <div class="column justify-center">
         <TimerDisplay
-          :time-in-seconds="task.time_spent"
+          :time-in-seconds="task.total_time_spent"
           :has-dark-theme="false"
         />
       </div>
@@ -73,7 +73,7 @@
           Time in focus:
 
           <TimerDisplay
-            :time-in-seconds="task.time_spent"
+            :time-in-seconds="task.total_time_spent"
             :has-dark-theme="false"
           />
         </div>
@@ -154,7 +154,7 @@
       </p>
 
       <p>
-        You already spent {{ formatTimer(task.time_spent) }} of total time, this progress cannot be recovered.
+        You already spent {{ formatTimer(task.total_time_spent) }} of total time, this progress cannot be recovered.
       </p>
     </template>
 
