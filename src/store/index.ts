@@ -46,7 +46,7 @@ export const store = createStore<State>({
 
   actions: {
     [VERIFY_API]: () => {
-      httpClient.get('tasks')
+      httpClient().get('tasks')
         .then(() => {
           sessionStorage.setItem('AVAILABLE_API', '1');
         })
