@@ -47,7 +47,7 @@ export const project: Module<ProjectState, State> = {
   actions: {
     [FETCH_PROJECTS]: ({ commit }) : Promise<void> => {
       if (hasApi()) {
-        return http.get('projects')
+        return http().get('projects')
           .then(resp => commit(SET_PROJECTS, resp.data));
       }
 
@@ -60,7 +60,7 @@ export const project: Module<ProjectState, State> = {
       const project = { name: project_name };
 
       if (hasApi()) {
-        return http.post('projects', project)
+        return http().post('projects', project)
           .then(resp => commit(ADD_PROJECT, resp.data));
       }
 
@@ -73,7 +73,7 @@ export const project: Module<ProjectState, State> = {
 
     [EDIT_PROJECT]: ({ commit }, project: Project) => {
       if (hasApi()) {
-        return http.put(`projects/${project.id}`, project)
+        return http().put(`projects/${project.id}`, project)
           .then(resp => commit(UPDATE_EDITED_PROJECT, resp.data));
       }
 
@@ -85,7 +85,7 @@ export const project: Module<ProjectState, State> = {
 
     [DELETE_PROJECT]: ({ commit }, { id: project_id }) => {
       if (hasApi()) {
-        return http.delete(`projects/${project_id}`)
+        return http().delete(`projects/${project_id}`)
           .then(() => commit(REMOVE_PROJECT, project_id));
       }
 
