@@ -89,10 +89,13 @@
 <script setup lang="ts">
   import type { QTableProps } from 'quasar';
   import { ref, computed } from 'vue';
+  import { groupBy } from 'lodash';
+
+  import TimerDisplay from '@/components/TimerDisplay.vue';
+
   import { useStore } from '@/store';
   import TaskInterface from '@/interfaces/Task.interface';
   import { SET_ACTIVE_TASK } from '@/store/types/actions';
-  import TimerDisplay from '@/components/TimerDisplay.vue';
 
   const store = useStore();
   const emit = defineEmits(['selected-task']);
@@ -152,6 +155,11 @@
   const selectTask = (task: TaskInterface) => {
     emit('selected-task', task);
   };
+
+  const getTasksAggregate = computed(() => {
+    console.log(groupBy(tasks, 'description'));
+    return tasks;
+  });
 
   const handleDeleteButtonClick = () => {
     // show_modal.value = true;
