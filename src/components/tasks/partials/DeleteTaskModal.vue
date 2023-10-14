@@ -78,9 +78,8 @@
     show_modal.value = true;
   };
 
-  defineExpose({ closeModal, openModal });
+  defineExpose({
+    closeModal,
+    openModal,
+  });
 </script>
-
-<style scoped lang="scss">
-
-</style>

@@ -11,7 +11,3 @@
     return route.meta.layoutComponent;
   });
 </script>
-
-<style scoped lang="scss">
-
-</style>

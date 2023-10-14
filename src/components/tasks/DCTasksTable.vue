@@ -145,6 +145,7 @@
       label: 'Task',
       align: 'left',
       field: 'description',
+      sortable: true,
     },
     {
       name: 'project',
@@ -155,7 +156,6 @@
     {
       name: 'total_time_spent',
       label: 'Time spent',
-      sortable: true,
       align: 'left',
       field: '',
     },
