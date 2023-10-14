@@ -6,4 +6,6 @@ export default interface TaskInterface {
   total_time_spent: number,
   description: string,
   project: ProjectInterface,
+  createdAt?: Date,
+  updatedAt?: Date,
 }

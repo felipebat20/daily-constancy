@@ -113,15 +113,17 @@
     </Modal>
 
     <div :class="{'task-container': ! is_grid_layout}">
-      <!-- <Task
-        v-for="(task, index) in tasks"
-        :key="index"
-        :task="task"
-        :is-grid-layout="is_grid_layout"
-        @selected-task="updateSelectedTask"
-      /> -->
+      <template v-if="! is_grid_layout">
+        <Task
+          v-for="(task, index) in tasks"
+          :key="index"
+          :task="task"
+          :is-grid-layout="is_grid_layout"
+          @selected-task="updateSelectedTask"
+        />
+      </template>
 
-      <DCTasksTable />
+      <DCTasksTable v-else />
     </div>
 
     <Box v-if="! tasks.length">
@@ -134,7 +136,7 @@
   import { computed, defineComponent, ref, watch } from 'vue';
 
   import Form from '@/components/Form.vue';
-  // import Task from '@/components/ATTask.vue';
+  import Task from '@/components/ATTask.vue';
   import Box from '@/components/shared/Box.vue';
   import Modal from '@/components/shared/Modal.vue';
   import DCTasksTable from '@/components/tasks/DCTasksTable.vue';
@@ -154,7 +156,7 @@
     name: 'App',
     components: {
       Form,
-      // Task,
+      Task,
       Box,
       DCTasksTable,
       Modal,
