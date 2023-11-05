@@ -112,7 +112,7 @@
 <script setup lang="ts">
   import type { QTableProps } from 'quasar';
   import { ref, computed } from 'vue';
-  import { groupBy } from 'lodash';
+  import { groupBy, orderBy } from 'lodash';
 
   import DeleteTaskModal from '@/components/tasks/partials/DeleteTaskModal.vue';
   import EditTaskModal from '@/components/tasks/partials/EditTaskModal.vue';
@@ -187,7 +187,7 @@
   const getTasksAggregate = computed(() => {
     const day = (task: TaskInterface) => new Date(task.createdAt || (+task.id)).toDateString();
 
-    return Object.entries(groupBy(tasks.value, day)).reverse();
+    return Object.entries(groupBy(orderBy(tasks.value, ['createdAt', 'id'], ['desc', 'desc']), day));
   });
 
   const handleDeleteButtonClick = (task: TaskInterface) => {

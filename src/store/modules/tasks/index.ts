@@ -84,9 +84,9 @@ export const task: Module<TaskState, State> = {
 
         const { data: new_task }: { data: TaskInterface} = await http().post('tasks', task_parsed);
 
-        const new_session = await http().post(`tasks/${new_task.id}/sessions`, session);
+        const { data: new_session } = await http().post(`tasks/${new_task.id}/sessions`, session);
 
-        return commit(NEW_ACTIVE_TASK, new_task);
+        return commit(NEW_TASK, { ...new_task, total_time_spent: new_session.time_spent });
       }
 
       return db.collection('tasks')
