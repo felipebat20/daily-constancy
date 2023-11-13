@@ -76,7 +76,7 @@
         timer.value = 0;
         emit('timeIsFinished', timeInSeconds.value);
         timeInSeconds.value = 0;
-        document.title = 'Alura tracker';
+        document.title = 'Daily Constancy';
       };
 
       const startTimer = () => {

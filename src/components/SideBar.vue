@@ -104,6 +104,28 @@
             </q-tooltip>
           </router-link>
         </li>
+
+        <li v-if="true">
+          <router-link
+            to="/login"
+            class="link is-flex justify-center"
+            :class="{ 'is-active': getIsActive('/login') }"
+          >
+            <q-icon
+              size="24px"
+              name="account_circle"
+            />
+
+            <q-tooltip
+              anchor="center right"
+              self="center left"
+              :offset="[8, 8]"
+              class="bg-dark"
+            >
+              Profile
+            </q-tooltip>
+          </router-link>
+        </li>
       </ul>
     </aside>
 

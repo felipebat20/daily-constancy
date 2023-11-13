@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="form-title">
       <h3>
-        Login
+        Create account
       </h3>
     </div>
 
@@ -10,13 +10,19 @@
       @submit="handleLogin"
       class="sign-up-form bg-grey-1 shadow-3"
     >
-      <span class="text-weight-medium">
-        Conecte-se
-      </span>
+      <q-input
+        v-model="name"
+        label="Your name"
+        dense
+        outlined
+        name="name"
+        autocomplete="on"
+        type="text"
+      />
 
       <q-input
         v-model="email"
-        label="Entrar com email"
+        label="Your email"
         dense
         outlined
         name="email"
@@ -26,7 +32,7 @@
 
       <q-input
         v-model="password"
-        label="Digite a senha"
+        label="Type your password"
         dense
         outlined
         autocomplete="on"
@@ -34,6 +40,24 @@
         type="password"
         @keypress.enter="handleLogin"
       />
+
+      <q-input
+        v-model="confirm_password"
+        label="Confirm your password"
+        dense
+        outlined
+        autocomplete="on"
+        name="confirm_password"
+        type="password"
+        @keypress.enter="handleLogin"
+      />
+
+      <span
+        v-if="!! error"
+        class="error-message"
+      >
+        {{ error }}
+      </span>
 
       <q-btn
         color="primary"
@@ -50,9 +74,9 @@
 
       <router-link
         class="text-white"
-        :to="{ name: 'register' }"
+        :to="{ name: 'login' }"
       >
-        Create account
+        Log in
       </router-link>
     </div>
   </div>
@@ -69,38 +93,49 @@
   const router = useRouter();
   const $q = useQuasar();
 
+  const name = ref('');
   const email = ref('');
   const password = ref('');
+  const confirm_password = ref('');
+  const error = ref('');
   const request_pending = ref(false);
 
   const handleLogin = async() => {
     const body = {
+      name: name.value,
       email: email.value,
       password: password.value,
+      confirm_password: confirm_password.value,
     };
 
     request_pending.value = true;
-    const { token } = await api.post('/login', body);
+    const { id, message } = await api.post('/register', body);
     request_pending.value = false;
 
-    if (token) {
-      $q.notify({
-        progress: true,
-        type: 'positive',
-        message: 'Logado com sucesso.',
-        icon: 'done',
-      position: 'top-right',
-      });
+    if (id) {
+      const { token } = await api.post('/login', { email, password });
 
-      $q.cookies.set(jwt, token, { expires: '1d' });
+      if (token) {
+        $q.notify({
+          progress: true,
+          type: 'positive',
+          message: 'Registration completed successfully!',
+          icon: 'done',
+          position: 'top-right',
+        });
 
-      return router.push({ path: '/' });
+        $q.cookies.set(jwt, token, { expires: '1d' });
+
+        return router.push({ path: '/' });
+      }
     }
+
+    error.value = message;
 
     return $q.notify({
       progress: true,
       type: 'negative',
-      message: 'Não foi possível realizar o login.',
+      message: 'Registration failed.',
       icon: 'error_outline',
       position: 'top-right',
     });
@@ -150,5 +185,11 @@
       color: white;
       font-weight: 500;
     }
+  }
+
+  .error-message {
+    font-size: 12px;
+    font-weight: 500;
+    color: $negative;
   }
 </style>
