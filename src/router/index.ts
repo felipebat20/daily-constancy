@@ -9,6 +9,7 @@ import ProjectsForm from '../views/Projects/Form.vue';
 import ProjectsList from '../views/Projects/List.vue';
 import Streaks from '@/views/Streaks/StreaksIndex.vue';
 import DCLogin from '@/views/Auth/DCLogin.vue';
+import DCRegister from '@/views/Auth/DCRegister.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -55,8 +56,16 @@ const routes: RouteRecordRaw[] = [
 
   {
     component: DCLogin,
-    name: 'Login',
+    name: 'login',
     path: '/login',
+    meta: {
+      layout: 'DCAuthLayout',
+    }
+  },
+  {
+    component: DCRegister,
+    name: 'register',
+    path: '/register',
     meta: {
       layout: 'DCAuthLayout',
     }

@@ -1,4 +1,4 @@
-# alura-tracker
+# daily-constancy
 
 ## Project setup
 ```

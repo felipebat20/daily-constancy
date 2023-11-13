@@ -31,6 +31,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import { useRouter } from 'vue-router';
+  import { useQuasar } from 'quasar';
 
   import { useStore } from '@/store';
   import {
@@ -38,10 +39,6 @@
     EDIT_PROJECT,
     FETCH_PROJECTS,
   } from '@/store/types/actions';
-
-  import { NotificationType } from '@/interfaces/Notification.interface';
-
-  import useNotify from '@/hooks/notify';
 
   export default defineComponent({
     name: 'ATProjectsForm',
@@ -54,9 +51,9 @@
 
     setup (props) {
       const store = useStore();
-      const { notify } = useNotify();
       const project_name = ref('');
       const router = useRouter();
+      const $q = useQuasar();
 
       if (props.id) {
         store.dispatch(FETCH_PROJECTS).then(() => {
@@ -70,7 +67,14 @@
       const submitForm = () => {
         saveOrUpdateProject().then(() => {
           project_name.value = '';
-          notify(NotificationType.SUCCESS, 'Great', 'Your project is available!');
+          $q.notify({
+            progress: true,
+            type: 'positive',
+            message: 'Your project is available!',
+            position:  'top-right',
+            icon: 'check_circle',
+          });
+
           router.push('/projects');
         });
       };
