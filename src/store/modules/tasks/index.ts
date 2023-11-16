@@ -22,6 +22,7 @@ import {
   NEW_UPDATED_TASK,
   REMOVE_TASK,
   NEW_ACTIVE_TASK,
+  NEW_REQUEST_PENDING,
 } from "@/store/types/mutations";
 
 export interface TaskState {
@@ -50,12 +51,17 @@ export const task: Module<TaskState, State> = {
   },
 
   actions: {
-    [FETCH_TASKS]: ({ commit }, task_name: string) : Promise<void> => {
+    [FETCH_TASKS]: async ({ commit }, task_name: string) : Promise<void> => {
       if (hasApi()) {
         const query = 'tasks';
 
-        return http().get(query)
-          .then(resp => commit(NEW_TASKS, resp.data));
+        commit(NEW_REQUEST_PENDING, { topic: 'tasks', key: 'fetch_user_tasks', value: true });
+
+        const response = await http().get(query);
+
+        commit(NEW_REQUEST_PENDING, { topic: 'tasks', key: 'fetch_user_tasks', value: false });
+
+        return commit(NEW_TASKS, response.data);
       }
 
       return db.collection('tasks')

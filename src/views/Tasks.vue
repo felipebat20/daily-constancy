@@ -112,7 +112,18 @@
       </template>
     </Modal>
 
-    <div :class="{'task-container': ! is_grid_layout}">
+    <Box v-if="request_pending">
+      Fetching tasks
+    </Box>
+
+    <Box v-else-if="! tasks.length">
+      Are you kidding with your future? :(
+    </Box>
+
+    <div
+      v-else
+      :class="{'task-container': ! is_grid_layout}"
+    >
       <template v-if="! is_grid_layout">
         <Task
           v-for="(task, index) in tasks"
@@ -123,12 +134,11 @@
         />
       </template>
 
-      <DCTasksTable v-else />
+      <DCTasksTable
+        v-else
+        :request_pending="request_pending"
+      />
     </div>
-
-    <Box v-if="! tasks.length">
-      Are you kidding with your future? :(
-    </Box>
   </div>
 </template>
 
@@ -172,14 +182,16 @@
       const store = useStore();
       const task_filter = ref('');
       const is_grid_layout = ref(isGridLayout());
+      const request_pending = computed(() => store.state.requests_pending.tasks?.fetch_user_tasks);
 
       const projects = computed(() => store.state.project.projects);
       const project_id = ref(0);
 
-      store.dispatch(FETCH_TASKS);
       watch(task_filter, () =>{
         store.dispatch(FETCH_TASKS, task_filter.value);
       });
+
+      store.dispatch(FETCH_TASKS);
 
       return {
         store,
@@ -188,6 +200,7 @@
         is_grid_layout,
         projects,
         project_id,
+        request_pending,
       };
     },
 

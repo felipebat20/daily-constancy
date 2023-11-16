@@ -14,7 +14,7 @@ import DCRegister from '@/views/Auth/DCRegister.vue';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'Tasks',
+    name: 'tasks',
     component: Tasks,
     meta: { layout: 'DCDefault' }
   },

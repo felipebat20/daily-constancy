@@ -105,7 +105,7 @@
           </router-link>
         </li>
 
-        <li v-if="true">
+        <li v-if="! user_is_authenticated">
           <router-link
             to="/login"
             class="link is-flex justify-center"
@@ -129,44 +129,77 @@
       </ul>
     </aside>
 
-    <q-btn
-      class="switch-theme button mt-auto"
-      @click="switchTheme"
-    >
-      <q-icon
-        size="24px"
-        v-if="! dark_theme"
-        name="dark_mode"
-        color="white"
-      />
-
-      <q-icon
-        size="24px"
-        v-else
-        name="light_mode"
-        color="white"
-      />
-
-      <q-tooltip
-        anchor="center right"
-        self="center left"
-        :offset="[8, 8]"
-        class="bg-dark"
+    <div class="bottom-buttons">
+      <q-btn
+        class="switch-theme button "
+        @click="switchTheme"
       >
-        {{ getThemeText }}
-      </q-tooltip>
-    </q-btn>
+        <q-icon
+          size="24px"
+          v-if="! dark_theme"
+          name="dark_mode"
+          color="white"
+        />
+
+        <q-icon
+          size="24px"
+          v-else
+          name="light_mode"
+          color="white"
+        />
+
+        <q-tooltip
+          anchor="center right"
+          self="center left"
+          :offset="[8, 8]"
+          class="bg-dark"
+        >
+          {{ getThemeText }}
+        </q-tooltip>
+      </q-btn>
+
+      <q-btn
+        v-if="user_is_authenticated"
+        class="switch-theme button"
+        @click="handleLogout"
+      >
+        <q-icon
+          size="24px"
+          name="logout"
+          color="white"
+        />
+
+        <q-tooltip
+          anchor="center right"
+          self="center left"
+          :offset="[8, 8]"
+          class="bg-dark"
+        >
+          Logout
+        </q-tooltip>
+      </q-btn>
+    </div>
   </header>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref } from 'vue';
+  import { useQuasar } from 'quasar';
+  import { useRoute, useRouter } from 'vue-router';
+
+  import { jwt } from '@/static/storage-keys';
+
+  import { jwtToken } from '@/hooks/verify_api';
+  import { useStore } from '@/store';
+  import { FETCH_PROJECTS, FETCH_TASKS } from '@/store/types/actions';
 
   export default defineComponent({
     name: 'SideBar',
     emits: ['onSwitchTheme'],
     data() {
-      return { dark_theme: false };
+      return {
+        dark_theme: false,
+      };
     },
 
     computed: {
@@ -176,7 +209,40 @@
         }
 
         return 'Switch to dark theme';
-      }
+      },
+    },
+
+    setup() {
+      const $q = useQuasar();
+      const route = useRoute();
+      const router = useRouter();
+      const store = useStore();
+      const user_is_authenticated = ref(!! jwtToken());
+
+      const handleLogout = () => {
+        $q.cookies.remove(jwt);
+
+        user_is_authenticated.value = false;
+        store.dispatch(FETCH_TASKS);
+        store.dispatch(FETCH_PROJECTS);
+
+        if (route.name !== 'tasks') {
+          router.push({ name: 'tasks' });
+        }
+
+        return $q.notify({
+          type: 'positive',
+          progress: true,
+          icon: 'done',
+          message: 'You have been logout.',
+          position: 'top',
+        });
+      };
+
+      return {
+        handleLogout,
+        user_is_authenticated,
+      };
     },
 
     methods: {
@@ -213,7 +279,12 @@
     }
   }
 
-  .link {
-    color: #fff;
+  .link { color: #fff; }
+  .bottom-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+    margin-bottom: 30px;
   }
 </style>

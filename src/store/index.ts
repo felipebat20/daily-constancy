@@ -2,10 +2,12 @@ import { createStore, Store, useStore as vuexUseStore } from 'vuex';
 import { InjectionKey } from 'vue';
 
 import { Notification as NotificationInterface } from "@/interfaces/Notification.interface";
+import { RequestsManager } from '@/interfaces/RequestsManager';
 
 import {
   NEW_NOTIFICATION,
   DELETE_NOTIFICATION,
+  NEW_REQUEST_PENDING,
 } from '@/store/types/mutations';
 
 import { VERIFY_API } from '@/store/types/actions';
@@ -22,9 +24,16 @@ export interface State {
   project: ProjectState,
   task: TaskState,
   streak: StreakState,
+  requests_pending: RequestsManager,
 }
 
 export const key : InjectionKey<Store<State>> = Symbol();
+
+interface RequestPending {
+  topic: string,
+  key: string,
+  value: boolean,
+}
 
 export const store = createStore<State>({
   modules: {
@@ -37,11 +46,17 @@ export const store = createStore<State>({
     task: { tasks: [], active_task: {} as TaskInterface },
     project: { projects: [] },
     streak: { streaks: [] },
+    requests_pending: {
+      tasks: {
+        fetch_user_tasks: false,
+      },
+    },
   },
 
   mutations: {
     [NEW_NOTIFICATION]: (state, notification: NotificationInterface) => state.notifications.push({ ...notification, id: new Date().getTime()}),
     [DELETE_NOTIFICATION]: (state, notification_id: number) => state.notifications = state.notifications.filter(notification => notification.id !== notification_id),
+    [NEW_REQUEST_PENDING]: (state, { topic, key, value }: RequestPending) => state.requests_pending[topic][key] = value,
   },
 
   actions: {
