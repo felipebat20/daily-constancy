@@ -1,4 +1,4 @@
 export default interface Project {
-  id: number,
+  id: any,
   name: string,
 }

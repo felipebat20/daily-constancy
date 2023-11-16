@@ -14,6 +14,7 @@
         class="input"
         id="projectName"
         autofocus
+        :disabled="request_pending"
       >
     </div>
 
@@ -30,7 +31,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
   import { useQuasar } from 'quasar';
 
   import { useStore } from '@/store';
@@ -49,16 +50,22 @@
       },
     },
 
-    setup (props) {
+    setup () {
       const store = useStore();
       const project_name = ref('');
       const router = useRouter();
+      const route = useRoute();
       const $q = useQuasar();
+      const request_pending = ref(false);
 
-      if (props.id) {
+      const { project_id } = route.params;
+
+      if (project_id) {
+        request_pending.value = true;
         store.dispatch(FETCH_PROJECTS).then(() => {
+          request_pending.value = false;
           const project = store.state.project.projects
-            .find(proj => proj.id == parseInt(props.id));
+            .find(proj => proj.id.toString() === project_id);
 
           project_name.value = project?.name || '';
         });
@@ -80,8 +87,8 @@
       };
 
       const saveOrUpdateProject = () => {
-        if (props.id) {
-          return store.dispatch(EDIT_PROJECT, { id: parseInt(props.id), name: project_name.value });
+        if (project_id) {
+          return store.dispatch(EDIT_PROJECT, { id: project_id, name: project_name.value });
         }
 
         return store.dispatch(CREATE_NEW_PROJECT, project_name.value);
@@ -90,6 +97,7 @@
       return {
         project_name,
         submitForm,
+        request_pending,
       };
     },
   });

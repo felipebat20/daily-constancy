@@ -78,7 +78,7 @@ export const project: Module<ProjectState, State> = {
       }
 
       return db.collection('projects')
-        .doc({ id: project.id })
+        .doc({ id: parseInt(project.id) })
         .update(project)
         .then(() => commit(UPDATE_EDITED_PROJECT, project));
     },
