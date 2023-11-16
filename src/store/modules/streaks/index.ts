@@ -4,9 +4,11 @@ import { State } from "@/store";
 
 import StreakInterface from '@/interfaces/Streak.interface';
 
-import { CREATE_STREAK, FETCH_STREAKS } from '@/store/types/streaks/actions';
+import { CREATE_STREAK, FETCH_STREAKS } from '@/store/types/actions';
 import { db } from '@/hooks/database';
 import { NEW_STREAK, NEW_STREAKS } from '@/store/types/streaks/mutations';
+import { hasApi } from '@/hooks/verify_api';
+import http from '@/http';
 
 export interface StreakState {
   streaks: StreakInterface[]
@@ -29,7 +31,13 @@ export const streak: Module<StreakState, State> = {
         .then(() => commit(NEW_STREAK, streak));
     },
 
-    [FETCH_STREAKS]: ({ commit }) => {
+    [FETCH_STREAKS]: async ({ commit }) => {
+      if (hasApi()) {
+        const { data: streaks } = await http().get('/streaks');
+
+        return commit(NEW_STREAKS, streaks);
+      }
+
       db.collection('streaks')
         .get()
         .then((resp: StreakInterface[]) => commit(NEW_STREAKS, resp));

@@ -14,7 +14,7 @@ import { VERIFY_API } from '@/store/types/actions';
 
 import { project, ProjectState } from './modules/projects';
 import { task, TaskState } from './modules/tasks';
-import { StreakState } from './modules/streaks';
+import { streak, StreakState } from './modules/streaks';
 
 import httpClient from '@/http';
 import TaskInterface from '@/interfaces/Task.interface';
@@ -39,6 +39,7 @@ export const store = createStore<State>({
   modules: {
     project,
     task,
+    streak,
   },
 
   state: {
