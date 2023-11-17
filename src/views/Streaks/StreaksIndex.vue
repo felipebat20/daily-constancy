@@ -17,15 +17,15 @@
     </div>
 
     <div>
-      <q-table>
-        teste
-      </q-table>
+      <StreaksTable :streaks="streaks" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { computed, ref } from 'vue';
+
+  import StreaksTable from '@/components/streaks/DCStreaksTable.vue';
 
   import { Heading } from '@/design-system/Texts';
 
