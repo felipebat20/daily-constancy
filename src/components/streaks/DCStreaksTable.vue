@@ -42,7 +42,6 @@
             no-caps
             color="primary"
             rounded
-            disable
           >
             <q-tooltip>
               See streak
@@ -87,6 +86,7 @@
 
   import DCDeleteStreak from '@/components/streaks/partials/DCDeleteStreak.vue';
   import DCEditStreak from '@/components/streaks/partials/DCEditStreak.vue';
+import StreakInterface from '@/interfaces/Streak.interface';
 
   const deleteStreakModal = ref(DCDeleteStreak);
   const editStreakModal = ref(DCEditStreak);
@@ -126,8 +126,8 @@
 
   const rows = computed(() => props.streaks);
 
-  const handleDeleteButtonClick = (streak) =>  deleteStreakModal.value.handleOpenModal(streak);
-  const handleEditStreakButtonClick = (streak) => editStreakModal.value.handleOpenModal(streak);
+  const handleDeleteButtonClick = (streak: StreakInterface) =>  deleteStreakModal.value.handleOpenModal(streak);
+  const handleEditStreakButtonClick = (streak: StreakInterface) => editStreakModal.value.handleOpenModal(streak);
 </script>
 
 <style scoped lang="scss">

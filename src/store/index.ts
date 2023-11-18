@@ -18,6 +18,7 @@ import { streak, StreakState } from './modules/streaks';
 
 import httpClient from '@/http';
 import TaskInterface from '@/interfaces/Task.interface';
+import StreakInterface from '@/interfaces/Streak.interface';
 
 export interface State {
   notifications: NotificationInterface[],
@@ -46,7 +47,12 @@ export const store = createStore<State>({
     notifications: [],
     task: { tasks: [], active_task: {} as TaskInterface },
     project: { projects: [] },
-    streak: { streaks: [] },
+    streak: {
+      streaks: [],
+      streak: {} as StreakInterface,
+      focus_summaries: [],
+    },
+
     requests_pending: {
       tasks: {
         fetch_user_tasks: false,

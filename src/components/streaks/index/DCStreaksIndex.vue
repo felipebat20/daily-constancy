@@ -33,12 +33,11 @@
   import { Heading } from '@/design-system/Texts';
 
   import { useStore } from '@/store';
-  import { FETCH_PROJECTS, FETCH_STREAKS } from '@/store/types/actions';
+  import { FETCH_STREAKS } from '@/store/types/actions';
 
   const store = useStore();
 
   store.dispatch(FETCH_STREAKS);
-  store.dispatch(FETCH_PROJECTS);
 
   const streaks = computed(() => store.state.streak.streaks);
 
