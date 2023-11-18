@@ -25,7 +25,16 @@ export const streak: Module<StreakState, State> = {
   },
 
   actions: {
-    [CREATE_STREAK]: ({ commit }, streak: StreakInterface) => {
+    [CREATE_STREAK]: async ({ commit }, { name, projects }: { name: string, projects: string[] | undefined }) => {
+      if (hasApi()) {
+        const { data } = await http().post('/streaks', {
+          name,
+          projects,
+        });
+
+        return commit(NEW_STREAK, data);
+      }
+
       db.collection('streaks')
         .add({ ...streak })
         .then(() => commit(NEW_STREAK, streak));

@@ -5,6 +5,6 @@ export default interface StreakInterface {
   id: number,
   created_at: number,
   time_spent_today: number,
-  project: ProjectInterface,
+  project: ProjectInterface[],
   task: TaskInterface,
 }

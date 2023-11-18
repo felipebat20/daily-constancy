@@ -3,6 +3,7 @@
     title="Active streaks"
     :columns="columns"
     :rows="rows"
+    :rows-per-page-options="[25, 50, 100]"
   >
     <template #body-cell-projects="props">
       <q-td>
@@ -11,6 +12,7 @@
             v-if="! props.value.length"
             label="N/D"
             class="text-caption"
+            rounded
           />
 
           <q-badge
@@ -18,6 +20,8 @@
             :key="project"
             :label="project"
             class="text-caption"
+            color="positive"
+            rounded
           />
         </div>
       </q-td>
@@ -32,6 +36,7 @@
             no-caps
             color="primary"
             rounded
+            disable
           >
             <q-tooltip>
               See streak
@@ -43,6 +48,7 @@
             no-caps
             color="secondary"
             rounded
+            disable
           >
             <q-tooltip>
               Edit streak
@@ -54,6 +60,7 @@
             no-caps
             color="deep-orange"
             rounded
+            disable
           >
             <q-tooltip>
               Delete streak
@@ -91,14 +98,15 @@
 
     {
       name: 'projects',
-      field: (row) => row.projects?.map(project => project.name),
+      field: (row) => row.projects?.map(({ name }: { name: string }) => name),
       label: 'Projects',
     },
 
     {
       name: 'actions',
       field: 'id',
-    }
+      label: '',
+    },
   ];
 
   const rows = computed(() => props.streaks);

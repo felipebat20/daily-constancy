@@ -9,16 +9,18 @@
       </Heading>
 
       <q-btn
-        to="/streaks/create"
         label="Create new streak"
         icon="add"
         no-caps
+        @click="handleCreateButtonClick"
       />
     </div>
 
     <div>
       <StreaksTable :streaks="streaks" />
     </div>
+
+    <DCStreaksCreate ref="createStreakModal" />
   </div>
 </template>
 
@@ -26,17 +28,23 @@
   import { computed, ref } from 'vue';
 
   import StreaksTable from '@/components/streaks/DCStreaksTable.vue';
+  import DCStreaksCreate from '@/components/streaks/create/DCStreaksCreate.vue';
 
   import { Heading } from '@/design-system/Texts';
 
   import { useStore } from '@/store';
-  import { FETCH_STREAKS } from '@/store/types/actions';
+  import { FETCH_PROJECTS, FETCH_STREAKS } from '@/store/types/actions';
 
   const store = useStore();
 
   store.dispatch(FETCH_STREAKS);
+  store.dispatch(FETCH_PROJECTS);
 
   const streaks = computed(() => store.state.streak.streaks);
+
+  const createStreakModal = ref(DCStreaksCreate);
+
+  const handleCreateButtonClick = () => createStreakModal.value.show_modal = true;
 </script>
 
 <style scoped lang="scss">
@@ -48,7 +56,7 @@
     flex-direction: row;
     justify-content: space-between;
 
-    a { height: fit-content }
+    button { height: fit-content }
   }
 }
 </style>
