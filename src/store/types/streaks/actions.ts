@@ -1,2 +1,4 @@
 export const CREATE_STREAK = 'CREATE_STREAK';
 export const FETCH_STREAKS = 'FETCH_STREAKS';
+export const EDIT_STREAK = 'EDIT_STREAK';
+export const DELETE_STREAK = 'DELETE_STREAK';

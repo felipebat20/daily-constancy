@@ -4,9 +4,21 @@ import { State } from "@/store";
 
 import StreakInterface from '@/interfaces/Streak.interface';
 
-import { CREATE_STREAK, FETCH_STREAKS } from '@/store/types/actions';
+import {
+  CREATE_STREAK,
+  FETCH_STREAKS,
+  DELETE_STREAK,
+  EDIT_STREAK,
+} from '@/store/types/actions';
+
 import { db } from '@/hooks/database';
-import { NEW_STREAK, NEW_STREAKS } from '@/store/types/streaks/mutations';
+import {
+  NEW_STREAK,
+  NEW_STREAKS,
+  UPDATE_STREAK,
+  REMOVE_STREAK,
+} from '@/store/types/streaks/mutations';
+
 import { hasApi } from '@/hooks/verify_api';
 import http from '@/http';
 
@@ -22,6 +34,14 @@ export const streak: Module<StreakState, State> = {
   mutations: {
     [NEW_STREAK]: (state, streak: StreakInterface) => state.streaks.push(streak),
     [NEW_STREAKS]: (state, streaks: StreakInterface[]) => state.streaks = streaks,
+    [REMOVE_STREAK]: (state, streak: StreakInterface) => state.streaks = state.streaks.filter((({ id }) => id !== streak.id)),
+    [UPDATE_STREAK]: (state, updated_streak: StreakInterface) => state.streaks = state.streaks.map(streak => {
+      if (streak.id === updated_streak.id) {
+        return updated_streak;
+      }
+
+      return streak;
+    }),
   },
 
   actions: {
@@ -50,6 +70,18 @@ export const streak: Module<StreakState, State> = {
       db.collection('streaks')
         .get()
         .then((resp: StreakInterface[]) => commit(NEW_STREAKS, resp));
+    },
+
+    [DELETE_STREAK]: async ({ commit }, streak: StreakInterface) => {
+      await http().delete(`/streaks/${streak.id}`);
+
+      return commit(REMOVE_STREAK, streak);
+    },
+
+    [EDIT_STREAK]: async ({ commit }, streak: StreakInterface) => {
+      const { data: updated_streak } = await http().put(`/streaks/${streak.id}`, streak);
+
+      return commit(UPDATE_STREAK, updated_streak);
     },
   },
 };

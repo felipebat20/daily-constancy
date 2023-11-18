@@ -28,7 +28,7 @@
   import { computed, ref } from 'vue';
 
   import StreaksTable from '@/components/streaks/DCStreaksTable.vue';
-  import DCStreaksCreate from '@/components/streaks/create/DCStreaksCreate.vue';
+  import DCStreaksCreate from '@/components/streaks/partials/DCStreaksCreate.vue';
 
   import { Heading } from '@/design-system/Texts';
 

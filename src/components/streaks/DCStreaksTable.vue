@@ -3,10 +3,16 @@
     title="Active streaks"
     :columns="columns"
     :rows="rows"
+    row-key="id"
+    color="amber"
+    flat
+    bordered
     :rows-per-page-options="[25, 50, 100]"
+    :loading="false"
+    loading-label="Fetching streaks"
   >
     <template #body-cell-projects="props">
-      <q-td>
+      <q-td :style="{ 'width': '35%' }">
         <div class="projects">
           <q-badge
             v-if="! props.value.length"
@@ -27,11 +33,11 @@
       </q-td>
     </template>
 
-    <template #body-cell-actions="props">
+    <template #body-cell-actions="action_props">
       <q-td>
-        <div class="projects">
+        <div class="buttons">
           <q-btn
-            :to="`/streaks/${props.value}`"
+            :to="`/streaks/${action_props.value}`"
             label="See streak"
             no-caps
             color="primary"
@@ -48,7 +54,7 @@
             no-caps
             color="secondary"
             rounded
-            disable
+            @click="handleEditStreakButtonClick(action_props.row)"
           >
             <q-tooltip>
               Edit streak
@@ -60,7 +66,7 @@
             no-caps
             color="deep-orange"
             rounded
-            disable
+            @click="handleDeleteButtonClick(action_props.row)"
           >
             <q-tooltip>
               Delete streak
@@ -70,11 +76,20 @@
       </q-td>
     </template>
   </q-table>
+
+  <DCDeleteStreak ref="deleteStreakModal" />
+  <DCEditStreak ref="editStreakModal" />
 </template>
 
 <script lang="ts" setup>
   import type { QTableProps } from 'quasar';
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
+
+  import DCDeleteStreak from '@/components/streaks/partials/DCDeleteStreak.vue';
+  import DCEditStreak from '@/components/streaks/partials/DCEditStreak.vue';
+
+  const deleteStreakModal = ref(DCDeleteStreak);
+  const editStreakModal = ref(DCEditStreak);
 
   const props = defineProps({
     streaks: {
@@ -110,10 +125,19 @@
   ];
 
   const rows = computed(() => props.streaks);
+
+  const handleDeleteButtonClick = (streak) =>  deleteStreakModal.value.handleOpenModal(streak);
+  const handleEditStreakButtonClick = (streak) => editStreakModal.value.handleOpenModal(streak);
 </script>
 
 <style scoped lang="scss">
   .projects {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .buttons {
     display: flex;
     gap: 10px;
   }
