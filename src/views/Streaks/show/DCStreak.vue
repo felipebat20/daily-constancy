@@ -278,6 +278,7 @@
       font-weight: 700;
     }
   }
+
   .calendar-container {
     display: flex;
     flex-direction: row;

@@ -24,7 +24,3 @@
 
   const getHeadingLevel = computed(() => props.level);
 </script>
-
-<style scoped lang="scss">
-
-</style>

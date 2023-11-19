@@ -63,10 +63,10 @@
   const store = useStore();
   const show_modal = ref(false);
   const streak_name = ref('');
-  const projects_model = ref([]);
+  const projects_model = ref([] as { label: string, value: string }[]);
   const request_pending = ref(false);
   const projects = computed(() => store.state.project.projects);
-  const streak = ref({});
+  const streak = ref({} as StreakInterface);
 
   const getParsedProjects = computed(() => {
     const parsed_projects = [];
@@ -107,7 +107,3 @@
 
   defineExpose({ show_modal, handleOpenModal });
 </script>
-
-<style scoped lang="scss">
-
-</style>
