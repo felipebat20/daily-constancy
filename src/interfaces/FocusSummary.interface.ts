@@ -5,8 +5,8 @@ export default interface FocusSummary {
   date: string,
   totalFocusTime: number,
   totalFucusedSessions: number,
-  totalTasks: 1,
-  totalProjects: 1,
+  totalTasks: number,
+  totalProjects: number,
   tasks: TaskInterface[],
   projects: ProjectInterface[],
 }

@@ -22,7 +22,6 @@
     }
   });
 
-  const slots = useSlots();
   const getHeadingLevel = computed(() => props.level);
 </script>
 
