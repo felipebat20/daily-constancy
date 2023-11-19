@@ -14,10 +14,11 @@ import { VERIFY_API } from '@/store/types/actions';
 
 import { project, ProjectState } from './modules/projects';
 import { task, TaskState } from './modules/tasks';
-import { StreakState } from './modules/streaks';
+import { streak, StreakState } from './modules/streaks';
 
 import httpClient from '@/http';
 import TaskInterface from '@/interfaces/Task.interface';
+import StreakInterface from '@/interfaces/Streak.interface';
 
 export interface State {
   notifications: NotificationInterface[],
@@ -39,13 +40,19 @@ export const store = createStore<State>({
   modules: {
     project,
     task,
+    streak,
   },
 
   state: {
     notifications: [],
     task: { tasks: [], active_task: {} as TaskInterface },
     project: { projects: [] },
-    streak: { streaks: [] },
+    streak: {
+      streaks: [],
+      streak: {} as StreakInterface,
+      focus_summaries: [],
+    },
+
     requests_pending: {
       tasks: {
         fetch_user_tasks: false,

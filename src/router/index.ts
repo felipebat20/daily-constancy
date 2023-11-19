@@ -7,7 +7,9 @@ import Reports from '../views/ATReports.vue';
 import Projects from '../views/Projects.vue';
 import ProjectsForm from '../views/Projects/Form.vue';
 import ProjectsList from '../views/Projects/List.vue';
-import Streaks from '@/views/Streaks/StreaksIndex.vue';
+import Streaks from '@/views/Streaks/DCStreaks.vue';
+import StreaksList from '@/components/streaks/index/DCStreaksIndex.vue';
+import StreakShow from '@/views/Streaks/show/DCStreak.vue';
 import DCLogin from '@/views/Auth/DCLogin.vue';
 import DCRegister from '@/views/Auth/DCRegister.vue';
 
@@ -28,7 +30,17 @@ const routes: RouteRecordRaw[] = [
     path: '/streaks',
     name: 'Streaks',
     component: Streaks,
-    meta: { layout: 'DCDefault' }
+    meta: { layout: 'DCDefault' },
+    children: [
+      {
+        path: '',
+        component: StreaksList,
+      },
+      {
+        path: ':streak_id',
+        component: StreakShow
+      }
+    ]
   },
   {
     component: Projects,

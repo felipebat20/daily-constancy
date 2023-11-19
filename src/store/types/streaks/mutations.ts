@@ -1,2 +1,6 @@
 export const NEW_STREAK = 'NEW_STREAK';
 export const NEW_STREAKS = 'NEW_STREAKS';
+export const REMOVE_STREAK = 'REMOVE_STREAK';
+export const UPDATE_STREAK = 'UPDATE_STREAK';
+export const NEW_ACTIVE_STREAK = 'NEW_ACTIVE_STREAK';
+export const NEW_FOCUS_SUMMARIES = 'NEW_FOCUS_SUMMARIES';

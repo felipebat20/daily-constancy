@@ -83,9 +83,9 @@
           </router-link>
         </li>
 
-        <li v-if="false">
+        <li v-if="user_is_authenticated">
           <router-link
-            to="/reports"
+            to="/streaks"
             class="link is-flex justify-center"
             :class="{ 'is-active': getIsActive('/streaks') }"
           >
