@@ -296,7 +296,7 @@
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
 
     .top-bar {
       display: flex;
@@ -306,6 +306,7 @@
         font-weight: 700;
       }
     }
+
     .card-title {
       h2 {
         font-size: 19px;
@@ -318,13 +319,18 @@
     .tasks-container {
       padding: 18px;
       border-radius: 10px;
-      gap: 20px;
+      gap: 10px;
       display: flex;
       flex-direction: column;
 
       .tasks {
         display: flex;
         flex-direction: column;
+
+        .task {
+          padding-top: 4px;
+          padding-bottom: 4px;
+        }
 
         span {
           font-size: 17px;
