@@ -60,7 +60,7 @@
   const getDaysLabels = (month_label: string) => {
     if (getDaysByMonths.value[month_label]) {
       return getDaysByMonths.value[month_label].map((summary) => {
-        const date = new Date(parseInt(summary.date));
+        const date = getDateFromSummary(summary.date);
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
@@ -74,7 +74,7 @@
 
   const getDaysByMonths = computed(() => {
     const aggregate_by_months = groupBy(focus_summaries.value, (summary) => {
-      const date = new Date(+summary.date);
+      const date = getDateFromSummary(summary.date);
       const year = date.getFullYear();
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
 
@@ -84,13 +84,19 @@
     return aggregate_by_months;
   });
 
+  const getDateFromSummary = (date: string) => {
+    const [year, month, day] = date.split('-').map(date_string => +date_string);
+
+    return new Date(year, month, day);
+  };
+
   const getDateLabels = computed(() => {
     if (focus_summaries.value.length) {
       const first_focus_summary = focus_summaries.value[focus_summaries.value.length - 1];
       const last_focus_summary  = focus_summaries.value[0];
 
-      const first_month_date = new Date(+first_focus_summary.date);
-      const last_month_date = new Date(+last_focus_summary.date);
+      const first_month_date = getDateFromSummary(first_focus_summary.date);
+      const last_month_date = getDateFromSummary(last_focus_summary.date);
 
       let months = (last_month_date.getFullYear() - first_month_date.getFullYear()) * 12;
 
