@@ -116,10 +116,11 @@ export const task: Module<TaskState, State> = {
         .then(() => commit(NEW_UPDATED_TASK, task));
     },
 
-    [DELETE_TASK]: ({ commit }, task: TaskInterface) => {
+    [DELETE_TASK]: async ({ commit }, task: TaskInterface) => {
       if (hasApi()) {
-        return http().delete(`tasks/${task.id}`)
-          .then(resp => commit(REMOVE_TASK, resp.data));
+        await http().delete(`tasks/${task.id}`);
+
+        return commit(REMOVE_TASK, task);
       }
 
       return db.collection('tasks')

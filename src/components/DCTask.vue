@@ -1,58 +1,5 @@
 <template>
-  <Box v-if="isGridLayout">
-    <div class="columns is-clickable">
-      <div class="column is-1 is-flex">
-        <button
-          class="button is-inline-block"
-          @click="setActiveTask"
-        >
-          <span class="icon is-small">
-            <i class="fas fa-play" />
-          </span>
-        </button>
-      </div>
-
-      <div class="column is-4 justify-center">
-        {{ task.description || 'Unnamed Task' }}
-      </div>
-
-      <div class="column is-3 justify-center">
-        {{ task.project?.name ?? 'N/D' }}
-      </div>
-
-      <div class="column justify-center">
-        <TimerDisplay
-          :time-in-seconds="getTaskTime(task)"
-          :has-dark-theme="false"
-        />
-      </div>
-
-      <div class="column is-flex is-flex-direction-row">
-        <button
-          class="button"
-          @click="selectTask"
-        >
-          <span class="icon is-small">
-            <i class="fas fa-pencil-alt" />
-          </span>
-        </button>
-
-        <button
-          class="button ml-2 is-danger"
-          @click="handleDeleteButtonClick"
-        >
-          <span class="icon is-small">
-            <i class="fas fa-trash" />
-          </span>
-        </button>
-      </div>
-    </div>
-  </Box>
-
-  <DSCard
-    v-else
-    class="task-card"
-  >
+  <DSCard class="task-card">
     <template #title>
       {{ task.description }}
     </template>
@@ -159,12 +106,12 @@
     </template>
 
     <template #footer>
-      <button
+      <q-btn
+        :loading="true"
         @click="deleteTask"
-        class="button is-danger"
       >
         Delete task
-      </button>
+      </q-btn>
 
       <button
         class="button"
@@ -189,6 +136,8 @@
   import { DELETE_TASK, SET_ACTIVE_TASK } from '@/store/types/actions';
 
   import formatTimer from '@/hooks/formatTimer';
+
+  const delete_request_pending = ref(false);
 
   const props = defineProps({
     task: {
@@ -215,8 +164,11 @@
     show_modal.value = true;
   };
 
-  const deleteTask = () => {
-    store.dispatch(DELETE_TASK, props.task).then(() => closeModal());
+  const deleteTask = async () => {
+    delete_request_pending.value = true;
+    await store.dispatch(DELETE_TASK, props.task);
+    closeModal();
+    delete_request_pending.value = false;
   };
 
   const setActiveTask = () => {

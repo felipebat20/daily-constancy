@@ -146,7 +146,7 @@
   import { computed, defineComponent, ref, watch } from 'vue';
 
   import Form from '@/components/Form.vue';
-  import Task from '@/components/ATTask.vue';
+  import Task from '@/components/DCTask.vue';
   import Box from '@/components/shared/Box.vue';
   import Modal from '@/components/shared/Modal.vue';
   import DCTasksTable from '@/components/tasks/DCTasksTable.vue';
