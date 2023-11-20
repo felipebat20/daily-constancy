@@ -9,32 +9,60 @@
           flat
         />
 
-        <Heading level="h2">
+        <Heading
+          v-if="! request_pending"
+          level="h2"
+        >
           Streak: {{ streak.name }}
         </Heading>
+
+        <div
+          v-else
+          class="title-request-pending"
+        >
+          <Heading level="h2">
+            Streak:
+          </Heading>
+
+          <q-skeleton
+            type="text"
+            width="200px"
+            height="30px"
+          />
+        </div>
       </div>
 
       <div>
         <div class="q-pa-md">
           <div class="calendar-container">
-            <div
-              v-for="month_label in getDateLabels"
-              :key="month_label"
-            >
-              <q-date
-                v-model="getDays[month_label]"
-                multiple
-                today-btn
-                minimal
-                :years-in-month-view="false"
-                :default-year-month="month_label"
-                :navigation-min-year-month="month_label"
-                :navigation-max-year-month="month_label"
-                color="orange"
-                @update:model-value="handleUpdate"
-                @click="handleUpdate"
+            <template v-if="request_pending">
+              <DateSkeleton
+                v-for="n in 3"
+                :key="n"
               />
-            </div>
+            </template>
+
+            <template v-else>
+              <div
+                v-for="month_label in getDateLabels"
+                :key="month_label"
+              >
+                <q-date
+                  v-model="getDays[month_label]"
+                  multiple
+                  today-btn
+                  minimal
+                  dense
+                  :years-in-month-view="false"
+                  :default-year-month="month_label"
+                  :navigation-min-year-month="month_label"
+                  :navigation-max-year-month="month_label"
+                  color="orange"
+                  @update:model-value="handleUpdate"
+                  @click="handleUpdate"
+                />
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -63,7 +91,22 @@
         </div>
 
         <div class="tasks">
-          <template v-if="getSelectedFocusSummary.tasks.length">
+          <template v-if="request_pending">
+            <div
+              v-for="n in 3"
+              :key="n"
+            >
+              <span>
+                <q-skeleton
+                  type="text"
+                  width="100%"
+                  height="30px"
+                />
+              </span>
+            </div>
+          </template>
+
+          <template v-else-if="getSelectedFocusSummary.tasks.length">
             <div
               v-for="task in getSelectedFocusSummary.tasks"
               :key="task.id"
@@ -93,7 +136,22 @@
         </div>
 
         <div class="projects">
-          <template v-if="getSelectedFocusSummary.projects.length">
+          <template v-if="request_pending">
+            <div
+              v-for="n in 3"
+              :key="n"
+            >
+              <span>
+                <q-skeleton
+                  type="text"
+                  width="90px"
+                  height="30px"
+                />
+              </span>
+            </div>
+          </template>
+
+          <template v-else-if="getSelectedFocusSummary.projects.length">
             <q-badge
               v-for="project in getSelectedFocusSummary.projects"
               :key="project.name"
@@ -121,6 +179,7 @@
   import { groupBy } from 'lodash';
 
   import { Heading } from '@/design-system/Texts';
+  import { DateSkeleton } from '@/design-system/Skeleton';
 
   import { useStore } from '@/store';
 
@@ -131,6 +190,11 @@
   const route = useRoute();
 
   const { streak_id } = route.params;
+  const request_pending = computed(() => {
+    const { streak: streak_request_pending = {} } = store.state.requests_pending;
+
+    return streak_request_pending.show || streak_request_pending.focus_summaries;
+  });
 
   store.dispatch(FETCH_STREAK, streak_id);
   store.dispatch(FETCH_STREAK_FOCUS_SUMMARIES, streak_id);
@@ -284,6 +348,7 @@
     flex-direction: row;
     width: 100%;
     gap: 10px;
+    flex-wrap: wrap;
 
     > div {
       width: fit-content;
@@ -360,5 +425,10 @@
         font-weight: 700;
       }
     }
+  }
+
+  .title-request-pending {
+    display: flex;
+    gap: 10px;
   }
 </style>

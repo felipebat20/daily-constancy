@@ -26,6 +26,7 @@ import {
 import { hasApi } from '@/hooks/verify_api';
 import http from '@/http';
 import FocusSummary from '@/interfaces/FocusSummary.interface';
+import { NEW_REQUEST_PENDING } from '@/store/types/mutations';
 
 export interface StreakState {
   streaks: StreakInterface[]
@@ -74,8 +75,10 @@ export const streak: Module<StreakState, State> = {
 
     [FETCH_STREAKS]: async ({ commit }) => {
       if (hasApi()) {
+        commit(NEW_REQUEST_PENDING, { topic: 'streak', key: 'fetch_all', value: true });
         const { data: streaks } = await http().get('/streaks');
 
+        commit(NEW_REQUEST_PENDING, { topic: 'streak', key: 'fetch_all', value: false });
         return commit(NEW_STREAKS, streaks);
       }
 
@@ -103,9 +106,12 @@ export const streak: Module<StreakState, State> = {
     },
 
     [FETCH_STREAK_FOCUS_SUMMARIES]: async ({ commit }, streak_id: string) => {
+      commit(NEW_REQUEST_PENDING, { topic: 'streak', key: 'focus_summaries', value: true });
+
       const { data: focus_summaries } = await http().get(`/streaks/${streak_id}/focus_summaries`);
 
       commit(NEW_FOCUS_SUMMARIES, focus_summaries);
+      commit(NEW_REQUEST_PENDING, { topic: 'streak', key: 'focus_summaries', value: false });
 
       return focus_summaries;
     },

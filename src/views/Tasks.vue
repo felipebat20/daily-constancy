@@ -112,9 +112,12 @@
       </template>
     </Modal>
 
-    <Box v-if="request_pending">
-      Fetching tasks
-    </Box>
+    <div v-if="request_pending">
+      <TableSkeleton
+        v-for="n in 3"
+        :key="n"
+      />
+    </div>
 
     <Box v-else-if="! tasks.length">
       Are you kidding with your future? :(
@@ -150,6 +153,7 @@
   import Box from '@/components/shared/Box.vue';
   import Modal from '@/components/shared/Modal.vue';
   import DCTasksTable from '@/components/tasks/DCTasksTable.vue';
+  import { TableSkeleton } from '@/design-system/Skeleton';
 
   import TaskInterface from '@/interfaces/Task.interface';
   import { useStore } from '@/store';
@@ -170,6 +174,7 @@
       Box,
       DCTasksTable,
       Modal,
+      TableSkeleton,
     },
 
     data() {

@@ -7,8 +7,8 @@
     color="amber"
     flat
     bordered
+    :loading="request_pending"
     :rows-per-page-options="[25, 50, 100]"
-    :loading="false"
     loading-label="Fetching streaks"
   >
     <template #body-cell-projects="props">
@@ -84,12 +84,20 @@
   import type { QTableProps } from 'quasar';
   import { computed, ref } from 'vue';
 
+  import { useStore } from '@/store';
+
   import DCDeleteStreak from '@/components/streaks/partials/DCDeleteStreak.vue';
   import DCEditStreak from '@/components/streaks/partials/DCEditStreak.vue';
-import StreakInterface from '@/interfaces/Streak.interface';
+  import StreakInterface from '@/interfaces/Streak.interface';
 
   const deleteStreakModal = ref(DCDeleteStreak);
   const editStreakModal = ref(DCEditStreak);
+  const store = useStore();
+  const request_pending = computed(() => {
+    const { streak: streak_request_pending = {} } = store.state.requests_pending;
+
+    return streak_request_pending.fetch_all;
+  });
 
   const props = defineProps({
     streaks: {
