@@ -23,12 +23,14 @@
     </template>
 
     <template #footer>
-      <button
+      <q-btn
+        :loading="request_pending"
         @click="deleteTask"
         class="button is-danger"
+        no-caps
       >
         Delete task
-      </button>
+      </q-btn>
 
       <button
         class="button"
@@ -61,13 +63,18 @@
   });
 
   const show_modal = ref(false);
+  const request_pending = ref(false);
 
   const getTaskTime = (task: TaskInterface) => {
     return task.total_time_spent || task.time_spent;
   };
 
-  const deleteTask = () => {
-    store.dispatch(DELETE_TASK, props.task).then(() => closeModal());
+  const deleteTask = async () => {
+    request_pending.value = true;
+    await store.dispatch(DELETE_TASK, props.task);
+    closeModal();
+
+    return request_pending.value = false;
   };
 
   const closeModal = () => {

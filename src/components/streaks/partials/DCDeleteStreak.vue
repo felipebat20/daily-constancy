@@ -45,12 +45,13 @@
 
   import { useStore } from '@/store';
 
+  import StreakInterface from '@/interfaces/Streak.interface';
   import { DELETE_STREAK } from '@/store/types/actions';
 
   const store = useStore();
   const show_modal = ref(false);
   const request_pending = ref(false);
-  const streak = ref({});
+  const streak = ref({} as StreakInterface);
 
   const handleDeleteStreak = async () => {
     request_pending.value = true;
@@ -64,7 +65,7 @@
     request_pending.value = false;
   };
 
-  const handleOpenModal = (deletable_streak) => {
+  const handleOpenModal = (deletable_streak: StreakInterface) => {
     streak.value = deletable_streak;
 
     show_modal.value = true;

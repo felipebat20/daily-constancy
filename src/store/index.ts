@@ -54,9 +54,8 @@ export const store = createStore<State>({
     },
 
     requests_pending: {
-      tasks: {
-        fetch_user_tasks: false,
-      },
+      tasks: { fetch_user_tasks: false },
+      streak: {},
     },
   },
 

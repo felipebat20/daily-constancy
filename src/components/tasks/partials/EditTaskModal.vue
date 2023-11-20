@@ -62,12 +62,14 @@
     </template>
 
     <template #footer>
-      <button
-        @click="updateTask"
+      <q-btn
         class="button is-success"
+        :loading="request_pending"
+        no-caps
+        @click="updateTask"
       >
         Save task
-      </button>
+      </q-btn>
 
       <button
         class="button"
@@ -95,6 +97,7 @@
   const project_id = ref(0);
 
   const task: Ref<TaskInterface> = ref({} as TaskInterface);
+  const request_pending = ref(false);
 
   const projects = computed(() => store.state.project.projects);
   const openModal = (update_task: TaskInterface) => {
@@ -106,13 +109,18 @@
 
   const closeModal = () => show_modal.value = false;
 
-  const updateTask = () => {
+  const updateTask = async () => {
+    request_pending.value = true;
     const project = projects.value.find(proj => proj.id === project_id.value);
 
-    return store.dispatch(UPDATE_TASK, {
+    await store.dispatch(UPDATE_TASK, {
       ...task.value,
       project,
-    }).then(closeModal);
+    });
+
+    request_pending.value = false;
+
+    return closeModal();
   };
 
   defineExpose({
