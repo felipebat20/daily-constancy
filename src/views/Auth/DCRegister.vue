@@ -124,7 +124,7 @@
           position: 'top-right',
         });
 
-        $q.cookies.set(jwt, token, { expires: '1d' });
+        $q.cookies.set(jwt, token, { expires: '7d' });
 
         return router.push({ path: '/' });
       }
