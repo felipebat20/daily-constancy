@@ -147,6 +147,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, watch } from 'vue';
+  import { debounce } from 'lodash';
 
   import Form from '@/components/Form.vue';
   import Task from '@/components/DCTask.vue';
@@ -192,9 +193,9 @@
       const projects = computed(() => store.state.project.projects);
       const project_id = ref(0);
 
-      watch(task_filter, () =>{
+      watch(task_filter, debounce(function () {
         store.dispatch(FETCH_TASKS, task_filter.value);
-      });
+      }, 700));
 
       store.dispatch(FETCH_TASKS);
 
