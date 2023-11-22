@@ -53,11 +53,15 @@ export const task: Module<TaskState, State> = {
   actions: {
     [FETCH_TASKS]: async ({ commit }, task_name: string) : Promise<void> => {
       if (hasApi()) {
-        const query = 'tasks';
-
         commit(NEW_REQUEST_PENDING, { topic: 'tasks', key: 'fetch_user_tasks', value: true });
 
-        const response = await http().get(query);
+        const url_params = new URLSearchParams();
+
+        if (task_name) {
+          url_params.append('description', task_name);
+        }
+
+        const response = await http().get('/tasks', { params: url_params });
 
         commit(NEW_REQUEST_PENDING, { topic: 'tasks', key: 'fetch_user_tasks', value: false });
 
