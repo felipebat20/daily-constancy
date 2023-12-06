@@ -90,6 +90,8 @@
   import DCEditStreak from '@/components/streaks/partials/DCEditStreak.vue';
   import StreakInterface from '@/interfaces/Streak.interface';
 
+  import formatDate from '@/hooks/formatDate';
+
   const deleteStreakModal = ref(DCDeleteStreak);
   const editStreakModal = ref(DCEditStreak);
   const store = useStore();
@@ -115,7 +117,7 @@
 
     {
       name: 'createdAt',
-      field: 'createdAt',
+      field: (row) => formatDate(new Date(row.createdAt)),
       label: 'Created at',
     },
 
