@@ -14,11 +14,11 @@
     <thead>
       <tr>
         <th>
-          ID
+          Name
         </th>
 
         <th>
-          Name
+          Created at
         </th>
 
         <th>
@@ -33,11 +33,11 @@
         :key="project.id"
       >
         <td>
-          {{ project.id }}
+          {{ project.name }}
         </td>
 
         <td>
-          {{ project.name }}
+          {{ formatDate(new Date(project.createdAt || (+project.id))) }}
         </td>
 
         <td>
@@ -71,6 +71,7 @@
 
   import { useStore } from '@/store';
   import { FETCH_PROJECTS, DELETE_PROJECT } from '@/store/types/actions';
+  import formatDate from '@/hooks/formatDate';
 
   export default defineComponent({
     name: 'ATProjectsList',
@@ -86,12 +87,13 @@
     },
 
     methods: {
+      formatDate,
       deleteTask(project: ProjectInterface) {
         const { id } = project;
 
         return this.store.dispatch(DELETE_PROJECT, { id });
       },
-    }
+    },
   });
 </script>
 
