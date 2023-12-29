@@ -66,7 +66,7 @@
   const request_pending = ref(false);
 
   const getTaskTime = (task: TaskInterface) => {
-    return task.total_time_spent || task.time_spent;
+    return task.total_time_spent || task.time_spent || 0;
   };
 
   const deleteTask = async () => {
