@@ -97,7 +97,7 @@
       watch(active_task, (state, prev_state) => {
         if (state.id && state.id !== prev_state.id) {
           clearInterval(timer.value);
-          timeInSeconds.value = (active_task.value.total_time_spent || active_task.value.time_spent);
+          timeInSeconds.value = (active_task.value.total_time_spent || active_task.value.time_spent || 0);
           startTimer();
         }
       });
