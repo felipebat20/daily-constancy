@@ -21,8 +21,8 @@
     --bg-primary: #FFF;
     --text-primary: #000;
     --accent-background: #FFF;
-    --placeholder-color: rgba(54,54,54,.3);
-    --border-color: rgba(0,0,0,.12);
+    --placeholder-color: rgba(54, 54, 54, .3);
+    --border-color: rgba(0, 0, 0, .12);
   }
 
   main.dark-theme {
