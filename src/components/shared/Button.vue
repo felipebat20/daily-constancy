@@ -1,6 +1,8 @@
 <template>
-  <button
-    class="button"
+  <q-btn
+    class="custom-border"
+    no-caps
+    unelevated
     :disabled="button.disabled"
   >
     <span class="icon">
@@ -8,7 +10,7 @@
     </span>
 
     <span>{{ button.label }}</span>
-  </button>
+  </q-btn>
 </template>
 
 <script lang="ts">
@@ -26,3 +28,7 @@
     },
   });
 </script>
+
+<style lang="scss" scoped>
+  .custom-border { border-color: var(--border-color) !important; }
+</style>

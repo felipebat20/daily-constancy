@@ -183,11 +183,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, ref, onBeforeMount } from 'vue';
   import { useQuasar } from 'quasar';
   import { useRoute, useRouter } from 'vue-router';
 
-  import { jwt } from '@/static/storage-keys';
+  import { jwt, dark_theme as dark_theme_key } from '@/static/storage-keys';
 
   import { jwtToken } from '@/hooks/verify_api';
   import { useStore } from '@/store';
@@ -196,12 +196,6 @@
   export default defineComponent({
     name: 'SideBar',
     emits: ['onSwitchTheme'],
-    data() {
-      return {
-        dark_theme: false,
-      };
-    },
-
     computed: {
       getThemeText(): string {
         if (this.dark_theme) {
@@ -212,12 +206,23 @@
       },
     },
 
-    setup() {
+    setup(props, { emit }) {
       const $q = useQuasar();
       const route = useRoute();
       const router = useRouter();
       const store = useStore();
       const user_is_authenticated = ref(!! jwtToken());
+      const dark_theme = ref(false);
+
+      onBeforeMount(() => {
+        const dark = localStorage.getItem(dark_theme_key);
+
+        $q.dark.set(!! dark);
+        dark_theme.value = !! dark;
+        emit('onSwitchTheme', !! dark);
+
+        return dark_theme.value = !! dark;
+      });
 
       const handleLogout = () => {
         $q.cookies.remove(jwt);
@@ -239,18 +244,30 @@
         });
       };
 
+      const switchTheme = () => {
+        $q.dark.toggle();
+        dark_theme.value = ! dark_theme.value;
+        emit('onSwitchTheme', dark_theme.value);
+        handleDarkThemeState(dark_theme.value);
+      };
+
+      const handleDarkThemeState = (dark: boolean) => {
+        if (dark) {
+          return localStorage.setItem(dark_theme_key, '1');
+        }
+
+        return localStorage.removeItem(dark_theme_key);
+      };
+
       return {
+        dark_theme,
+        switchTheme,
         handleLogout,
         user_is_authenticated,
       };
     },
 
     methods: {
-      switchTheme () {
-        this.dark_theme = ! this.dark_theme;
-        this.$emit('onSwitchTheme', this.dark_theme);
-      },
-
       getIsActive(path: string) {
         return this.$route.path === path;
       },

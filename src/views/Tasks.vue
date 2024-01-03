@@ -11,6 +11,7 @@
             type="text"
             placeholder="Search a task"
           >
+
           <span class="icon is-small is-left">
             <i class="fas fa-search" />
           </span>
@@ -275,5 +276,18 @@
     cursor: pointer;
   }
 
+  .dark-theme .change-view-container {
+    background-color: var(--accent-background);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
   .change-view-container:hover { background-color: #adb5bd; }
+  .input {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+
+    &::placeholder { color: var(--placeholder-color); }
+  }
 </style>

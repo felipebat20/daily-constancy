@@ -1,7 +1,7 @@
 <template>
   <router-link
     to="/projects/create"
-    class="button"
+    class="mr-0 ml-auto button"
   >
     <span class="icon is-small">
       <i class="fas fa-plus" />
@@ -97,8 +97,17 @@
   });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .projects {
     padding: 1.25rem;
+
+    .table {
+      background-color: var(--accent-background);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 1rem;
+
+      td, th { border-color: var(--border-color); }
+    }
   }
 </style>

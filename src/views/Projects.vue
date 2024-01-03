@@ -17,7 +17,6 @@
 </script>
 
 <style scoped>
-  .projects {
-    padding: 1.25rem;
-  }
+  .projects { padding: 1.25rem;}
+  .title { color: var(--text-primary); }
 </style>

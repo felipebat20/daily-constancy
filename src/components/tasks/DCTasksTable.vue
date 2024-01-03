@@ -23,14 +23,15 @@
               :props="props"
               style="width: 40px"
             >
-              <button
-                class="button is-inline-block"
+              <q-btn
+                class="custom-border is-inline-block"
+                unelevated
                 @click="setActiveTask(props.row)"
               >
                 <span class="icon is-small">
                   <i class="fas fa-play" />
                 </span>
-              </button>
+              </q-btn>
             </q-td>
 
             <q-td
@@ -74,23 +75,24 @@
               key="actions"
               :props="props"
             >
-              <button
-                class="button"
+              <q-btn
+                class="custom-border is-inline-block"
+                unelevated
                 @click="selectTask(props.row)"
               >
                 <span class="icon is-small">
                   <i class="fas fa-pencil-alt" />
                 </span>
-              </button>
+              </q-btn>
 
-              <button
+              <q-btn
                 class="button ml-2 is-danger"
                 @click="handleDeleteButtonClick(props.row)"
               >
                 <span class="icon is-small">
                   <i class="fas fa-trash" />
                 </span>
-              </button>
+              </q-btn>
             </q-td>
           </q-tr>
         </template>
@@ -200,12 +202,17 @@
 .my-sticky-header-table
   /* height or max-height is important */
   height: 400px
+  background-color: var(--accent-background) !important
+  border-color: var(--border-color) !important
+  color: var(--text-primary) !important
 
   .q-table__top,
   .q-table__bottom,
   thead tr:first-child th
     /* bg color is important for th; just specify one */
-    background-color: #FFF
+    background-color: var(--accent-background)
+    color: var(--text-primary)
+    border-color: var(--border-color) !important
 
   thead tr th
     position: sticky
@@ -223,6 +230,9 @@
     /* height of all previous header rows */
     scroll-margin-top: 48px
 
+  tr, td
+    border-color: var(--border-color) !important
+
 .tables
   display: flex
   gap: 10px
@@ -234,4 +244,12 @@
   height: 100%
   width: 500px
   white-space: pre-wrap
+
+.button
+  color: var(--text-primary)
+  background-color: var(--accent-background)
+  border-color: var(--border-color)
+
+.custom-border
+  border: 1px solid var(--border-color) !important
 </style>

@@ -6,13 +6,14 @@
         role="form"
         aria-label="Form to create new task"
       >
-        <input
+        <q-input
           type="text"
-          class="input"
+          outlined
+          dense
           placeholder="Which task would you like start?"
           v-model="description"
           autofocus
-        >
+        />
       </div>
 
       <div class="column is-3">
@@ -144,7 +145,5 @@
     color: var(--text-primary);
   }
 
-  .height-1 {
-    height: 20px;
-  }
+  .height-1 { height: 20px; }
 </style>

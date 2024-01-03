@@ -140,7 +140,7 @@
   const handleEditStreakButtonClick = (streak: StreakInterface) => editStreakModal.value.handleOpenModal(streak);
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   .projects {
     display: flex;
     gap: 10px;
@@ -150,5 +150,14 @@
   .buttons {
     display: flex;
     gap: 10px;
+  }
+
+  .q-dark { --q-dark: var(--accent-background); }
+  .q-table--dark, td, th { border-color: var(--border-color) !important; }
+  table th { color: var(--text-primary) !important; }
+  table {
+    background-color: var(--accent-background) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
   }
 </style>
