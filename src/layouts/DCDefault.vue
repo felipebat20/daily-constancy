@@ -37,17 +37,6 @@
 </script>
 
 <style scoped>
-  main {
-    min-height: 100vh;
-    --bg-primary: #FFF;
-    --text-primary: #000;
-  }
-
-  main.dark-theme {
-    --bg-primary: #2b2d42;
-    --text-primary: #ddd;
-  }
-
   .content-side-bar {
     background-color: var(--bg-primary);
     color: var(--text-primary);

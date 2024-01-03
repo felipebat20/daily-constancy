@@ -51,7 +51,7 @@
         return {
           disabled: this.getTimeIsRunning,
           icon: 'fas fa-play',
-          label: 'play'
+          label: 'Play'
         };
       },
 
@@ -59,7 +59,7 @@
         return {
           disabled: ! this.getTimeIsRunning,
           icon: 'fas fa-stop',
-          label: 'stop'
+          label: 'Stop'
         };
       },
     },

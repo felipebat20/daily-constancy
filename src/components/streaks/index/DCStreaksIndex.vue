@@ -11,7 +11,9 @@
       <q-btn
         label="Create new streak"
         icon="add"
+        unelevated
         no-caps
+        class="custom-border"
         @click="handleCreateButtonClick"
       />
     </div>
@@ -57,5 +59,8 @@
 
     button { height: fit-content }
   }
+
+  .title { color: var(--text-primary); }
+  .custom-border { border: 1px solid var(--border-color); }
 }
 </style>
