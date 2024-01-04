@@ -15,7 +15,7 @@
       <q-td>
         <div
           class="offensive"
-          :class="{'on-fire': value.today_is_in_streak }"
+          :class="{ 'on-fire': value.today_is_in_streak }"
         >
           <div class="icon">
             <q-icon
@@ -189,13 +189,13 @@
 
   .offensive {
     display: flex;
-    justify-content: flex;
+    justify-content: center;
     align-items: center;
     gap: 4px;
     font-size: 15px;
     font-weight: 700;
-    vertical-align: baseline;
 
     &.on-fire { color: rgb(255, 171, 51); }
+    .days { margin-top: 2px; }
   }
 </style>
