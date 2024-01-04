@@ -11,6 +11,26 @@
     :rows-per-page-options="[25, 50, 100]"
     loading-label="Fetching streaks"
   >
+    <template #body-cell-offensive="{ value }">
+      <q-td>
+        <div
+          class="offensive"
+          :class="{ 'on-fire': value.today_is_in_streak }"
+        >
+          <div class="icon">
+            <q-icon
+              name="whatshot"
+              size="23px"
+            />
+          </div>
+
+          <span class="days">
+            {{ value.days }}
+          </span>
+        </div>
+      </q-td>
+    </template>
+
     <template #body-cell-projects="props">
       <q-td :style="{ 'width': '35%' }">
         <div class="projects">
@@ -110,6 +130,12 @@
 
   const columns: QTableProps['columns'] = [
     {
+      name: 'offensive',
+      field: 'offensive',
+      label: ''
+    },
+
+    {
       name: 'Name',
       field: 'name',
       label: 'Name'
@@ -159,5 +185,17 @@
     background-color: var(--accent-background) !important;
     border-color: var(--border-color) !important;
     color: var(--text-primary) !important;
+  }
+
+  .offensive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    font-size: 15px;
+    font-weight: 700;
+
+    &.on-fire { color: rgb(255, 171, 51); }
+    .days { margin-top: 2px; }
   }
 </style>
