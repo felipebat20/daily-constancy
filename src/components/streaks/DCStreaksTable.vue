@@ -178,7 +178,7 @@
     gap: 10px;
   }
 
-  .q-dark { --q-dark: var(--accent-background); }
+  .q-table__container { background-color: var(--accent-background) !important; }
   .q-table--dark, td, th { border-color: var(--border-color) !important; }
   table th { color: var(--text-primary) !important; }
   table {
