@@ -8,4 +8,8 @@ export default interface StreakInterface {
   time_spent_today: number,
   projects: ProjectInterface[],
   task: TaskInterface,
+  offensive?: {
+    days: number,
+    today_is_in_streak: boolean
+  }
 }
