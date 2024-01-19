@@ -13,21 +13,7 @@
   >
     <template #body-cell-offensive="{ value }">
       <q-td>
-        <div
-          class="offensive"
-          :class="{ 'on-fire': value.today_is_in_streak }"
-        >
-          <div class="icon">
-            <q-icon
-              name="whatshot"
-              size="23px"
-            />
-          </div>
-
-          <span class="days">
-            {{ value.days }}
-          </span>
-        </div>
+        <StreakOffensive :offensive="value" />
       </q-td>
     </template>
 
@@ -109,6 +95,7 @@
   import DCDeleteStreak from '@/components/streaks/partials/DCDeleteStreak.vue';
   import DCEditStreak from '@/components/streaks/partials/DCEditStreak.vue';
   import StreakInterface from '@/interfaces/Streak.interface';
+  import StreakOffensive from '@/design-system/StreakOffensive.vue';
 
   import formatDate from '@/hooks/formatDate';
 
