@@ -12,7 +12,10 @@
 
     <div
       class="content-side-bar"
-      :class="{'margin-menu': $q.screen.gt.md }"
+      :class="{
+        'margin-menu': $q.screen.gt.xs,
+        'w-100': ! $q.screen.gt.xs,
+      }"
     >
       <Notification />
       <router-view />
@@ -68,4 +71,6 @@
     margin-left: 4rem;
     width: 100%;
   }
+
+  .w-100 { width: 100%; }
 </style>

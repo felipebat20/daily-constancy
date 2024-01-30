@@ -1,4 +1,54 @@
 <template>
+  <div class="top-bar">
+    <div>
+      <router-link
+        style="{ height: 2rem; width: 2rem;}"
+        to="/"
+      >
+        <q-img
+          src="../assets/treker.png"
+          alt="logo"
+          class="mt-2"
+          style="max-width: 2rem;"
+        />
+      </router-link>
+    </div>
+
+    <div>
+      Daily Constancy
+    </div>
+
+    <div>
+      <q-btn
+        class="switch-theme button "
+        @click="switchTheme"
+      >
+        <q-icon
+          size="24px"
+          v-if="! dark_theme"
+          name="dark_mode"
+          color="white"
+        />
+
+        <q-icon
+          size="24px"
+          v-else
+          name="light_mode"
+          color="white"
+        />
+
+        <q-tooltip
+          anchor="center right"
+          self="center left"
+          :offset="[8, 8]"
+          class="bg-dark"
+        >
+          {{ getThemeText }}
+        </q-tooltip>
+      </q-btn>
+    </div>
+  </div>
+
   <header :class="{ 'sidebar-mobile': ! $q.screen.gt.xs }">
     <div
       v-if="$q.screen.gt.xs"
@@ -311,10 +361,6 @@
     margin-bottom: 30px;
   }
 
-  .d-none {
-    display: none;
-  }
-
   .sidebar-mobile {
     position: fixed;
     bottom: 0;
@@ -334,5 +380,18 @@
         }
       }
     }
+  }
+
+  .top-bar {
+    display: flex;
+    width: 100%;
+    position: fixed;
+    background: #0d3b66;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 3;
+
+    > div { display: flex; }
   }
 </style>

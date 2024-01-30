@@ -1,5 +1,5 @@
 <template>
-  <Form />
+  <Form :class="{ 'custom-margin': ! $q.screen.gt.xs }" />
 
   <div class="main-container">
     <div class="tasks-container">
@@ -63,5 +63,10 @@
         gap: 10px;
       }
     }
+  }
+
+  .custom-margin {
+    margin-top: 56px;
+    width: 100%;
   }
 </style>
