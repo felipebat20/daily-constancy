@@ -17,9 +17,9 @@
       </router-link>
     </div>
 
-    <div>
+    <p class="text-white m-0">
       Daily Constancy
-    </div>
+    </p>
 
     <div>
       <q-btn
