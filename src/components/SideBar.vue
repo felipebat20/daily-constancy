@@ -183,7 +183,7 @@
           </router-link>
         </li>
 
-        <li v-if="user_is_authenticated">
+        <li v-if="user_is_authenticated && ! $q.screen.gt.xs">
           <q-btn
             v-if="user_is_authenticated"
             class="link is-flex justify-center"
