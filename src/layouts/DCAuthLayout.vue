@@ -33,15 +33,6 @@
 </script>
 
 <style scoped lang="scss">
-body.body--dark {
-  --bg-primary: #FFF;
-  --text-primary: #000;
-  --accent-background: #FFF;
-  --placeholder-color: rgba(54, 54, 54, .3);
-  border-color: rgba(0, 0, 0, .12);
-  color: var(--text-primary);
-}
-
 .auth-page { background-color: #0d3b66; }
   .auth-container {
     max-width: 1140px;
