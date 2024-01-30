@@ -6,7 +6,10 @@
       <DCTasksContainer />
     </div>
 
-    <div class="side-right-bar">
+    <div
+      v-if="$q.screen.gt.xs"
+      class="side-right-bar"
+    >
       <StreaksHomeCard />
     </div>
   </div>
@@ -14,6 +17,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
+  import { useQuasar } from 'quasar';
 
   import Form from '@/components/Form.vue';
   import DCTasksContainer from '@/components/tasks/DCTasksContainer.vue';
@@ -26,6 +30,12 @@
       DCTasksContainer,
       StreaksHomeCard,
     },
+
+    setup() {
+      const $q = useQuasar();
+
+      return { $q };
+    }
   });
 </script>
 

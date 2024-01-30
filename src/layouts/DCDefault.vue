@@ -10,7 +10,10 @@
       <SideBar @on-switch-theme="switchDarkTheme" />
     </div>
 
-    <div class="margin-menu content-side-bar">
+    <div
+      class="content-side-bar"
+      :class="{'margin-menu': $q.screen.gt.md }"
+    >
       <Notification />
       <router-view />
     </div>
@@ -19,6 +22,7 @@
 
 <script setup lang="ts">
   import { ref } from 'vue';
+  import { useQuasar } from 'quasar';
 
   import SideBar from '../components/SideBar.vue';
   import Notification from '../components/Notifications.vue';
@@ -30,6 +34,7 @@
 
   document.title = 'Daily Constancy';
   const store = useStore();
+  const $q = useQuasar();
 
   store.dispatch(VERIFY_API);
 

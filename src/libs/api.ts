@@ -19,7 +19,7 @@ class ApiClient {
       });
 
       if (response.json) {
-        return response.json();
+        return await response.json();
       }
     } catch (err) {
       return err;

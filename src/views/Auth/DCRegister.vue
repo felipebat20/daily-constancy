@@ -113,7 +113,7 @@
     request_pending.value = false;
 
     if (id) {
-      const { token } = await api.post('/login', { email, password });
+      const { token } = await api.post('/login', { email: email.value, password: password.value });
 
       if (token) {
         $q.notify({

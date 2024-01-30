@@ -1,6 +1,9 @@
 <template>
-  <header>
-    <div class="is-flex justify-center">
+  <header :class="{ 'sidebar-mobile': ! $q.screen.gt.xs }">
+    <div
+      v-if="$q.screen.gt.xs"
+      class="is-flex justify-center"
+    >
       <router-link
         style="{ height: 2rem; width: 2rem;}"
         to="/"
@@ -129,7 +132,10 @@
       </ul>
     </aside>
 
-    <div class="bottom-buttons">
+    <div
+      v-if="$q.screen.gt.xs"
+      class="bottom-buttons"
+    >
       <q-btn
         class="switch-theme button "
         @click="switchTheme"
@@ -275,7 +281,7 @@
   });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   header {
     padding: .5rem;
     background: #0d3b66;
@@ -303,5 +309,30 @@
     gap: 10px;
     margin-top: auto;
     margin-bottom: 30px;
+  }
+
+  .d-none {
+    display: none;
+  }
+
+  .sidebar-mobile {
+    position: fixed;
+    bottom: 0;
+    z-index: 3;
+    width: 100%;
+    padding: 10px;
+
+    .menu {
+      ul {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+
+        li a {
+          border-radius: 8px;
+        }
+      }
+    }
   }
 </style>
