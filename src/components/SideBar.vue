@@ -1,6 +1,62 @@
 <template>
-  <header>
-    <div class="is-flex justify-center">
+  <div
+    v-if="! $q.screen.gt.xs"
+    class="top-bar"
+  >
+    <div>
+      <router-link
+        style="{ height: 2rem; width: 2rem;}"
+        to="/"
+      >
+        <q-img
+          src="../assets/treker.png"
+          alt="logo"
+          class="mt-2"
+          style="max-width: 2rem;"
+        />
+      </router-link>
+    </div>
+
+    <p class="text-white m-0">
+      Daily Constancy
+    </p>
+
+    <div>
+      <q-btn
+        class="switch-theme button "
+        @click="switchTheme"
+      >
+        <q-icon
+          size="24px"
+          v-if="! dark_theme"
+          name="dark_mode"
+          color="white"
+        />
+
+        <q-icon
+          size="24px"
+          v-else
+          name="light_mode"
+          color="white"
+        />
+
+        <q-tooltip
+          anchor="center right"
+          self="center left"
+          :offset="[8, 8]"
+          class="bg-dark"
+        >
+          {{ getThemeText }}
+        </q-tooltip>
+      </q-btn>
+    </div>
+  </div>
+
+  <header :class="{ 'sidebar-mobile': ! $q.screen.gt.xs }">
+    <div
+      v-if="$q.screen.gt.xs"
+      class="is-flex justify-center"
+    >
       <router-link
         style="{ height: 2rem; width: 2rem;}"
         to="/"
@@ -126,10 +182,37 @@
             </q-tooltip>
           </router-link>
         </li>
+
+        <li v-if="user_is_authenticated && ! $q.screen.gt.xs">
+          <q-btn
+            v-if="user_is_authenticated"
+            class="link is-flex justify-center"
+            flat
+            @click="handleLogout"
+          >
+            <q-icon
+              size="24px"
+              name="logout"
+              color="white"
+            />
+
+            <q-tooltip
+              anchor="center right"
+              self="center left"
+              :offset="[8, 8]"
+              class="bg-dark"
+            >
+              Logout
+            </q-tooltip>
+          </q-btn>
+        </li>
       </ul>
     </aside>
 
-    <div class="bottom-buttons">
+    <div
+      v-if="$q.screen.gt.xs"
+      class="bottom-buttons"
+    >
       <q-btn
         class="switch-theme button "
         @click="switchTheme"
@@ -275,7 +358,7 @@
   });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   header {
     padding: .5rem;
     background: #0d3b66;
@@ -303,5 +386,39 @@
     gap: 10px;
     margin-top: auto;
     margin-bottom: 30px;
+  }
+
+  .sidebar-mobile {
+    position: fixed;
+    bottom: 0;
+    z-index: 3;
+    width: 100%;
+    padding: 10px;
+
+    .menu {
+      ul {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+
+        li a {
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+
+  .top-bar {
+    display: flex;
+    width: 100%;
+    position: fixed;
+    background: #0d3b66;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 3;
+
+    > div { display: flex; }
   }
 </style>

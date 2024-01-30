@@ -1,8 +1,8 @@
 <template>
-  <div class="box form">
-    <div class="columns">
+  <div class="box form mb-0">
+    <div class="columns is-12">
       <div
-        class="column is-5"
+        class="column"
         role="form"
         aria-label="Form to create new task"
       >
@@ -16,7 +16,7 @@
         />
       </div>
 
-      <div class="column is-3">
+      <div class="column">
         <q-select
           :options="getParsedProjects"
           v-model="project_id"

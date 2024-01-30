@@ -112,10 +112,16 @@
     </Modal>
 
     <div v-if="request_pending">
-      <TableSkeleton
-        v-for="n in 3"
-        :key="n"
-      />
+      <template v-if="getIsGridLayout">
+        <TableSkeleton
+          v-for="n in 3"
+          :key="n"
+        />
+      </template>
+
+      <template v-else>
+        <CardSkeleton />
+      </template>
     </div>
 
     <Box v-else-if="! tasks.length">
@@ -124,14 +130,14 @@
 
     <div
       v-else
-      :class="{'task-container': ! is_grid_layout}"
+      :class="{'task-container': ! getIsGridLayout }"
     >
-      <template v-if="! is_grid_layout">
+      <template v-if="! getIsGridLayout">
         <Task
           v-for="(task, index) in tasks"
           :key="index"
           :task="task"
-          :is-grid-layout="is_grid_layout"
+          :is-grid-layout="getIsGridLayout"
           @selected-task="updateSelectedTask"
         />
       </template>
@@ -147,12 +153,13 @@
 <script lang="ts">
   import { computed, defineComponent, ref, watch } from 'vue';
   import { debounce } from 'lodash';
+  import { useQuasar } from 'quasar';
 
   import Task from '@/components/DCTask.vue';
   import Box from '@/components/shared/Box.vue';
   import Modal from '@/components/shared/Modal.vue';
   import DCTasksTable from '@/components/tasks/DCTasksTable.vue';
-  import { TableSkeleton } from '@/design-system/Skeleton';
+  import { TableSkeleton, CardSkeleton } from '@/design-system/Skeleton';
 
   import TaskInterface from '@/interfaces/Task.interface';
   import { useStore } from '@/store';
@@ -173,6 +180,7 @@
       DCTasksTable,
       Modal,
       TableSkeleton,
+      CardSkeleton,
     },
 
     data() {
@@ -182,6 +190,7 @@
     },
 
     setup() {
+      const $q = useQuasar();
       const store = useStore();
       const task_filter = ref('');
       const is_grid_layout = ref(isGridLayout());
@@ -196,6 +205,10 @@
 
       store.dispatch(FETCH_TASKS);
 
+      const getIsGridLayout = computed(() => {
+        return is_grid_layout.value && $q.screen.gt.xs;
+      });
+
       return {
         store,
         tasks: computed(() => store.state.task.tasks),
@@ -204,6 +217,7 @@
         projects,
         project_id,
         request_pending,
+        getIsGridLayout,
       };
     },
 
@@ -246,6 +260,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
   }
 
