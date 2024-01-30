@@ -1,5 +1,8 @@
 <template>
-  <div class="top-bar">
+  <div
+    v-if="! $q.screen.gt.xs"
+    class="top-bar"
+  >
     <div>
       <router-link
         style="{ height: 2rem; width: 2rem;}"
@@ -178,6 +181,30 @@
               Profile
             </q-tooltip>
           </router-link>
+        </li>
+
+        <li v-if="user_is_authenticated">
+          <q-btn
+            v-if="user_is_authenticated"
+            class="link is-flex justify-center"
+            flat
+            @click="handleLogout"
+          >
+            <q-icon
+              size="24px"
+              name="logout"
+              color="white"
+            />
+
+            <q-tooltip
+              anchor="center right"
+              self="center left"
+              :offset="[8, 8]"
+              class="bg-dark"
+            >
+              Logout
+            </q-tooltip>
+          </q-btn>
         </li>
       </ul>
     </aside>
