@@ -13,29 +13,25 @@ module.exports = defineConfig({
   },
   pwa: {
     name: 'Daily Constancy',
-    themeColor: '#4DBA87',
-    msTileColor: '#000000',
     manifestOptions: {
-      name: 'Quasar Notes',
-      short_name: 'Quasar Notes',
-      description: 'Aplicativo de anotações feito com Quasar Framework',
+      name: 'Daily Constancy',
+      short_name: 'Daily Constancy',
+      description: 'Aplicativo para manter sequências',
       display: 'standalone',
       orientation: 'portrait',
       background_color: '#093f6e',
       theme_color: '#093f6e',
       categories: ['tools', 'productivity', 'finance'],
+      lang: 'en',
+      icons: [
+        {
+          "src": "img/treker.png",
+          "sizes": "any"
+        },
+      ]
     },
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
-    iconPaths: {
-      faviconSVG: 'img/icons/favicon.svg',
-      favicon32: 'img/icons/treker.png',
-      favicon16: 'img/icons/treker.png',
-      appleTouchIcon: 'img/icons/treker.png',
-      maskIcon: 'img/icons/treker.svg',
-      msTileImage: 'img/icons/treker.png'
-    },
-
     // configure the workbox plugin
     workboxPluginMode: 'GenerateSW',
     workboxOptions: { skipWaiting: true, clientsClaim: true },

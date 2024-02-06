@@ -6,7 +6,6 @@
   import { defineComponent } from 'vue';
 
   import AppLayout from './layouts/AppLayout.vue';
-  import TestInstall from './TestInstall.vue';
 
   export default defineComponent({
     name: 'App',
