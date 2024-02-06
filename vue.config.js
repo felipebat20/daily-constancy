@@ -12,25 +12,32 @@ module.exports = defineConfig({
     }
   },
   pwa: {
-    name: 'My App',
+    name: 'Daily Constancy',
     themeColor: '#4DBA87',
     msTileColor: '#000000',
+    manifestOptions: {
+      name: 'Quasar Notes',
+      short_name: 'Quasar Notes',
+      description: 'Aplicativo de anotações feito com Quasar Framework',
+      display: 'standalone',
+      orientation: 'portrait',
+      background_color: '#093f6e',
+      theme_color: '#093f6e',
+      categories: ['tools', 'productivity', 'finance'],
+    },
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
     iconPaths: {
       faviconSVG: 'img/icons/favicon.svg',
-      favicon32: 'img/icons/favicon-32x32.png',
-      favicon16: 'img/icons/favicon-16x16.png',
-      appleTouchIcon: 'img/icons/apple-touch-icon-152x152.png',
-      maskIcon: 'img/icons/safari-pinned-tab.svg',
-      msTileImage: 'img/icons/msapplication-icon-144x144.png'
+      favicon32: 'img/icons/treker.png',
+      favicon16: 'img/icons/treker.png',
+      appleTouchIcon: 'img/icons/treker.png',
+      maskIcon: 'img/icons/treker.svg',
+      msTileImage: 'img/icons/treker.png'
     },
 
     // configure the workbox plugin
     workboxPluginMode: 'GenerateSW',
-    workboxOptions: {
-      // swSrc is required in InjectManifest mode.
-      // ...other Workbox options...
-    }
+    workboxOptions: { skipWaiting: true, clientsClaim: true },
   }
 });
