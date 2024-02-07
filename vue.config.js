@@ -51,11 +51,11 @@ module.exports = defineConfig({
       ]
     },
     iconPaths: {
-      faviconSVG: 'img/icons/dc.svg',
+      faviconSVG: 'img/icons/android-launchericon-48-48.png',
       favicon32: 'img/icons/android-launchericon-48-48.png',
       favicon16: 'img/icons/android-launchericon-48-48.png',
       appleTouchIcon: 'img/icons/android-launchericon-144-144.png',
-      maskIcon: 'img/icons/dc.svg',
+      maskIcon: 'img/icons/android-launchericon-48-48.png',
       msTileImage: 'img/icons/android-launchericon-144-144.png'
     },
     appleMobileWebAppCapable: 'yes',
