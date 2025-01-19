@@ -133,7 +133,7 @@
         playRequestPending.value = false;
       };
 
-      watch(active_task, async (state, prev_state) => {
+      watch(active_task, (state, prev_state) => {
         if (state.id && state.id !== prev_state.id) {
           description.value = active_task.value.description;
           if (state.project?.id) {
