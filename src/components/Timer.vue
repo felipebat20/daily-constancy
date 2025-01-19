@@ -38,6 +38,16 @@
       taskName: {
         type: String,
         default: '',
+      },
+
+      playRequestPending: {
+        type: Boolean,
+        default: false,
+      },
+
+      stopRequestPending: {
+        type: Boolean,
+        default: false,
       }
     },
 
@@ -49,6 +59,7 @@
 
       getPlayButton(): ButtonInterface {
         return {
+          loading: this.playRequestPending,
           disabled: this.getTimeIsRunning,
           icon: 'fas fa-play',
           label: 'Play'
@@ -57,6 +68,7 @@
 
       getStopButton(): ButtonInterface {
         return {
+          loading: this.stopRequestPending,
           disabled: ! this.getTimeIsRunning,
           icon: 'fas fa-stop',
           label: 'Stop'

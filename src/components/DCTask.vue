@@ -34,10 +34,10 @@
             class="button"
             color="white"
             text-color="black"
-            @click="setActiveTask"
+            @click="handleInitTask"
           >
             <span class="icon is-small">
-              <i class="fas fa-play" />
+              <i :class="getTaskIcon(task)" />
             </span>
 
             <q-tooltip>
@@ -133,7 +133,7 @@
   import TaskInterface from '../interfaces/Task.interface';
   import Modal from '@/components/shared/Modal.vue';
   import { useStore } from '@/store';
-  import { DELETE_TASK, SET_ACTIVE_TASK } from '@/store/types/actions';
+  import { DELETE_TASK, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
 
   import formatTimer from '@/hooks/formatTimer';
 
@@ -171,8 +171,20 @@
     delete_request_pending.value = false;
   };
 
-  const setActiveTask = () => {
-    store.dispatch(SET_ACTIVE_TASK, props.task);
+  const handleInitTask = (task: TaskInterface) => {
+    if (task.lastSessionStartedAt) {
+      return store.dispatch(FINISH_TASK_SESSION, task);
+    }
+
+    store.dispatch(SET_ACTIVE_TASK, task);
+  };
+
+  const getTaskIcon = (task: TaskInterface) => {
+    if (task.lastSessionStartedAt) {
+      return 'fas fa-pause';
+    }
+
+    return 'fas fa-play';
   };
 
   const closeModal = () => {

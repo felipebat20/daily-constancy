@@ -43,6 +43,8 @@
       <div class="column">
         <Timer
           :task-name="description"
+          :play-request-pending="playRequestPending"
+          :stop-request-pending="stopRequestPending"
           @time-is-finished="finishTask"
           @start-timer="startTimer"
         />
@@ -52,13 +54,19 @@
 </template>
 
 <script lang="ts">
+  import { AxiosResponse } from 'axios';
   import { computed, defineComponent, ref, watch } from 'vue';
 
   import Timer from './Timer.vue';
 
   import { useStore } from '@/store';
-  import { CREATE_NEW_TASK, FETCH_PROJECTS, FINISH_ACTIVE_SESSION, SET_ACTIVE_TASK, UPDATE_TASK } from '@/store/types/actions';
-  import { AxiosResponse } from 'axios';
+  import {
+    CREATE_NEW_TASK,
+    FETCH_PROJECTS,
+    FINISH_TASK_SESSION,
+    CREATE_TASK_SESSION
+  } from '@/store/types/actions';
+  import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
 
   interface projectOptions {
     label: string;
@@ -75,10 +83,19 @@
       const project_id = ref<number | null>(null);
       const projects = computed(() => store.state.project.projects);
       const active_task = computed(() => store.state.task.active_task);
+      const playRequestPending = ref(false);
+      const stopRequestPending = ref(false);
 
       store.dispatch(FETCH_PROJECTS);
 
-      const finishTask = (time: number): Promise<AxiosResponse> => {
+      const finishTask = async (): Promise<void | boolean> => {
+        stopRequestPending.value = true;
+        await handleFinishTask();
+
+        return stopRequestPending.value = false;
+      };
+
+      const handleFinishTask = async () => {
         const project = projects.value.find(project => project.id === project_id.value);
         const task_name = description.value;
 
@@ -86,37 +103,45 @@
         project_id.value = null;
 
         if (active_task.value.id) {
-          return store.dispatch(FINISH_ACTIVE_SESSION);
+          await store.dispatch(FINISH_TASK_SESSION, active_task.value);
+
+          return store.commit(NEW_ACTIVE_TASK, {});
         }
 
-        return store.dispatch(CREATE_NEW_TASK, {
+        await store.dispatch(CREATE_NEW_TASK, {
           description: task_name,
-          time_spent: time,
           id: new Date().getTime(),
           project,
         });
       };
 
-      const startTimer = (time: number): Promise<AxiosResponse> => {
+      const startTimer = async (time: number): Promise<void> => {
         const project = projects.value.find(project => project.id === project_id.value);
         const task_name = description.value;
 
         description.value = '';
         project_id.value = null;
 
-        return store.dispatch(CREATE_NEW_TASK, {
+        playRequestPending.value = true;
+        await store.dispatch(CREATE_NEW_TASK, {
           description: task_name,
           time_spent: time,
           id: new Date().getTime(),
           project,
         });
+
+        playRequestPending.value = false;
       };
 
-      watch(active_task, (state, prev_state) => {
+      watch(active_task, async (state, prev_state) => {
         if (state.id && state.id !== prev_state.id) {
           description.value = active_task.value.description;
           if (state.project?.id) {
             project_id.value = state.project.id;
+          }
+
+          if (prev_state?.endAt) {
+            store.dispatch(FINISH_TASK_SESSION, prev_state);
           }
         }
       });
@@ -146,6 +171,8 @@
         finishTask,
         startTimer,
         getParsedProjects,
+        playRequestPending,
+        stopRequestPending,
       };
     },
   });

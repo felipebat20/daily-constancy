@@ -26,10 +26,11 @@
               <q-btn
                 class="custom-border is-inline-block"
                 unelevated
-                @click="setActiveTask(props.row)"
+                :loading="isRequestPending(props.row)"
+                @click="handleInitTask(props.row)"
               >
                 <span class="icon is-small">
-                  <i class="fas fa-play" />
+                  <i :class="getTaskIcon(props.row)" />
                 </span>
               </q-btn>
             </q-td>
@@ -124,7 +125,7 @@
   import TaskInterface from '@/interfaces/Task.interface';
   import formatTimer from '@/hooks/formatTimer';
 
-  import { SET_ACTIVE_TASK } from '@/store/types/actions';
+  import { CREATE_TASK_SESSION, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
 
   const store = useStore();
   const emit = defineEmits(['selected-task']);
@@ -170,12 +171,39 @@
     },
   ];
 
+  const request_pending = ref([] as number[]);
+
   const pagination = ref({
     rowsPerPage: 0
   });
 
-  const setActiveTask = (task: TaskInterface) => {
-    store.dispatch(SET_ACTIVE_TASK, task);
+  const isRequestPending = (task: TaskInterface) => {
+    return request_pending.value.includes(task.id);
+  };
+
+  const handleTask = async (task: TaskInterface) => {
+    if (task.lastSessionStartedAt) {
+      return store.dispatch(FINISH_TASK_SESSION, task);
+    }
+
+    const new_task = await store.dispatch(CREATE_TASK_SESSION, task);
+    store.dispatch(SET_ACTIVE_TASK, new_task);
+  };
+
+  const handleInitTask = async (task: TaskInterface) => {
+    request_pending.value.push(task.id);
+
+    await handleTask(task);
+
+    request_pending.value = request_pending.value.filter((task_id: string | number) => task_id !== task.id);
+  };
+
+  const getTaskIcon = (task: TaskInterface) => {
+    if (task.lastSessionStartedAt) {
+      return 'fas fa-pause';
+    }
+
+    return 'fas fa-play';
   };
 
   const getTaskTime = (task: TaskInterface) => {

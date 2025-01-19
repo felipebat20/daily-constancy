@@ -3,6 +3,7 @@
     class="custom-border"
     no-caps
     unelevated
+    :loading="button.loading"
     :disabled="button.disabled"
   >
     <span class="icon">
