@@ -116,6 +116,13 @@
           timeInSeconds.value = (active_task.value.total_time_spent || active_task.value.time_spent || 0);
           startTimer();
         }
+
+        if (! state.id) {
+          clearInterval(timer.value);
+          timer.value = 0;
+          timeInSeconds.value = 0;
+          document.title = 'Daily Constancy';
+        }
       });
 
       return {

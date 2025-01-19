@@ -126,6 +126,7 @@
   import formatTimer from '@/hooks/formatTimer';
 
   import { CREATE_TASK_SESSION, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
+  import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
 
   const store = useStore();
   const emit = defineEmits(['selected-task']);
@@ -183,11 +184,13 @@
 
   const handleTask = async (task: TaskInterface) => {
     if (task.lastSessionStartedAt) {
-      return store.dispatch(FINISH_TASK_SESSION, task);
+      await store.dispatch(FINISH_TASK_SESSION, task);
+
+      return store.commit(NEW_ACTIVE_TASK, {});
     }
 
     const new_task = await store.dispatch(CREATE_TASK_SESSION, task);
-    store.dispatch(SET_ACTIVE_TASK, new_task);
+    await store.dispatch(SET_ACTIVE_TASK, new_task);
   };
 
   const handleInitTask = async (task: TaskInterface) => {

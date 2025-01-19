@@ -144,6 +144,11 @@
             store.dispatch(FINISH_TASK_SESSION, prev_state);
           }
         }
+
+        if (! state.id) {
+          description.value = '';
+          project_id.value = null;
+        }
       });
 
       const getParsedProjects = computed(() => {

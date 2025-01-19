@@ -34,7 +34,8 @@
             class="button"
             color="white"
             text-color="black"
-            @click="handleInitTask"
+            :loading="isRequestPending(task)"
+            @click="handleInitTask(task)"
           >
             <span class="icon is-small">
               <i :class="getTaskIcon(task)" />
@@ -133,9 +134,10 @@
   import TaskInterface from '../interfaces/Task.interface';
   import Modal from '@/components/shared/Modal.vue';
   import { useStore } from '@/store';
-  import { DELETE_TASK, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
+  import { CREATE_TASK_SESSION, DELETE_TASK, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
 
   import formatTimer from '@/hooks/formatTimer';
+  import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
 
   const delete_request_pending = ref(false);
 
@@ -152,6 +154,8 @@
   });
 
   const emit = defineEmits(['selected-task']);
+
+  const request_pending = ref([] as number[]);
 
   const store = useStore();
   const show_modal = ref(false);
@@ -171,12 +175,27 @@
     delete_request_pending.value = false;
   };
 
-  const handleInitTask = (task: TaskInterface) => {
+  const isRequestPending = (task: TaskInterface) => {
+    return request_pending.value.includes(task.id);
+  };
+
+  const handleTask = async (task: TaskInterface) => {
     if (task.lastSessionStartedAt) {
-      return store.dispatch(FINISH_TASK_SESSION, task);
+      await store.dispatch(FINISH_TASK_SESSION, task);
+
+      return store.commit(NEW_ACTIVE_TASK, {});
     }
 
-    store.dispatch(SET_ACTIVE_TASK, task);
+    const new_task = await store.dispatch(CREATE_TASK_SESSION, task);
+    await store.dispatch(SET_ACTIVE_TASK, new_task);
+  };
+
+  const handleInitTask = async (task: TaskInterface) => {
+    request_pending.value.push(task.id);
+
+    await handleTask(task);
+
+    request_pending.value = request_pending.value.filter((task_id: string | number) => task_id !== task.id);
   };
 
   const getTaskIcon = (task: TaskInterface) => {
