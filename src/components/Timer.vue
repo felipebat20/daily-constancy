@@ -7,7 +7,7 @@
 
     <Button
       :button="getPlayButton"
-      @click="startTimer"
+      @click="createTask"
     />
 
     <Button
@@ -38,10 +38,20 @@
       taskName: {
         type: String,
         default: '',
+      },
+
+      playRequestPending: {
+        type: Boolean,
+        default: false,
+      },
+
+      stopRequestPending: {
+        type: Boolean,
+        default: false,
       }
     },
 
-    emits: ['timeIsFinished'],
+    emits: ['timeIsFinished', 'startTimer'],
     computed: {
       getTimeIsRunning(): boolean {
         return !! this.timer;
@@ -49,6 +59,7 @@
 
       getPlayButton(): ButtonInterface {
         return {
+          loading: this.playRequestPending,
           disabled: this.getTimeIsRunning,
           icon: 'fas fa-play',
           label: 'Play'
@@ -57,6 +68,7 @@
 
       getStopButton(): ButtonInterface {
         return {
+          loading: this.stopRequestPending,
           disabled: ! this.getTimeIsRunning,
           icon: 'fas fa-stop',
           label: 'Stop'
@@ -77,6 +89,10 @@
         emit('timeIsFinished', timeInSeconds.value);
         timeInSeconds.value = 0;
         document.title = 'Daily Constancy';
+      };
+
+      const createTask = () => {
+        emit('startTimer');
       };
 
       const startTimer = () => {
@@ -105,6 +121,7 @@
       return {
         stopTimer,
         startTimer,
+        createTask,
         timeInSeconds,
         timer,
       };
