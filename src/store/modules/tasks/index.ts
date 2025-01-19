@@ -12,8 +12,10 @@ import {
   FETCH_TASKS,
   CREATE_NEW_TASK,
   UPDATE_TASK,
+  SET_TASK,
   DELETE_TASK,
   SET_ACTIVE_TASK,
+  FINISH_ACTIVE_SESSION,
 } from "@/store/types/actions";
 
 import {
@@ -36,6 +38,8 @@ export const task: Module<TaskState, State> = {
     active_task: {} as TaskInterface,
   },
 
+  getters: { getActiveTask: (state) => state.active_task },
+
   mutations: {
     [NEW_TASKS]: (state, tasks: TaskInterface[]) => state.tasks = tasks,
     [NEW_TASK]: (state, task: TaskInterface) => state.tasks.push(task),
@@ -51,6 +55,7 @@ export const task: Module<TaskState, State> = {
   },
 
   actions: {
+    [SET_TASK]: ({ commit }, task: TaskInterface) => commit(NEW_TASK, task),
     [FETCH_TASKS]: async ({ commit }, task_name: string) : Promise<void> => {
       if (hasApi()) {
         commit(NEW_REQUEST_PENDING, { topic: 'tasks', key: 'fetch_user_tasks', value: true });
@@ -94,9 +99,7 @@ export const task: Module<TaskState, State> = {
 
         const { data: new_task }: { data: TaskInterface} = await http().post('tasks', task_parsed);
 
-        const { data: new_session } = await http().post(`tasks/${new_task.id}/sessions`, session);
-
-        return commit(NEW_TASK, { ...new_task, total_time_spent: new_session.time_spent });
+        return commit(NEW_ACTIVE_TASK, { ...new_task });
       }
 
       return db.collection('tasks')
@@ -104,10 +107,22 @@ export const task: Module<TaskState, State> = {
         .then(() => commit(NEW_TASK, task));
     },
 
+    [FINISH_ACTIVE_SESSION]: async ({ commit, getters }) => {
+      if (hasApi()) {
+        const { getActiveTask } = getters;
+        const active_session = getActiveTask.sessions[0];
+
+        await http().put(`tasks/${getActiveTask.id}/sessions/${active_session.id}`, { endAt: new Date().toJSON() });
+      }
+    },
+
     [UPDATE_TASK]: async ({ commit }, task: TaskInterface) => {
       if (hasApi()) {
         if (task.time_spent) {
-          await http().post(`tasks/${task.id}/sessions`, { project_id: task.project?.id, time_spent: task.time_spent });
+          await http().post(`tasks/${task.id}/sessions`, {
+            project_id: task.project?.id,
+            endAt: new Date().toJSON()
+          });
         }
 
         return http().put(`tasks/${task.id}`, { description: task.description, project_id: task.project?.id })

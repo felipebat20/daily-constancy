@@ -44,6 +44,7 @@
         <Timer
           :task-name="description"
           @time-is-finished="finishTask"
+          @start-timer="startTimer"
         />
       </div>
     </div>
@@ -56,7 +57,7 @@
   import Timer from './Timer.vue';
 
   import { useStore } from '@/store';
-  import { CREATE_NEW_TASK, FETCH_PROJECTS, SET_ACTIVE_TASK, UPDATE_TASK } from '@/store/types/actions';
+  import { CREATE_NEW_TASK, FETCH_PROJECTS, FINISH_ACTIVE_SESSION, SET_ACTIVE_TASK, UPDATE_TASK } from '@/store/types/actions';
   import { AxiosResponse } from 'axios';
 
   interface projectOptions {
@@ -85,13 +86,23 @@
         project_id.value = null;
 
         if (active_task.value.id) {
-          return store.dispatch(UPDATE_TASK, {
-            ...active_task.value,
-            description: task_name,
-            project,
-            time_spent: time - (active_task.value.total_time_spent || 0),
-          }).then(() => store.dispatch(SET_ACTIVE_TASK, {}));
+          return store.dispatch(FINISH_ACTIVE_SESSION);
         }
+
+        return store.dispatch(CREATE_NEW_TASK, {
+          description: task_name,
+          time_spent: time,
+          id: new Date().getTime(),
+          project,
+        });
+      };
+
+      const startTimer = (time: number): Promise<AxiosResponse> => {
+        const project = projects.value.find(project => project.id === project_id.value);
+        const task_name = description.value;
+
+        description.value = '';
+        project_id.value = null;
 
         return store.dispatch(CREATE_NEW_TASK, {
           description: task_name,
@@ -133,6 +144,7 @@
         project_id,
         projects,
         finishTask,
+        startTimer,
         getParsedProjects,
       };
     },

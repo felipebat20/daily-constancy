@@ -7,7 +7,7 @@
 
     <Button
       :button="getPlayButton"
-      @click="startTimer"
+      @click="createTask"
     />
 
     <Button
@@ -41,7 +41,7 @@
       }
     },
 
-    emits: ['timeIsFinished'],
+    emits: ['timeIsFinished', 'startTimer'],
     computed: {
       getTimeIsRunning(): boolean {
         return !! this.timer;
@@ -79,6 +79,10 @@
         document.title = 'Daily Constancy';
       };
 
+      const createTask = () => {
+        emit('startTimer');
+      };
+
       const startTimer = () => {
         timer.value = setInterval(() => {
           timeInSeconds.value = timeInSeconds.value + 1;
@@ -105,6 +109,7 @@
       return {
         stopTimer,
         startTimer,
+        createTask,
         timeInSeconds,
         timer,
       };
