@@ -66,7 +66,6 @@
   }
 
   .custom-margin {
-    margin-top: 56px;
     width: 100%;
   }
 </style>

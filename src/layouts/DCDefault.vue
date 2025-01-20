@@ -14,7 +14,7 @@
       class="content-side-bar"
       :class="{
         'margin-menu': $q.screen.gt.xs,
-        'w-100': ! $q.screen.gt.xs,
+        'mobile': ! $q.screen.gt.xs,
       }"
     >
       <Notification />
@@ -72,5 +72,8 @@
     width: 100%;
   }
 
-  .w-100 { width: 100%; }
+  .mobile {
+    width: 100%;
+    padding-top: 56px;
+  }
 </style>

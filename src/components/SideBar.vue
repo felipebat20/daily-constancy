@@ -71,8 +71,8 @@
     </div>
 
     <aside class="menu">
-      <ul class="menu-list text-left">
-        <li>
+      <ul class="list-none text-left">
+        <li class="flex items-center">
           <router-link
             to="/"
             class="link is-flex justify-center"
@@ -95,7 +95,7 @@
           </router-link>
         </li>
 
-        <li>
+        <li class="flex items-center">
           <router-link
             to="/projects"
             class="link is-flex justify-center"
@@ -117,7 +117,7 @@
           </router-link>
         </li>
 
-        <li>
+        <li class="flex items-center">
           <router-link
             to="/reports"
             class="link is-flex justify-center"
@@ -139,7 +139,10 @@
           </router-link>
         </li>
 
-        <li v-if="user_is_authenticated">
+        <li
+          class="flex items-center"
+          v-if="user_is_authenticated"
+        >
           <router-link
             to="/streaks"
             class="link is-flex justify-center"
@@ -183,10 +186,13 @@
           </router-link>
         </li>
 
-        <li v-if="user_is_authenticated && ! $q.screen.gt.xs">
+        <li
+          v-if="user_is_authenticated && ! $q.screen.gt.xs"
+          class="px-0"
+        >
           <q-btn
             v-if="user_is_authenticated"
-            class="link is-flex justify-center"
+            class="link is-flex justify-center px-0"
             flat
             @click="handleLogout"
           >
@@ -244,6 +250,7 @@
       <q-btn
         v-if="user_is_authenticated"
         class="switch-theme button"
+        dense
         @click="handleLogout"
       >
         <q-icon
@@ -389,11 +396,10 @@
   }
 
   .sidebar-mobile {
-    position: fixed;
     bottom: 0;
     z-index: 3;
     width: 100%;
-    padding: 10px;
+    padding: 6px;
 
     .menu {
       ul {

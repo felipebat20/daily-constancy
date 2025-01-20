@@ -1,86 +1,187 @@
 <template>
-  <q-table
-    title="Active streaks"
-    :columns="columns"
-    :rows="rows"
-    row-key="id"
-    color="amber"
-    flat
-    bordered
-    :loading="request_pending"
-    :rows-per-page-options="[25, 50, 100]"
-    loading-label="Fetching streaks"
-  >
-    <template #body-cell-offensive="{ value }">
-      <q-td>
-        <StreakOffensive :offensive="value" />
-      </q-td>
-    </template>
+  <div v-if="$q.screen.gt.xs">
+    <q-table
+      title="Active streaks"
+      :columns="columns"
+      :rows="rows"
+      row-key="id"
+      color="amber"
+      flat
+      bordered
+      :loading="request_pending"
+      :rows-per-page-options="[25, 50, 100]"
+      loading-label="Fetching streaks"
+    >
+      <template #body-cell-offensive="{ value }">
+        <q-td>
+          <StreakOffensive :offensive="value" />
+        </q-td>
+      </template>
 
-    <template #body-cell-projects="props">
-      <q-td :style="{ 'width': '35%' }">
-        <div class="projects">
-          <q-badge
-            v-if="! props.value.length"
-            label="N/D"
-            class="text-caption"
-            rounded
-          />
+      <template #body-cell-projects="props">
+        <q-td :style="{ 'width': '35%' }">
+          <div class="projects">
+            <q-badge
+              v-if="! props.value.length"
+              label="N/D"
+              class="text-caption"
+              rounded
+            />
 
-          <q-badge
-            v-for="project in props.value"
-            :key="project"
-            :label="project"
-            class="text-caption"
-            color="positive"
-            rounded
-          />
-        </div>
-      </q-td>
-    </template>
+            <q-badge
+              v-for="project in props.value"
+              :key="project"
+              :label="project"
+              class="text-caption"
+              color="positive"
+              rounded
+            />
+          </div>
+        </q-td>
+      </template>
 
-    <template #body-cell-actions="action_props">
-      <q-td>
-        <div class="buttons">
+      <template #body-cell-actions="action_props">
+        <q-td>
+          <div class="buttons">
+            <q-btn
+              :to="`/streaks/${action_props.value}`"
+              label="See streak"
+              no-caps
+              color="primary"
+              rounded
+            >
+              <q-tooltip>
+                See streak
+              </q-tooltip>
+            </q-btn>
+
+            <q-btn
+              icon="edit"
+              no-caps
+              color="secondary"
+              rounded
+              @click="handleEditStreakButtonClick(action_props.row)"
+            >
+              <q-tooltip>
+                Edit streak
+              </q-tooltip>
+            </q-btn>
+
+            <q-btn
+              icon="delete"
+              no-caps
+              color="deep-orange"
+              rounded
+              @click="handleDeleteButtonClick(action_props.row)"
+            >
+              <q-tooltip>
+                Delete streak
+              </q-tooltip>
+            </q-btn>
+          </div>
+        </q-td>
+      </template>
+    </q-table>
+  </div>
+
+  <v-else>
+    <div>
+      <q-card
+        v-for="streak in rows"
+        :key="streak.id"
+        flat
+        bordered
+        class="my-card"
+        :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2'"
+      >
+        <q-card-section>
+          <div class="row items-center no-wrap">
+            <div class="col">
+              <div class="text-h6">
+                {{ streak.name }}
+              </div>
+
+              <q-separator />
+
+              <div class="text-subtitle2">
+                <q-badge
+                  v-for="project in streak.projects"
+                  :key="project"
+                  :label="project.name"
+                  class="text-caption"
+                  color="positive"
+                  rounded
+                />
+              </div>
+            </div>
+
+            <div class="col-auto">
+              <q-btn
+                color="grey-7"
+                round
+                flat
+                icon="more_vert"
+              >
+                <q-menu
+                  cover
+                  auto-close
+                >
+                  <q-list
+                    dense
+                    style="min-width: 100px;"
+                  >
+                    <q-item
+                      dense
+                      clickable
+                      v-close-popup
+                      @click="handleEditStreakButtonClick(streak)"
+                    >
+                      <q-item-section
+                        dense
+                      >
+                        Edit
+                      </q-item-section>
+                    </q-item>
+
+                    <q-item
+                      clickable
+                      v-close-popup
+                      @click="handleDeleteButtonClick(streak)"
+                    >
+                      <q-item-section>
+                        Delete
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          {{ lorem }}
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
           <q-btn
-            :to="`/streaks/${action_props.value}`"
+            :to="`/streaks/${streak.id}`"
             label="See streak"
             no-caps
             color="primary"
             rounded
+            block
           >
             <q-tooltip>
               See streak
             </q-tooltip>
           </q-btn>
-
-          <q-btn
-            icon="edit"
-            no-caps
-            color="secondary"
-            rounded
-            @click="handleEditStreakButtonClick(action_props.row)"
-          >
-            <q-tooltip>
-              Edit streak
-            </q-tooltip>
-          </q-btn>
-
-          <q-btn
-            icon="delete"
-            no-caps
-            color="deep-orange"
-            rounded
-            @click="handleDeleteButtonClick(action_props.row)"
-          >
-            <q-tooltip>
-              Delete streak
-            </q-tooltip>
-          </q-btn>
-        </div>
-      </q-td>
-    </template>
-  </q-table>
+        </q-card-actions>
+      </q-card>
+    </div>
+  </v-else>
 
   <DCDeleteStreak ref="deleteStreakModal" />
   <DCEditStreak ref="editStreakModal" />
