@@ -5,7 +5,7 @@
   >
     <div>
       <router-link
-        style="{ height: 2rem; width: 2rem;}"
+        :style="{ height: '2rem', width: '2rem' }"
         to="/"
       >
         <q-img
@@ -58,7 +58,7 @@
       class="is-flex justify-center"
     >
       <router-link
-        style="{ height: 2rem; width: 2rem;}"
+        :style="{ height: '2rem', width: '2rem' }"
         to="/"
       >
         <q-img
@@ -71,8 +71,8 @@
     </div>
 
     <aside class="menu">
-      <ul class="list-none text-left">
-        <li class="flex items-center">
+      <ul class="list-none text-left flex justify-center gap-2">
+        <li class="flex items-center justify-center">
           <router-link
             to="/"
             class="link is-flex justify-center"
@@ -95,7 +95,7 @@
           </router-link>
         </li>
 
-        <li class="flex items-center">
+        <li class="flex items-center justify-center">
           <router-link
             to="/projects"
             class="link is-flex justify-center"
@@ -117,7 +117,7 @@
           </router-link>
         </li>
 
-        <li class="flex items-center">
+        <li class="flex items-center justify-center">
           <router-link
             to="/reports"
             class="link is-flex justify-center"
@@ -140,7 +140,7 @@
         </li>
 
         <li
-          class="flex items-center"
+          class="flex items-center justify-center"
           v-if="user_is_authenticated"
         >
           <router-link

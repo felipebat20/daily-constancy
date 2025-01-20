@@ -2,7 +2,10 @@
   <Form :class="{ 'custom-margin': ! $q.screen.gt.xs }" />
 
   <div class="main-container">
-    <div class="tasks-container">
+    <div
+      class="tasks-container"
+      :class="{'desktop': $q.screen.gt.xs}"
+    >
       <DCTasksContainer />
     </div>
 
@@ -49,6 +52,8 @@
 
     .tasks-container {
       width: 100%;
+
+      &.desktop { width: calc(100% - 452px); }
     }
 
     .side-right-bar {

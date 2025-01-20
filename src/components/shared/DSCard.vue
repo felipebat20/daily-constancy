@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card p-2 rounded">
     <header class="card-header">
       <p class="card-header-title">
         <slot name="title" />

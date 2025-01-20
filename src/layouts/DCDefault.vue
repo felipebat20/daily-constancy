@@ -75,5 +75,6 @@
   .mobile {
     width: 100%;
     padding-top: 56px;
+    padding-bottom: 48px;
   }
 </style>
