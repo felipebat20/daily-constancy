@@ -72,5 +72,9 @@
     width: 100%;
   }
 
-  .w-100 { width: 100%; }
+  .w-100 {
+    width: 100%;
+    margin-top: 56px;
+    margin-bottom: 60px;
+  }
 </style>

@@ -65,8 +65,5 @@
     }
   }
 
-  .custom-margin {
-    margin-top: 56px;
-    width: 100%;
-  }
+  .custom-margin { width: 100%; }
 </style>
