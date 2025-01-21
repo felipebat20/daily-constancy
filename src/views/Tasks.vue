@@ -70,7 +70,5 @@
     }
   }
 
-  .custom-margin {
-    width: 100%;
-  }
+  .custom-margin { width: 100%; }
 </style>

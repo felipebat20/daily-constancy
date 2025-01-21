@@ -72,9 +72,9 @@
     width: 100%;
   }
 
-  .mobile {
+  .w-100 {
     width: 100%;
-    padding-top: 56px;
-    padding-bottom: 48px;
+    margin-top: 56px;
+    margin-bottom: 60px;
   }
 </style>
