@@ -6,7 +6,7 @@
       </p>
     </header>
 
-    <div class="card-content p-4">
+    <div class="card-content p-2">
       <div class="content">
         <slot name="content" />
       </div>

@@ -6,11 +6,13 @@
     :loading="button.loading"
     :disabled="button.disabled"
   >
-    <span class="icon">
-      <i :class="button.icon" />
-    </span>
+    <div class="flex gap-1">
+      <span class="icon">
+        <i :class="button.icon" />
+      </span>
 
-    <span>{{ button.label }}</span>
+      <span>{{ button.label }}</span>
+    </div>
   </q-btn>
 </template>
 

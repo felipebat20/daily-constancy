@@ -1,8 +1,7 @@
 <template>
-  <div class="box form mb-0">
-    <div class="columns is-12">
+  <div class="flex md:flex-col mb-0">
+    <div class="flex w-full max-sm:flex-col gap-2 p-2">
       <div
-        class="column"
         role="form"
         aria-label="Form to create new task"
       >
