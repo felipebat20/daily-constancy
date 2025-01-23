@@ -6,7 +6,7 @@
     :loading="button.loading"
     :disabled="button.disabled"
   >
-    <div class="flex gap-1">
+    <div class="flex gap-2">
       <span class="icon">
         <i :class="button.icon" />
       </span>
