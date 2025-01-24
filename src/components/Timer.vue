@@ -110,7 +110,7 @@
 
       onBeforeUnmount(() => {
         if (timer.value) {
-          stopTimer();
+          handleTimeIsFinished();
         }
       });
 
