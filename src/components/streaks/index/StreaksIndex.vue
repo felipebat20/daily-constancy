@@ -1,21 +1,28 @@
 <template>
   <div class="streaks">
-    <div class="heading-container">
+    <div class="heading-container py-2">
       <Heading
         level="h1"
-        class="title"
+        class="text-2xl font-bold"
       >
         Your streaks
       </Heading>
 
       <q-btn
-        label="Create new streak"
         icon="add"
+        icon-right="whatshot"
         unelevated
         no-caps
+        text-color="orange-5"
+        dense
+        label="Create new streak"
         class="custom-border"
         @click="handleCreateButtonClick"
-      />
+      >
+        <q-tooltip>
+          Create new streak
+        </q-tooltip>
+      </q-btn>
     </div>
 
     <div>

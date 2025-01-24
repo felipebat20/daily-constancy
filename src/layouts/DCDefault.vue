@@ -68,7 +68,7 @@
   }
 
   .margin-menu {
-    margin-left: 4rem;
+    padding-left: 4rem;
     width: 100%;
   }
 

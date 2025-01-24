@@ -2,17 +2,20 @@
   <div class="list">
     <div class="search-container">
       <div class="field">
-        <p class="control has-icons-left has-icons-right">
-          <input
+        <p class="m-0 control has-icons-left has-icons-right">
+          <q-input
             v-model="task_filter"
-            class="input"
+            dense
             type="text"
+            outlined
+            icon="fas fa-search"
+            color="deep-orange-5"
             placeholder="Search a task"
           >
-
-          <span class="icon is-small is-left">
-            <i class="fas fa-search" />
-          </span>
+            <template #append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
         </p>
       </div>
 

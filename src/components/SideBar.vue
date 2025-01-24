@@ -55,7 +55,7 @@
   <header :class="{ 'sidebar-mobile': ! $q.screen.gt.xs }">
     <div
       v-if="$q.screen.gt.xs"
-      class="is-flex justify-center"
+      class="flex justify-center"
     >
       <router-link
         :style="{ height: '2rem', width: '2rem' }"
@@ -70,150 +70,7 @@
       </router-link>
     </div>
 
-    <aside class="menu">
-      <ul class="list-none text-left flex justify-center gap-2">
-        <li class="flex items-center justify-center">
-          <router-link
-            to="/"
-            class="link is-flex justify-center"
-            :class="{ 'is-active': getIsActive('/') }"
-          >
-            <q-icon
-              size="24px"
-              name="tasks"
-              style="display: inline-block;"
-            />
-
-            <q-tooltip
-              anchor="center right"
-              self="center left"
-              :offset="[8, 8]"
-              class="bg-dark"
-            >
-              Tasks
-            </q-tooltip>
-          </router-link>
-        </li>
-
-        <li class="flex items-center justify-center">
-          <router-link
-            to="/projects"
-            class="link is-flex justify-center"
-            :class="{ 'is-active': getIsActive('/projects') }"
-          >
-            <q-icon
-              size="24px"
-              name="account_tree"
-            />
-
-            <q-tooltip
-              anchor="center right"
-              self="center left"
-              :offset="[8, 8]"
-              class="bg-dark"
-            >
-              Projects
-            </q-tooltip>
-          </router-link>
-        </li>
-
-        <li class="flex items-center justify-center">
-          <router-link
-            to="/reports"
-            class="link is-flex justify-center"
-            :class="{ 'is-active': getIsActive('/reports') }"
-          >
-            <q-icon
-              size="24px"
-              name="analytics"
-            />
-
-            <q-tooltip
-              anchor="center right"
-              self="center left"
-              :offset="[8, 8]"
-              class="bg-dark"
-            >
-              Reports
-            </q-tooltip>
-          </router-link>
-        </li>
-
-        <li
-          class="flex items-center justify-center"
-          v-if="user_is_authenticated"
-        >
-          <router-link
-            to="/streaks"
-            class="link is-flex justify-center"
-            :class="{ 'is-active': getIsActive('/streaks') }"
-          >
-            <q-icon
-              size="24px"
-              name="whatshot"
-            />
-
-            <q-tooltip
-              anchor="center right"
-              self="center left"
-              :offset="[8, 8]"
-              class="bg-dark"
-            >
-              Streaks
-            </q-tooltip>
-          </router-link>
-        </li>
-
-        <li v-if="! user_is_authenticated">
-          <router-link
-            to="/login"
-            class="link is-flex justify-center"
-            :class="{ 'is-active': getIsActive('/login') }"
-          >
-            <q-icon
-              size="24px"
-              name="account_circle"
-            />
-
-            <q-tooltip
-              anchor="center right"
-              self="center left"
-              :offset="[8, 8]"
-              class="bg-dark"
-            >
-              Profile
-            </q-tooltip>
-          </router-link>
-        </li>
-
-        <li
-          v-if="user_is_authenticated && ! $q.screen.gt.xs"
-          class="px-0"
-        >
-          <q-btn
-            v-if="user_is_authenticated"
-            class="link is-flex justify-center px-0"
-            flat
-            @click="handleLogout"
-          >
-            <q-icon
-              size="24px"
-              name="logout"
-              color="white"
-            />
-
-            <q-tooltip
-              anchor="center right"
-              self="center left"
-              :offset="[8, 8]"
-              class="bg-dark"
-            >
-              Logout
-            </q-tooltip>
-          </q-btn>
-        </li>
-      </ul>
-    </aside>
+    <MenuIndex />
 
     <div
       v-if="$q.screen.gt.xs"
@@ -277,15 +134,21 @@
   import { useQuasar } from 'quasar';
   import { useRoute, useRouter } from 'vue-router';
 
-  import { jwt, dark_theme as dark_theme_key } from '@/static/storage-keys';
+  import MenuIndex from '@/components/menu/MenuIndex.vue';
 
   import { jwtToken } from '@/hooks/verify_api';
+
   import { useStore } from '@/store';
   import { FETCH_PROJECTS, FETCH_TASKS } from '@/store/types/actions';
+
+  import { jwt, dark_theme as dark_theme_key } from '@/static/storage-keys';
+
+  import { handleUserLogout} from './menu/MenuMixin';
 
   export default defineComponent({
     name: 'SideBar',
     emits: ['onSwitchTheme'],
+    components: { MenuIndex },
     computed: {
       getThemeText(): string {
         if (this.dark_theme) {
@@ -297,6 +160,8 @@
     },
 
     setup(props, { emit }) {
+      const { logout } = handleUserLogout();
+
       const $q = useQuasar();
       const route = useRoute();
       const router = useRouter();
@@ -314,26 +179,6 @@
         return dark_theme.value = !! dark;
       });
 
-      const handleLogout = () => {
-        $q.cookies.remove(jwt);
-
-        user_is_authenticated.value = false;
-        store.dispatch(FETCH_TASKS);
-        store.dispatch(FETCH_PROJECTS);
-
-        if (route.name !== 'tasks') {
-          router.push({ name: 'tasks' });
-        }
-
-        return $q.notify({
-          type: 'positive',
-          progress: true,
-          icon: 'done',
-          message: 'You have been logout.',
-          position: 'top',
-        });
-      };
-
       const switchTheme = () => {
         $q.dark.toggle();
         dark_theme.value = ! dark_theme.value;
@@ -349,11 +194,15 @@
         return localStorage.removeItem(dark_theme_key);
       };
 
+      const handleLogout = () => {
+        logout($q);
+      };
+
       return {
         dark_theme,
         switchTheme,
-        handleLogout,
         user_is_authenticated,
+        handleLogout
       };
     },
 
@@ -426,5 +275,10 @@
     z-index: 3;
 
     > div { display: flex; }
+  }
+
+  a.is-active {
+    background-color: #485fc7;
+    color: #fff;
   }
 </style>

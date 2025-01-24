@@ -1,0 +1,42 @@
+<script setup lang="ts">
+  import { useRoute } from 'vue-router';
+  import { ref } from 'vue';
+
+  const route = useRoute();
+
+  const getIsActive = (path: string) => {
+    return route.path === path;
+  };
+
+  defineProps({
+    menuItem: {
+      type: Object,
+      required: true,
+    },
+  });
+</script>
+
+<template>
+  <li class="flex items-center justify-center hover:bg-blue-5">
+    <router-link
+      :to="menuItem.to"
+      class="link flex justify-center p-2 hover:bg-sky-700"
+      :class="{ 'is-active': getIsActive(menuItem.to) }"
+    >
+      <q-icon
+        size="24px"
+        :name="menuItem.icon"
+        style="display: inline-block;"
+      />
+
+      <q-tooltip
+        anchor="center right"
+        self="center left"
+        :offset="[8, 8]"
+        class="bg-dark"
+      >
+        {{ menuItem.label }}
+      </q-tooltip>
+    </router-link>
+  </li>
+</template>

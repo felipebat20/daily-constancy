@@ -3,7 +3,7 @@
     v-model="show_modal"
     persistent
   >
-    <q-card style="min-width: 450px">
+    <q-card :style="{'min-width': ! $q.screen.gt.xs ? '100%' : '450px'}">
       <q-card-section>
         <div class="text-h6">
           New streak
@@ -15,6 +15,7 @@
           v-model="streak_name"
           autofocus
           label="Name"
+          color="deep-orange-5"
           @keyup.enter="show_modal = false"
         />
       </q-card-section>
@@ -26,6 +27,7 @@
           multiple
           :options="getParsedProjects"
           label="Projects"
+          color="deep-orange-5"
           options-dense
           clearable
         />
@@ -38,12 +40,14 @@
         <q-btn
           flat
           label="Cancel"
+          no-caps
           v-close-popup
         />
 
         <q-btn
-          flat
           label="Create streak"
+          color="blue-9"
+          no-caps
           :loading="request_pending"
           @click="handleCreateStreak"
         />

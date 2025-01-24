@@ -1,6 +1,6 @@
 <template>
   <div class="projects">
-    <h1 class="title">
+    <h1 class="text-2xl font-bold">
       Projects
     </h1>
 
@@ -12,7 +12,7 @@
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    name: 'ATProjects',
+    name: 'ProjectsIndex',
   });
 </script>
 

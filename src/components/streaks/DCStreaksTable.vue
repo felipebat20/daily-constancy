@@ -19,24 +19,25 @@
       </template>
 
       <template #body-cell-projects="props">
-        <q-td :style="{ 'width': '35%' }">
-          <div class="projects">
-            <q-badge
-              v-if="! props.value.length"
-              label="N/D"
-              class="text-caption"
-              rounded
-            />
+        <q-td
+          :style="{ 'width': '35%' }"
+          class="text-left"
+        >
+          <q-badge
+            v-if="! props.value.length"
+            label="N/D"
+            class="text-caption"
+            rounded
+          />
 
-            <q-badge
-              v-for="project in props.value"
-              :key="project"
-              :label="project"
-              class="text-caption"
-              color="positive"
-              rounded
-            />
-          </div>
+          <q-badge
+            v-for="project in props.value"
+            :key="project"
+            :label="project"
+            class="text-caption"
+            color="positive"
+            rounded
+          />
         </q-td>
       </template>
 
@@ -84,7 +85,7 @@
     </q-table>
   </div>
 
-  <v-else>
+  <div v-else>
     <div>
       <q-card
         v-for="streak in rows"
@@ -181,7 +182,7 @@
         </q-card-actions>
       </q-card>
     </div>
-  </v-else>
+  </div>
 
   <DCDeleteStreak ref="deleteStreakModal" />
   <DCEditStreak ref="editStreakModal" />
@@ -226,19 +227,22 @@
     {
       name: 'Name',
       field: 'name',
-      label: 'Name'
+      label: 'Name',
+      align: 'left',
     },
 
     {
       name: 'createdAt',
       field: (row) => formatDate(new Date(row.createdAt)),
       label: 'Created at',
+      align: 'left',
     },
 
     {
       name: 'projects',
       field: (row) => row.projects?.map(({ name }: { name: string }) => name),
       label: 'Projects',
+      align: 'left',
     },
 
     {

@@ -8,7 +8,7 @@ import Projects from '../views/Projects.vue';
 import ProjectsForm from '../views/Projects/Form.vue';
 import ProjectsList from '../views/Projects/List.vue';
 import Streaks from '@/views/Streaks/DCStreaks.vue';
-import StreaksList from '@/components/streaks/index/DCStreaksIndex.vue';
+import StreaksList from '@/components/streaks/index/StreaksIndex.vue';
 import StreakShow from '@/views/Streaks/show/DCStreak.vue';
 import DCLogin from '@/views/Auth/DCLogin.vue';
 import DCRegister from '@/views/Auth/DCRegister.vue';

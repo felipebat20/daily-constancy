@@ -10,6 +10,7 @@
           outlined
           dense
           placeholder="Which task would you like start?"
+          color="deep-orange-5"
           v-model="description"
           autofocus
         />
@@ -22,6 +23,7 @@
           label="Select a project"
           outlined
           emit-value
+          color="deep-orange-5"
           map-options
           dense
           options-dense
