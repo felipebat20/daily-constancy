@@ -84,15 +84,19 @@
       const active_task = computed(() => store.state.task.active_task);
 
       const stopTimer = (): void => {
-        clearInterval(timer.value);
-        timer.value = 0;
         emit('timeIsFinished', timeInSeconds.value);
-        timeInSeconds.value = 0;
-        document.title = 'Daily Constancy';
+        handleTimeIsFinished();
       };
 
       const createTask = () => {
         emit('startTimer');
+      };
+
+      const handleTimeIsFinished = () => {
+        clearInterval(timer.value);
+        timer.value = 0;
+        timeInSeconds.value = 0;
+        document.title = 'Daily Constancy';
       };
 
       const startTimer = () => {
@@ -118,10 +122,7 @@
         }
 
         if (! state.id) {
-          clearInterval(timer.value);
-          timer.value = 0;
-          timeInSeconds.value = 0;
-          document.title = 'Daily Constancy';
+          handleTimeIsFinished();
         }
       });
 
