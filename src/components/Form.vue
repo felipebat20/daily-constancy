@@ -12,33 +12,15 @@
           placeholder="Which task would you like start?"
           color="deep-orange-5"
           v-model="description"
-          autofocus
+          :autofocus="$q.screen.gt.xs"
         />
       </div>
 
       <div class="column">
-        <q-select
-          :options="getParsedProjects"
+        <ProjectsSelect
           v-model="project_id"
-          label="Select a project"
-          outlined
-          emit-value
-          color="deep-orange-5"
-          map-options
-          dense
-          options-dense
-        >
-          <template #option="scope">
-            <q-item
-              v-bind="scope.itemProps"
-              dense
-            >
-              <q-item-section>
-                <q-item-label>{{ scope.opt.label }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
+          :project_id="project_id"
+        />
       </div>
 
       <div class="column">
@@ -59,6 +41,7 @@
   import { computed, defineComponent, ref, watch } from 'vue';
 
   import Timer from './Timer.vue';
+  import ProjectsSelect from './shared/ProjectsSelect.vue';
 
   import { useStore } from '@/store';
   import {
@@ -69,14 +52,13 @@
   } from '@/store/types/actions';
   import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
 
-  interface projectOptions {
-    label: string;
-    value: null | number;
-  }
-
   export default defineComponent({
     name: 'VForm',
-    components: { Timer },
+    components: {
+      Timer,
+      ProjectsSelect
+    },
+
     emits: ['save-task'],
     setup() {
       const store = useStore();
@@ -152,31 +134,12 @@
         }
       });
 
-      const getParsedProjects = computed(() => {
-        const parsed_projects : projectOptions[] = [
-          {
-            value: null,
-            label: 'Select a project',
-          },
-        ];
-
-        parsed_projects.push(
-          ...projects.value.map((project) => ({
-            label: project.name,
-            value: project.id,
-          }))
-        );
-
-        return parsed_projects;
-      });
-
       return {
         description,
         project_id,
         projects,
         finishTask,
         startTimer,
-        getParsedProjects,
         playRequestPending,
         stopRequestPending,
       };

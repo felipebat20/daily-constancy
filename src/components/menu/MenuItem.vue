@@ -17,10 +17,13 @@
 </script>
 
 <template>
-  <li class="flex items-center justify-center hover:bg-blue-5">
+  <li
+    v-if="! menuItem.hide"
+    class="flex items-center justify-center hover:bg-blue-5"
+  >
     <router-link
       :to="menuItem.to"
-      class="link flex justify-center p-2 hover:bg-sky-700"
+      class="link flex justify-center p-2 hover:bg-sky-700 rounded"
       :class="{ 'is-active': getIsActive(menuItem.to) }"
     >
       <q-icon

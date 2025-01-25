@@ -12,90 +12,83 @@
         class="my-sticky-header-table"
         :columns="columns"
         row-key="id"
+        dense
         virtual-scroll
         v-model:pagination="pagination"
         :rows-per-page-options="[0]"
       >
-        <template #body="props">
-          <q-tr :props="props">
-            <q-td
-              key="continue"
-              :props="props"
-              style="width: 40px"
+        <template #body-cell-continue="props">
+          <q-td
+            key="continue"
+            :props="props"
+            style="width: 40px"
+          >
+            <q-btn
+              class="custom-border is-inline-block"
+              unelevated
+              :loading="isRequestPending(props.row)"
+              @click="handleInitTask(props.row)"
             >
-              <q-btn
-                class="custom-border is-inline-block"
-                unelevated
-                :loading="isRequestPending(props.row)"
-                @click="handleInitTask(props.row)"
-              >
-                <span class="icon is-small">
-                  <i :class="getTaskIcon(props.row)" />
-                </span>
-              </q-btn>
-            </q-td>
+              <span class="icon is-small">
+                <i :class="getTaskIcon(props.row)" />
+              </span>
+            </q-btn>
+          </q-td>
+        </template>
 
-            <q-td
-              key="name"
-              :props="props"
-              auto-width
+        <template #body-cell-project="props">
+          <q-td
+            key="project"
+            :props="props"
+            style="width: 150px"
+          >
+            <q-badge
+              color="green"
+              rounded
+              class="py-1 px-2"
             >
-              <div class="row-item">
-                {{ props.row.description || 'N/D' }}
-              </div>
-            </q-td>
+              {{ props.row.project?.name || 'N/D' }}
+            </q-badge>
+          </q-td>
+        </template>
 
-            <q-td
-              key="project"
-              :props="props"
-              style="width: 150px"
+        <template #body-cell-total_time_spent="props">
+          <q-td
+            key="total_time_spent"
+            :props="props"
+          >
+            <q-badge
+              color="primary"
+              rounded
+              class="py-1 px-2"
             >
-              <q-badge
-                color="green"
-                rounded
-                class="py-1 px-2"
-              >
-                {{ props.row.project?.name || 'N/D' }}
-              </q-badge>
-            </q-td>
+              {{ formatTimer(getTaskTime(props.row)) }}
+            </q-badge>
+          </q-td>
+        </template>
 
-            <q-td
-              key="total_time_spent"
-              :props="props"
+        <template #body-cell-actions="props">
+          <q-td
+            key="actions"
+          >
+            <q-btn
+              class="custom-border is-inline-block"
+              color="primary"
+              unelevated
+              @click="selectTask(props.row)"
             >
-              <q-badge
-                color="primary"
-                rounded
-                class="py-1 px-2"
-              >
-                {{ formatTimer(getTaskTime(props.row)) }}
-              </q-badge>
-            </q-td>
+              <span class="icon is-small">
+                <i class="fas fa-pencil-alt" />
+              </span>
+            </q-btn>
 
-            <q-td
-              key="actions"
-              :props="props"
-            >
-              <q-btn
-                class="custom-border is-inline-block"
-                unelevated
-                @click="selectTask(props.row)"
-              >
-                <span class="icon is-small">
-                  <i class="fas fa-pencil-alt" />
-                </span>
-              </q-btn>
-
-              <q-btn
-                class="button ml-2 is-danger"
-                @click="handleDeleteButtonClick(props.row)"
-              >
-                <span class="icon is-small">
-                  <i class="fas fa-trash" />
-                </span>
-              </q-btn>
-            </q-td>
-          </q-tr>
+            <q-btn
+              class="button ml-2 is-danger"
+              color="red"
+              icon="delete"
+              @click="handleDeleteButtonClick(props.row)"
+            />
+          </q-td>
         </template>
       </q-table>
     </div>
@@ -144,7 +137,7 @@
       field: '',
     },
     {
-      name: 'name',
+      name: 'description',
       required: true,
       label: 'Task',
       align: 'left',
@@ -214,6 +207,7 @@
   };
 
   const selectTask = (task: TaskInterface) => {
+    console.log(task);
     editTaskModal.value.openModal(task);
   };
 

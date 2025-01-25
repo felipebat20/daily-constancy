@@ -6,7 +6,7 @@
       class="tasks-container"
       :class="{'desktop': $q.screen.gt.xs}"
     >
-      <DCTasksContainer />
+      <TasksContainer />
     </div>
 
     <div
@@ -23,14 +23,14 @@
   import { useQuasar } from 'quasar';
 
   import Form from '@/components/Form.vue';
-  import DCTasksContainer from '@/components/tasks/DCTasksContainer.vue';
+  import TasksContainer from '@/components/tasks/TasksContainer.vue';
   import StreaksHomeCard from '@/components/tasks/partials/StreaksHomeCard.vue';
 
   export default defineComponent({
     name: 'App',
     components: {
       Form,
-      DCTasksContainer,
+      TasksContainer,
       StreaksHomeCard,
     },
 

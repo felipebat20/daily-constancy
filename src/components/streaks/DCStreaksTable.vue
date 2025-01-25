@@ -1,5 +1,8 @@
 <template>
-  <div v-if="$q.screen.gt.xs">
+  <div
+    class="q-pa-md"
+    v-if="$q.screen.gt.xs"
+  >
     <q-table
       title="Active streaks"
       :columns="columns"
@@ -11,6 +14,7 @@
       :loading="request_pending"
       :rows-per-page-options="[25, 50, 100]"
       loading-label="Fetching streaks"
+      hide-pagination
     >
       <template #body-cell-offensive="{ value }">
         <q-td>
@@ -43,16 +47,16 @@
 
       <template #body-cell-actions="action_props">
         <q-td>
-          <div class="buttons">
+          <div class="flex items-center gap-2 justify-center">
             <q-btn
               :to="`/streaks/${action_props.value}`"
-              label="See streak"
+              label="See"
               no-caps
               color="primary"
               rounded
             >
               <q-tooltip>
-                See streak
+                See
               </q-tooltip>
             </q-btn>
 
@@ -83,6 +87,15 @@
         </q-td>
       </template>
     </q-table>
+
+    <div class="row justify-center q-mt-md">
+      <q-pagination
+        v-model="pagination.page"
+        color="grey-8"
+        :max="pagesNumber"
+        size="sm"
+      />
+    </div>
   </div>
 
   <div v-else>
@@ -249,6 +262,7 @@
       name: 'actions',
       field: 'id',
       label: '',
+      style: 'max-width: 250px;'
     },
   ];
 
@@ -256,6 +270,15 @@
 
   const handleDeleteButtonClick = (streak: StreakInterface) =>  deleteStreakModal.value.handleOpenModal(streak);
   const handleEditStreakButtonClick = (streak: StreakInterface) => editStreakModal.value.handleOpenModal(streak);
+  const pagination = ref({
+    sortBy: 'desc',
+    descending: false,
+    page: 2,
+    rowsPerPage: 3
+    // rowsNumber: xx if getting data from a server
+  });
+
+  const pagesNumber = computed(() => Math.ceil(rows.value.length / pagination.value.rowsPerPage));
 </script>
 
 <style lang="scss">

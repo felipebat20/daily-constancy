@@ -35,85 +35,6 @@
       </div>
     </div>
 
-    <Modal
-      v-if="selected_task"
-      :show="!! selected_task"
-    >
-      <template #header>
-        <p class="modal-card-title mb-0">
-          Edit your task
-        </p>
-
-        <button
-          class="delete"
-          aria-label="close"
-          @click="clearSelectedTask"
-        />
-      </template>
-
-      <template #body>
-        <form @submit.prevent.stop="updateTask">
-          <div class="field">
-            <label
-              for="projectName"
-              class="label"
-            >
-              Description
-            </label>
-
-            <input
-              v-model="selected_task.description"
-              type="text"
-              class="input"
-              id="projectName"
-              autofocus
-            >
-          </div>
-
-          <div class="field">
-            <label
-              for="projectName"
-              class="label"
-            >
-              Project
-            </label>
-
-            <div class="select">
-              <select v-model="project_id">
-                <option :value="0">
-                  Select a project
-                </option>
-
-                <option
-                  v-for="project in projects"
-                  :key="project.id"
-                  :value="project.id"
-                >
-                  {{ project.name }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </form>
-      </template>
-
-      <template #footer>
-        <button
-          @click="updateTask"
-          class="button is-success"
-        >
-          Save task
-        </button>
-
-        <button
-          class="button"
-          @click="clearSelectedTask"
-        >
-          Cancel
-        </button>
-      </template>
-    </Modal>
-
     <div v-if="request_pending">
       <template v-if="getIsGridLayout">
         <TableSkeleton
@@ -145,7 +66,7 @@
         />
       </template>
 
-      <DCTasksTable
+      <TasksTable
         v-else
         :request_pending="request_pending"
       />
@@ -158,10 +79,9 @@
   import { debounce } from 'lodash';
   import { useQuasar } from 'quasar';
 
-  import Task from '@/components/DCTask.vue';
+  import Task from '@/components/TaskCard.vue';
   import Box from '@/components/shared/Box.vue';
-  import Modal from '@/components/shared/Modal.vue';
-  import DCTasksTable from '@/components/tasks/DCTasksTable.vue';
+  import TasksTable from '@/components/tasks/TasksTable.vue';
   import { TableSkeleton, CardSkeleton } from '@/design-system/Skeleton';
 
   import TaskInterface from '@/interfaces/Task.interface';
@@ -180,8 +100,7 @@
     components: {
       Task,
       Box,
-      DCTasksTable,
-      Modal,
+      TasksTable,
       TableSkeleton,
       CardSkeleton,
     },

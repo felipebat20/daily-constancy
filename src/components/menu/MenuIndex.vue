@@ -22,8 +22,8 @@
     { name: 'tasks', icon: 'tasks', label: 'Tasks', to: '/' },
     { name: 'projects', icon: 'account_tree', label: 'Projects', to: '/projects' },
     { name: 'reports', icon: 'analytics', label: 'Reports', to: '/reports' },
-    { name: 'streaks', icon: 'whatshot', label: 'Streaks', to: '/streaks', hide: user_is_authenticated.value },
-    { name: 'profile', icon: 'account_circle', label: 'Profile', to: '/login', hide: ! user_is_authenticated.value },
+    { name: 'streaks', icon: 'whatshot', label: 'Streaks', to: '/streaks', hide: ! user_is_authenticated.value },
+    { name: 'profile', icon: 'account_circle', label: 'Profile', to: '/login', hide: user_is_authenticated.value },
   ];
 </script>
 
