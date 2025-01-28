@@ -42,7 +42,7 @@
       >
         <q-btn
           v-if="user_is_authenticated"
-          class="link flex justify-center px-0"
+          class="link flex justify-center q-pa-sm"
           flat
           @click="handleLogout"
         >

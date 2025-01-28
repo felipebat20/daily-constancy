@@ -6,11 +6,7 @@ import { FETCH_PROJECTS, FETCH_TASKS } from '@/store/types/actions';
 import { jwt } from '@/static/storage-keys';
 
 export function handleUserLogout() {
-  console.log('handleLogout');
-
   const logout = ($q: any) => {
-    console.log($q);
-
     const route = useRoute();
     const router = useRouter();
     const store = useStore();

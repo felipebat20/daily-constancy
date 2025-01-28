@@ -1,29 +1,32 @@
 <template>
   <div class="flex md:flex-col mb-0">
-    <div class="flex w-full max-sm:flex-col gap-2 p-2">
-      <div
-        role="form"
-        aria-label="Form to create new task"
-      >
-        <q-input
-          type="text"
-          outlined
-          dense
-          placeholder="Which task would you like start?"
-          color="deep-orange-5"
-          v-model="description"
-          :autofocus="$q.screen.gt.xs"
-        />
+    <div class="flex w-full max-sm:flex-col justify-between gap-2">
+      <div class="flex max-sm:flex-col gap-2">
+        <div
+          role="form"
+          aria-label="Form to create new task"
+          class="md:w-[520px]"
+        >
+          <q-input
+            type="text"
+            outlined
+            dense
+            placeholder="Which task would you like start?"
+            color="deep-orange-5"
+            v-model="description"
+            :autofocus="$q.screen.gt.xs"
+          />
+        </div>
+
+        <div class="md:w-[520px]">
+          <ProjectsSelect
+            v-model="project_id"
+            :project_id="project_id"
+          />
+        </div>
       </div>
 
-      <div class="column">
-        <ProjectsSelect
-          v-model="project_id"
-          :project_id="project_id"
-        />
-      </div>
-
-      <div class="column">
+      <div>
         <Timer
           :task-name="description"
           :play-request-pending="playRequestPending"

@@ -207,7 +207,6 @@
   };
 
   const selectTask = (task: TaskInterface) => {
-    console.log(task);
     editTaskModal.value.openModal(task);
   };
 

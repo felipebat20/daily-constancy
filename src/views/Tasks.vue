@@ -1,17 +1,17 @@
 <template>
-  <Form :class="{ 'custom-margin': ! $q.screen.gt.xs }" />
-
   <div class="main-container">
     <div
-      class="tasks-container"
+      class="tasks-container flex flex-col gap-5 p-5"
       :class="{'desktop': $q.screen.gt.xs}"
     >
+      <Form :class="{ 'custom-margin': ! $q.screen.gt.xs }" />
+
       <TasksContainer />
     </div>
 
     <div
       v-if="$q.screen.gt.xs"
-      class="side-right-bar"
+      class="side-right-bar py-5"
     >
       <StreaksHomeCard />
     </div>
@@ -45,9 +45,7 @@
 <style lang="scss" scoped>
   .main-container {
     display: flex;
-    gap: 10px;
     max-width: 100%;
-    padding: 1.25rem;
     gap: 20px;
 
     .tasks-container {

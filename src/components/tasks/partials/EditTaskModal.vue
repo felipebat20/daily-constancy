@@ -86,8 +86,6 @@
 
   const projects = computed(() => store.state.project.projects);
   const openModal = (update_task: TaskInterface) => {
-    console.log(update_task);
-
     task.value = { ...update_task};
     project_id.value = update_task.project?.id;
 

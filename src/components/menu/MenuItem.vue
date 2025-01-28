@@ -24,10 +24,11 @@
     <router-link
       :to="menuItem.to"
       class="link flex justify-center p-2 hover:bg-sky-700 rounded"
-      :class="{ 'is-active': getIsActive(menuItem.to) }"
+      :class="{ 'bg-blue-500': getIsActive(menuItem.to) }"
     >
       <q-icon
         size="24px"
+        color="white"
         :name="menuItem.icon"
         style="display: inline-block;"
       />
