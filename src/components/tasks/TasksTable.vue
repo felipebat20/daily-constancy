@@ -4,7 +4,7 @@
       <q-table
         v-for="(tasks_aggregate, index) in getTasksAggregate"
         :key="index"
-        style="height: 400px; width: 100%"
+        style="max-height: 400px; width: 100%"
         flat
         bordered
         :title="tasks_aggregate[0]"
@@ -225,7 +225,7 @@
 <style lang="sass">
 .my-sticky-header-table
   /* height or max-height is important */
-  height: 400px
+  max-height: 400px
   background-color: var(--accent-background) !important
   border-color: var(--border-color) !important
   color: var(--text-primary) !important

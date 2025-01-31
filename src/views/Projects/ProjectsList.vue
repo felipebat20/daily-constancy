@@ -7,8 +7,8 @@
 
       <q-btn
         no-caps
-        to="/projects/create"
         class="mr-0 ml-auto button"
+        @click="handleCreateProject"
       >
         <span>New project</span>
       </q-btn>
@@ -22,31 +22,39 @@
         <q-td>
           <div class="flex items-center gap-2 justify-center">
             <q-btn
-              :to="`/projects/${props.row.id}`"
-              icon="edit"
               color="primary"
+              icon="edit"
               dense
+              @click="handleEditProject(props.row)"
             />
 
             <q-btn
               icon="delete"
               color="red"
               dense
-              @click="deleteTask(props.row)"
+              @click="handleDeleteProject(props.row)"
             />
           </div>
         </q-td>
       </template>
     </q-table>
+
+    <ProjectsForm ref="projectsForm" />
+    <DeleteProjectModal ref="deleteProjectModal" />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, computed } from 'vue';
+  import { defineComponent, computed, ref } from 'vue';
   import type { QTableProps } from 'quasar';
 
   import formatDate from '@/hooks/formatDate';
   import ProjectInterface from '@/interfaces/Project.interface';
+  import ProjectsForm from './CreateEditProjectModal.vue';
+  import DeleteProjectModal from './DeleteProjectModal.vue';
+
+  const projectsForm = ref(ProjectsForm);
+  const deleteProjectModal = ref(DeleteProjectModal);
 
   import { useStore } from '@/store';
   import { FETCH_PROJECTS, DELETE_PROJECT } from '@/store/types/actions';
@@ -56,12 +64,6 @@
   store.dispatch(FETCH_PROJECTS);
 
   const projects = computed(() => store.state.project.projects);
-
-  const deleteTask = (project: ProjectInterface) => {
-    const { id } = project;
-
-    return store.dispatch(DELETE_PROJECT, { id });
-  };
 
   const columns: QTableProps['columns'] = [
     {
@@ -84,6 +86,19 @@
       label: '',
     },
   ];
+
+  const handleEditProject = (project: ProjectInterface) => {
+    projectsForm.value.showModal(project);
+    projectsForm.value.project = project;
+  };
+
+  const handleDeleteProject = (project: ProjectInterface) => {
+    deleteProjectModal.value.showModal(project);
+  };
+
+  const handleCreateProject = () => {
+    projectsForm.value.showModal();
+  };
 </script>
 
 <style lang="scss" scoped>
