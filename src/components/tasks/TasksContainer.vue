@@ -60,7 +60,10 @@
 
     <div
       v-else
-      :class="{'task-container': ! getIsGridLayout }"
+      :class="{
+        'task-container': ! getIsGridLayout,
+        '!justify-start': $q.screen.gt.xs
+      }"
     >
       <template v-if="! getIsGridLayout">
         <Task
