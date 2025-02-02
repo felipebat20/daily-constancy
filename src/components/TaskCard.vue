@@ -50,7 +50,7 @@
         <div>
           <q-btn
             class="button"
-            @click="selectTask"
+            @click="handleEditButtonClick"
             color="white"
             text-color="black"
           >
@@ -83,59 +83,22 @@
     </template>
   </DSCard>
 
-  <Modal :show="show_modal">
-    <template #header>
-      <p class="modal-card-title mb-0">
-        Warning
-      </p>
-
-      <button
-        class="delete"
-        aria-label="close"
-        @click="closeModal"
-      />
-    </template>
-
-    <template #body>
-      <p>
-        Are you sure you want to delete this task?
-      </p>
-
-      <p>
-        You already spent {{ formatTimer(getTaskTime(task)) }} of total time, this progress cannot be recovered.
-      </p>
-    </template>
-
-    <template #footer>
-      <q-btn
-        :loading="true"
-        @click="deleteTask"
-      >
-        Delete task
-      </q-btn>
-
-      <button
-        class="button"
-        @click="closeModal"
-      >
-        Cancel
-      </button>
-    </template>
-  </Modal>
+  <DeleteTaskModal ref="deleteTaskModal" />
+  <EditTaskModal ref="editTaskModal" />
 </template>
 
 <script setup lang="ts">
   import { PropType, ref } from 'vue';
 
   import TimerDisplay from '@/components/TimerDisplay.vue';
+  import DeleteTaskModal from '@/components/tasks/partials/DeleteTaskModal.vue';
+  import EditTaskModal from '@/components/tasks/partials/EditTaskModal.vue';
   import DSCard from './shared/DSCard.vue';
 
   import TaskInterface from '../interfaces/Task.interface';
-  import Modal from '@/components/shared/Modal.vue';
   import { useStore } from '@/store';
   import { CREATE_TASK_SESSION, DELETE_TASK, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
 
-  import formatTimer from '@/hooks/formatTimer';
   import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
 
   const delete_request_pending = ref(false);
@@ -158,13 +121,19 @@
 
   const store = useStore();
   const show_modal = ref(false);
+  const deleteTaskModal = ref(DeleteTaskModal);
+  const editTaskModal = ref(EditTaskModal);
 
   const selectTask = () => {
     emit('selected-task', props.task);
   };
 
   const handleDeleteButtonClick = () => {
-    show_modal.value = true;
+    deleteTaskModal.value.openModal(props.task);
+  };
+
+  const handleEditButtonClick = () => {
+    editTaskModal.value.openModal(props.task);
   };
 
   const deleteTask = async () => {
