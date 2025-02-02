@@ -23,6 +23,7 @@ module.exports = defineConfig({
       theme_color: '#093f6e',
       categories: ['tools', 'productivity', 'finance'],
       lang: 'en',
+      addressBarColor: '#093f6e',
       icons: [
         {
           "src": "img/icons/android-launchericon-512-512.png",
