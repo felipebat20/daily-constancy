@@ -68,7 +68,10 @@
       </div>
     </div>
 
-    <div class="side-bar">
+    <div
+      v-if="$q.screen.gt.xs"
+      class="side-bar"
+    >
       <div class="top-bar">
         <div>
           <q-badge
@@ -170,6 +173,8 @@
         </div>
       </q-card>
     </div>
+
+    <DayStreakModal ref="dayStreakModal" />
   </div>
 </template>
 
@@ -177,6 +182,8 @@
   import { useRoute } from 'vue-router';
   import { computed, ref } from 'vue';
   import { groupBy } from 'lodash';
+
+  import DayStreakModal from './DayStreakModal.vue';
 
   import { Heading } from '@/design-system/Texts';
   import { DateSkeleton } from '@/design-system/Skeleton';
@@ -189,12 +196,18 @@
   const store = useStore();
   const route = useRoute();
 
+  const dayStreakModal = ref(DayStreakModal);
+
   const { streak_id } = route.params;
   const request_pending = computed(() => {
     const { streak: streak_request_pending = {} } = store.state.requests_pending;
 
     return streak_request_pending.show || streak_request_pending.focus_summaries;
   });
+
+  const openDayStreakModal = (params: { selected_date: string, focused_summary: FocusSummary }) => {
+    dayStreakModal.value.openModal(params);
+  };
 
   store.dispatch(FETCH_STREAK, streak_id);
   store.dispatch(FETCH_STREAK_FOCUS_SUMMARIES, streak_id);
@@ -297,6 +310,8 @@
       let { year, month, day } = details;
 
       selected_date.value = `${year}-${month - 1}-${day}`;
+
+      openDayStreakModal({ selected_date: selected_date.value, focused_summary: getSelectedFocusSummary.value });
 
       return false;
     }

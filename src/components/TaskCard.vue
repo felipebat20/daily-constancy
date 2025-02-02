@@ -96,12 +96,11 @@
   import DSCard from './shared/DSCard.vue';
 
   import TaskInterface from '../interfaces/Task.interface';
+
   import { useStore } from '@/store';
-  import { CREATE_TASK_SESSION, DELETE_TASK, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
+  import { CREATE_TASK_SESSION, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
 
   import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
-
-  const delete_request_pending = ref(false);
 
   const props = defineProps({
     task: {
@@ -115,18 +114,11 @@
     },
   });
 
-  const emit = defineEmits(['selected-task']);
-
   const request_pending = ref([] as number[]);
 
   const store = useStore();
-  const show_modal = ref(false);
   const deleteTaskModal = ref(DeleteTaskModal);
   const editTaskModal = ref(EditTaskModal);
-
-  const selectTask = () => {
-    emit('selected-task', props.task);
-  };
 
   const handleDeleteButtonClick = () => {
     deleteTaskModal.value.openModal(props.task);
@@ -134,13 +126,6 @@
 
   const handleEditButtonClick = () => {
     editTaskModal.value.openModal(props.task);
-  };
-
-  const deleteTask = async () => {
-    delete_request_pending.value = true;
-    await store.dispatch(DELETE_TASK, props.task);
-    closeModal();
-    delete_request_pending.value = false;
   };
 
   const isRequestPending = (task: TaskInterface) => {
@@ -172,10 +157,6 @@
     }
 
     return 'fas fa-play';
-  };
-
-  const closeModal = () => {
-    show_modal.value = false;
   };
 
   const getTaskTime = (task: TaskInterface) => {
