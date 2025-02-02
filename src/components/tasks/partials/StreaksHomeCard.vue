@@ -46,8 +46,11 @@
           <q-btn
             lin
             :to="`streaks/${streak.id}`"
+            icon="visibility"
           >
-            See
+            <q-tooltip>
+              See
+            </q-tooltip>
           </q-btn>
         </div>
       </div>

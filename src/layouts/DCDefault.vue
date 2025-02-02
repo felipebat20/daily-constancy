@@ -11,7 +11,7 @@
     </div>
 
     <div
-      class="content-side-bar"
+      class="content-side-bar active-tab"
       :class="{
         'margin-menu': $q.screen.gt.xs,
         'mobile': ! $q.screen.gt.xs,
@@ -71,6 +71,8 @@
     padding-left: 4rem;
     width: 100%;
   }
+
+  .active-tab { min-height: 100vh; }
 
   .mobile {
     width: 100%;

@@ -9,9 +9,8 @@
         to="/"
       >
         <q-img
-          src="../assets/treker.png"
+          src="../assets/daily-constancy.png"
           alt="logo"
-          class="mt-2"
           style="max-width: 2rem;"
         />
       </router-link>
@@ -62,9 +61,9 @@
         to="/"
       >
         <q-img
-          src="../assets/treker.png"
+          src="../assets/daily-constancy.png"
+          class="q-mt-sm"
           alt="logo"
-          class="mt-2"
           style="max-width: 2rem;"
         />
       </router-link>

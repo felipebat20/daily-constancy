@@ -8,12 +8,8 @@ export function handleUserLogout() {
   const logout = ($q: any) => {
     const route = useRoute();
     const router = useRouter();
-    const store = useStore();
 
     $q.cookies.remove(jwt);
-
-    store.dispatch(FETCH_TASKS);
-    store.dispatch(FETCH_PROJECTS);
 
     if (route.name !== 'login') {
       router.push({ name: 'login' });
