@@ -1,5 +1,8 @@
 <template>
-  <div class="streaks-container">
+  <q-card
+    bordered
+    class="streaks-container"
+  >
     <div class="streak-title">
       Habits in progress
     </div>
@@ -25,37 +28,45 @@
       </div>
     </div>
 
-    <div v-else>
-      <div
+    <q-list
+      class="flex flex-col gap-2"
+      bordered
+      separator
+      v-else
+    >
+      <q-item
         v-for="streak in streaks"
         :key="streak.id"
-        class="streak-item"
+        class="flex gap-2 justify-between q-px-none"
       >
-        <div class="offensive-container">
-          <StreakOffensive
-            v-if="streak.offensive"
-            :offensive="streak.offensive"
-          />
-        </div>
+        <div class="flex gap-2 items-center">
+          <div class="offensive-container">
+            <StreakOffensive
+              v-if="streak.offensive"
+              :offensive="streak.offensive"
+            />
+          </div>
 
-        <div class="name-container">
-          {{ streak.name }}
+          <span class="text-base">
+            {{ streak.name }}
+          </span>
         </div>
 
         <div class="action-container">
           <q-btn
-            lin
             :to="`streaks/${streak.id}`"
             icon="visibility"
+            outline
+            text-color="orange-5"
           >
             <q-tooltip>
               See
             </q-tooltip>
           </q-btn>
         </div>
-      </div>
-    </div>
-  </div>
+      </q-item>
+    </q-list>
+  </q-card>
 </template>
 
 <script lang="ts" setup>

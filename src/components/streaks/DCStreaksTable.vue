@@ -102,29 +102,32 @@
         :key="streak.id"
         class="col-12"
       >
-        <q-card
-          flat
-          bordered
-          :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2'"
-          class="q-pa-xs"
-        >
-          <q-card-section>
+        <q-card>
+          <q-card-section class="q-py-sm">
             <div class="row items-center q-gutter-x-sm">
               <StreakOffensive :offensive="getStreakOffensive(streak)" />
-              <div class="text-h6">
+
+              <span class="text-base">
                 {{ streak.name }}
-              </div>
+              </span>
             </div>
           </q-card-section>
 
-          <q-card-section>
+          <q-separator />
+
+          <q-card-section class="q-py-sm">
+            <p class="m-0 text-base pb-1">
+              Projects:
+            </p>
+
             <div class="row q-gutter-x-sm q-mb-sm">
               <q-badge
-                v-if="!streak.projects.length"
+                v-if="! streak.projects.length"
                 label="N/D"
                 class="text-caption"
                 rounded
               />
+
               <q-badge
                 v-for="project in streak.projects"
                 :key="project.name"
@@ -134,6 +137,7 @@
                 rounded
               />
             </div>
+
             <div class="text-caption text-grey">
               Criado em: {{ formatDate(new Date(streak.createdAt)) }}
             </div>
@@ -141,36 +145,33 @@
 
           <q-separator />
 
-          <q-card-actions
-            vertical
-            class="justify-center q-px-md"
-          >
+          <q-card-actions class="justify-center q-px-md">
             <q-btn
               :to="`/streaks/${streak.id}`"
-              color="primary"
+              text-color="primary"
               icon="visibility"
-              label="See streak"
-              flat
+              no-caps
+              outline
             >
               <q-tooltip>Ver streak</q-tooltip>
             </q-btn>
 
             <q-btn
               @click="handleEditStreakButtonClick(streak)"
-              color="secondary"
+              text-color="secondary"
               icon="edit"
-              label="Edit streak"
-              flat
+              no-caps
+              outline
             >
               <q-tooltip>Editar</q-tooltip>
             </q-btn>
 
             <q-btn
               @click="handleDeleteButtonClick(streak)"
-              color="deep-orange"
+              text-color="deep-orange"
               icon="delete"
-              label="Delete streak"
-              flat
+              no-caps
+              outline
             >
               <q-tooltip>Excluir</q-tooltip>
             </q-btn>
@@ -271,7 +272,7 @@
     sortBy: 'desc',
     descending: false,
     page: 2,
-    rowsPerPage: 3
+    rowsPerPage: 100
   });
 
   const pagesNumber = computed(() => Math.ceil(rows.value.length / pagination.value.rowsPerPage));
@@ -307,6 +308,5 @@
     font-weight: 700;
 
     &.on-fire { color: rgb(255, 171, 51); }
-    .days { margin-top: 2px; }
   }
 </style>

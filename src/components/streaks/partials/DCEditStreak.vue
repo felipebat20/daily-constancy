@@ -31,18 +31,16 @@
         />
       </q-card-section>
 
-      <q-card-actions
-        align="right"
-        class="text-primary"
-      >
+      <q-card-actions align="right">
         <q-btn
-          flat
+          no-caps
           label="Cancel"
           v-close-popup
         />
 
         <q-btn
-          flat
+          color="green-5"
+          no-caps
           label="Update streak"
           :loading="request_pending"
           @click="handleCreateStreak"

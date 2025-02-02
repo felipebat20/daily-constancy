@@ -58,7 +58,6 @@
       min-width: 368px;
 
       > div {
-        border: 3px solid var(--border-color);
         padding: 18px;
         border-radius: 16px;
         display: flex;
