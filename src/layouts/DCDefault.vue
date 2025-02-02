@@ -73,7 +73,6 @@
   }
 
   .active-tab { min-height: 100vh; }
-
   .mobile {
     width: 100%;
     padding-top: 56px;
