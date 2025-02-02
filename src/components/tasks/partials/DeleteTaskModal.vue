@@ -4,10 +4,20 @@
     persistent
   >
     <q-card :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }">
-      <q-card-section>
-        <div class="text-h6">
+      <q-card-section class="row items-center q-pb-md q-pt-sm">
+        <p class="text-base m-0">
           Delete task
-        </div>
+        </p>
+
+        <q-space />
+
+        <q-btn
+          icon="close"
+          flat
+          round
+          dense
+          v-close-popup
+        />
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -16,24 +26,26 @@
         </p>
 
         <p>
-          You already spent {{ formatTimer(getTaskTime()) }} of total time, this progress cannot be recovered.
+          You already spent
+          <q-badge color="red">
+            {{ formatTimer(getTaskTime()) }}
+          </q-badge>
+
+          of total time, this progress cannot be recovered.
         </p>
       </q-card-section>
 
       <q-card-actions
         align="right"
-        class="text-primary"
       >
         <q-btn
-          flat
           label="Cancel"
           no-caps
-          v-close-popup
+          class="button"
           @click="closeModal"
         />
 
         <q-btn
-          flat
           label="Delete task"
           :loading="request_pending"
           color="negative"

@@ -3,7 +3,7 @@
     v-model="show_modal"
     persistent
   >
-    <q-card style="min-width: 450px">
+    <q-card :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }">
       <q-card-section>
         <div class="text-h6">
           Update streak
