@@ -70,6 +70,7 @@
         <template #body-cell-actions="props">
           <q-td
             key="actions"
+            style="width: 100px"
           >
             <q-btn
               class="custom-border is-inline-block"
@@ -143,18 +144,21 @@
       align: 'left',
       field: 'description',
       sortable: true,
+      style: 'width: 100%',
     },
     {
       name: 'project',
       align: 'left',
       label: 'Project',
       field: '',
+      style: 'min-width: 250px',
     },
     {
       name: 'total_time_spent',
       label: 'Time spent',
       align: 'left',
       field: '',
+      style: 'min-width: 150px',
     },
     {
       name: 'actions',

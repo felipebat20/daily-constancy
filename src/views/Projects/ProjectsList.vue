@@ -17,21 +17,20 @@
     <q-table
       :rows="projects"
       :columns="columns"
+      title="Your projects"
     >
       <template #body-cell-actions="props">
-        <q-td>
-          <div class="flex items-center gap-2 justify-center">
+        <q-td style="width: 170px">
+          <div class="flex items-center gap-4 justify-end">
             <q-btn
               color="primary"
               icon="edit"
-              dense
               @click="handleEditProject(props.row)"
             />
 
             <q-btn
               icon="delete"
               color="red"
-              dense
               @click="handleDeleteProject(props.row)"
             />
           </div>
@@ -84,6 +83,7 @@
       name: 'actions',
       field: 'id',
       label: '',
+      style: 'max-width: 100px',
     },
   ];
 

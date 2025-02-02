@@ -19,6 +19,12 @@
       </div>
     </div>
 
+    <div v-else-if="! streaks.length">
+      <div class="text-h6">
+        No streaks found
+      </div>
+    </div>
+
     <div v-else>
       <div
         v-for="streak in streaks"

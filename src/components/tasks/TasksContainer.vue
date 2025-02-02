@@ -44,7 +44,13 @@
       </template>
 
       <template v-else>
-        <CardSkeleton />
+        <div class="flex items-center justify-center">
+          <QSpinnerFacebook
+            color="yellow"
+            background-color="purple"
+            size="140"
+          />
+        </div>
       </template>
     </div>
 
@@ -77,7 +83,7 @@
 <script lang="ts">
   import { computed, defineComponent, ref, watch } from 'vue';
   import { debounce } from 'lodash';
-  import { useQuasar } from 'quasar';
+  import { QSpinnerFacebook, useQuasar } from 'quasar';
 
   import Task from '@/components/TaskCard.vue';
   import Box from '@/components/shared/Box.vue';
@@ -102,7 +108,7 @@
       Box,
       TasksTable,
       TableSkeleton,
-      CardSkeleton,
+      QSpinnerFacebook,
     },
 
     data() {

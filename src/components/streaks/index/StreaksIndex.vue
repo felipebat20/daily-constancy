@@ -25,7 +25,18 @@
       </q-btn>
     </div>
 
-    <div>
+    <div
+      v-if="request_pending"
+      class="flex items-center justify-center"
+    >
+      <QSpinnerFacebook
+        color="yellow"
+        background-color="purple"
+        size="140"
+      />
+    </div>
+
+    <div v-else>
       <StreaksTable :streaks="streaks" />
     </div>
 
@@ -34,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+  import { QSpinnerFacebook } from 'quasar';
   import { computed, ref } from 'vue';
 
   import StreaksTable from '@/components/streaks/DCStreaksTable.vue';
@@ -45,6 +57,11 @@
   import { FETCH_STREAKS } from '@/store/types/actions';
 
   const store = useStore();
+  const request_pending = computed(() => {
+    const { streak: streak_request_pending = {} } = store.state.requests_pending;
+
+    return streak_request_pending.fetch_all;
+  });
 
   store.dispatch(FETCH_STREAKS);
 
