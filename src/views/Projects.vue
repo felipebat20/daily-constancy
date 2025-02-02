@@ -1,9 +1,5 @@
 <template>
   <div class="projects">
-    <h1 class="title">
-      Projects
-    </h1>
-
     <router-view />
   </div>
 </template>
@@ -12,7 +8,7 @@
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    name: 'ATProjects',
+    name: 'ProjectsIndex',
   });
 </script>
 

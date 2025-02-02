@@ -1,12 +1,12 @@
 <template>
-  <div class="card">
+  <div class="card p-2 rounded">
     <header class="card-header">
       <p class="card-header-title">
         <slot name="title" />
       </p>
     </header>
 
-    <div class="card-content p-4">
+    <div class="card-content p-2">
       <div class="content">
         <slot name="content" />
       </div>

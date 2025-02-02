@@ -14,7 +14,7 @@
       class="content-side-bar"
       :class="{
         'margin-menu': $q.screen.gt.xs,
-        'w-100': ! $q.screen.gt.xs,
+        'mobile': ! $q.screen.gt.xs,
       }"
     >
       <Notification />
@@ -68,13 +68,13 @@
   }
 
   .margin-menu {
-    margin-left: 4rem;
+    padding-left: 4rem;
     width: 100%;
   }
 
-  .w-100 {
+  .mobile {
     width: 100%;
-    margin-top: 56px;
-    margin-bottom: 60px;
+    padding-top: 56px;
+    padding-bottom: 60px;
   }
 </style>

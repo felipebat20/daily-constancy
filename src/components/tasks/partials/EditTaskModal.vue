@@ -1,92 +1,76 @@
 <template>
-  <Modal
-    v-if="show_modal"
+  <q-dialog
+    v-model="show_modal"
     :show="show_modal"
   >
-    <template #header>
-      <p class="modal-card-title mb-0">
-        Edit your task
-      </p>
+    <q-card
+      :style="{'min-width': ! $q.screen.gt.xs ? '100%' : '450px'}"
+      class="column"
+    >
+      <q-card-section class="row items-center q-pb-md q-pt-sm">
+        <p class="text-base m-0">
+          Edit your task
+        </p>
 
-      <button
-        class="delete"
-        aria-label="close"
-        @click="closeModal"
-      />
-    </template>
+        <q-space />
 
-    <template #body>
-      <form @submit.prevent.stop="updateTask">
-        <div class="field">
-          <label
-            for="projectName"
-            class="label"
-          >
-            Description
-          </label>
+        <q-btn
+          icon="close"
+          flat
+          round
+          dense
+          v-close-popup
+        />
+      </q-card-section>
 
-          <input
-            v-model="task.description"
-            type="text"
-            class="input"
-            id="projectName"
-            autofocus
-          >
-        </div>
+      <q-card-section class="q-pt-none">
+        <q-input
+          v-model="task.description"
+          type="text"
+          label="Description"
+          class="input"
+          id="projectName"
+          autofocus
+          dense
+          outlined
+        />
+      </q-card-section>
 
-        <div class="field">
-          <label
-            for="projectName"
-            class="label"
-          >
-            Project
-          </label>
+      <q-card-section class="q-pt-none">
+        <ProjectsSelect
+          v-model="project_id"
+          :project_id="project_id"
+        />
+      </q-card-section>
 
-          <div class="select">
-            <select v-model="project_id">
-              <option :value="0">
-                Select a project
-              </option>
+      <q-card-actions align="right">
+        <q-btn
+          no-caps
+          class="button"
+          @click="closeModal"
+        >
+          Cancel
+        </q-btn>
 
-              <option
-                v-for="project in projects"
-                :key="project.id"
-                :value="project.id"
-              >
-                {{ project.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </form>
-    </template>
-
-    <template #footer>
-      <q-btn
-        class="button is-success"
-        :loading="request_pending"
-        no-caps
-        @click="updateTask"
-      >
-        Save task
-      </q-btn>
-
-      <button
-        class="button"
-        @click="closeModal"
-      >
-        Cancel
-      </button>
-    </template>
-  </Modal>
+        <q-btn
+          color="green-5"
+          :loading="request_pending"
+          no-caps
+          @click="updateTask"
+        >
+          Save task
+        </q-btn>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts" setup>
-  import { defineExpose, ref, PropType, computed, defineProps } from 'vue';
+  import { defineExpose, ref, computed } from 'vue';
   import type { Ref } from 'vue';
 
   import TaskInterface from '@/interfaces/Task.interface';
-  import Modal from '@/components/shared/Modal.vue';
+  import ProjectsSelect from '@/components/shared/ProjectsSelect.vue';
 
   import { useStore } from '@/store';
   import { UPDATE_TASK }  from '@/store/types/actions';

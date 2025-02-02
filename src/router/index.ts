@@ -5,10 +5,9 @@ import loadLayoutMiddleware from './middleware/loadLayoutMiddleware';
 import Tasks from '../views/Tasks.vue';
 import Reports from '../views/ATReports.vue';
 import Projects from '../views/Projects.vue';
-import ProjectsForm from '../views/Projects/Form.vue';
-import ProjectsList from '../views/Projects/List.vue';
+import ProjectsList from '../views/Projects/ProjectsList.vue';
 import Streaks from '@/views/Streaks/DCStreaks.vue';
-import StreaksList from '@/components/streaks/index/DCStreaksIndex.vue';
+import StreaksList from '@/components/streaks/index/StreaksIndex.vue';
 import StreakShow from '@/views/Streaks/show/DCStreak.vue';
 import DCLogin from '@/views/Auth/DCLogin.vue';
 import DCRegister from '@/views/Auth/DCRegister.vue';
@@ -51,18 +50,7 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'Projects',
         component: ProjectsList,
-      },
-      {
-        path: 'create',
-        name: 'NewProjects',
-        component: ProjectsForm,
-      },
-      {
-        path: ':project_id',
-        name: 'EditProjects',
-        component: ProjectsForm,
-        props: true,
-      },
+      }
     ]
   },
 

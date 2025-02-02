@@ -13,6 +13,7 @@ import {
 
 // To be used on app.use(Quasar, { ... })
 export const quasarConfig = {
+  css: ['index.css'],
   config: {},
   plugins: {
     Notify,

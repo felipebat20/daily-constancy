@@ -128,7 +128,6 @@
   import { PropType, ref } from 'vue';
 
   import TimerDisplay from '@/components/TimerDisplay.vue';
-  import Box from './shared/Box.vue';
   import DSCard from './shared/DSCard.vue';
 
   import TaskInterface from '../interfaces/Task.interface';

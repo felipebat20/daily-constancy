@@ -1,14 +1,17 @@
 <template>
-  <Form :class="{ 'custom-margin': ! $q.screen.gt.xs }" />
-
   <div class="main-container">
-    <div class="tasks-container">
-      <DCTasksContainer />
+    <div
+      class="tasks-container flex flex-col gap-5 p-5"
+      :class="{'desktop': $q.screen.gt.xs}"
+    >
+      <Form :class="{ 'custom-margin': ! $q.screen.gt.xs }" />
+
+      <TasksContainer />
     </div>
 
     <div
       v-if="$q.screen.gt.xs"
-      class="side-right-bar"
+      class="side-right-bar py-5"
     >
       <StreaksHomeCard />
     </div>
@@ -20,14 +23,14 @@
   import { useQuasar } from 'quasar';
 
   import Form from '@/components/Form.vue';
-  import DCTasksContainer from '@/components/tasks/DCTasksContainer.vue';
+  import TasksContainer from '@/components/tasks/TasksContainer.vue';
   import StreaksHomeCard from '@/components/tasks/partials/StreaksHomeCard.vue';
 
   export default defineComponent({
     name: 'App',
     components: {
       Form,
-      DCTasksContainer,
+      TasksContainer,
       StreaksHomeCard,
     },
 
@@ -42,13 +45,13 @@
 <style lang="scss" scoped>
   .main-container {
     display: flex;
-    gap: 10px;
     max-width: 100%;
-    padding: 1.25rem;
     gap: 20px;
 
     .tasks-container {
       width: 100%;
+
+      &.desktop { width: calc(100% - 452px); }
     }
 
     .side-right-bar {

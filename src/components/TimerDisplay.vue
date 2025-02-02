@@ -1,7 +1,7 @@
 <template>
   <section>
     <span
-      class="icon-text"
+      class="flex gap-1"
       :class="{ 'with-dark-theme': hasDarkTheme }"
     >
       <span class="icon">

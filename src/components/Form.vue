@@ -1,46 +1,32 @@
 <template>
-  <div class="box form mb-0">
-    <div class="columns is-12">
-      <div
-        class="column"
-        role="form"
-        aria-label="Form to create new task"
-      >
-        <q-input
-          type="text"
-          outlined
-          dense
-          placeholder="Which task would you like start?"
-          v-model="description"
-          autofocus
-        />
-      </div>
-
-      <div class="column">
-        <q-select
-          :options="getParsedProjects"
-          v-model="project_id"
-          label="Select a project"
-          outlined
-          emit-value
-          map-options
-          dense
-          options-dense
+  <div class="flex md:flex-col mb-0">
+    <div class="flex w-full max-sm:flex-col justify-between gap-2">
+      <div class="flex max-sm:flex-col gap-2">
+        <div
+          role="form"
+          aria-label="Form to create new task"
+          class="md:w-[520px]"
         >
-          <template #option="scope">
-            <q-item
-              v-bind="scope.itemProps"
-              dense
-            >
-              <q-item-section>
-                <q-item-label>{{ scope.opt.label }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
+          <q-input
+            type="text"
+            outlined
+            dense
+            placeholder="Which task would you like start?"
+            color="deep-orange-5"
+            v-model="description"
+            :autofocus="$q.screen.gt.xs"
+          />
+        </div>
+
+        <div class="md:w-[520px]">
+          <ProjectsSelect
+            v-model="project_id"
+            :project_id="project_id"
+          />
+        </div>
       </div>
 
-      <div class="column">
+      <div>
         <Timer
           :task-name="description"
           :play-request-pending="playRequestPending"
@@ -54,28 +40,26 @@
 </template>
 
 <script lang="ts">
-  import { AxiosResponse } from 'axios';
   import { computed, defineComponent, ref, watch } from 'vue';
 
   import Timer from './Timer.vue';
+  import ProjectsSelect from './shared/ProjectsSelect.vue';
 
   import { useStore } from '@/store';
   import {
     CREATE_NEW_TASK,
     FETCH_PROJECTS,
     FINISH_TASK_SESSION,
-    CREATE_TASK_SESSION
   } from '@/store/types/actions';
   import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
 
-  interface projectOptions {
-    label: string;
-    value: null | number;
-  }
-
   export default defineComponent({
     name: 'VForm',
-    components: { Timer },
+    components: {
+      Timer,
+      ProjectsSelect
+    },
+
     emits: ['save-task'],
     setup() {
       const store = useStore();
@@ -151,31 +135,12 @@
         }
       });
 
-      const getParsedProjects = computed(() => {
-        const parsed_projects : projectOptions[] = [
-          {
-            value: null,
-            label: 'Select a project',
-          },
-        ];
-
-        parsed_projects.push(
-          ...projects.value.map((project) => ({
-            label: project.name,
-            value: project.id,
-          }))
-        );
-
-        return parsed_projects;
-      });
-
       return {
         description,
         project_id,
         projects,
         finishTask,
         startTimer,
-        getParsedProjects,
         playRequestPending,
         stopRequestPending,
       };

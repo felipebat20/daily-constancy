@@ -127,7 +127,7 @@ export const task: Module<TaskState, State> = {
       }
     },
 
-    [CREATE_TASK_SESSION]: async ({ commit, getters }, task: TaskInterface) => {
+    [CREATE_TASK_SESSION]: async ({ commit }, task: TaskInterface) => {
       if (hasApi()) {
         const startAt = new Date();
 

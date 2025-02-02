@@ -1,19 +1,21 @@
 <template>
-  <div class="is-flex is-align-items-center is-justify-content-space-between">
+  <div class="flex items-center gap-2 justify-between">
     <TimerDisplay
       :time-in-seconds="timeInSeconds"
       :has-dark-theme="true"
     />
 
-    <Button
-      :button="getPlayButton"
-      @click="createTask"
-    />
+    <div class="flex gap-2">
+      <Button
+        :button="getPlayButton"
+        @click="createTask"
+      />
 
-    <Button
-      :button="getStopButton"
-      @click="stopTimer"
-    />
+      <Button
+        :button="getStopButton"
+        @click="stopTimer"
+      />
+    </div>
   </div>
 </template>
 
