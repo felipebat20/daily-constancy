@@ -9,12 +9,7 @@
       </Heading>
 
       <q-btn
-        icon="add"
-        icon-right="whatshot"
-        unelevated
         no-caps
-        text-color="orange-5"
-        dense
         label="Create new streak"
         class="custom-border"
         @click="handleCreateButtonClick"

@@ -3,7 +3,7 @@
     v-model="show_modal"
     persistent
   >
-    <q-card style="min-width: 450px">
+    <q-card :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }">
       <q-card-section>
         <div class="text-h6">
           Delete streak
@@ -16,19 +16,14 @@
         </span>
       </q-card-section>
 
-      <q-card-actions
-        align="right"
-        class="text-primary"
-      >
+      <q-card-actions align="right">
         <q-btn
-          flat
           label="Cancel"
           no-caps
           v-close-popup
         />
 
         <q-btn
-          flat
           label="Delete streak"
           :loading="request_pending"
           color="negative"

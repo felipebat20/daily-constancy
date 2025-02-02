@@ -9,35 +9,28 @@
       </span>
 
       <strong :class="{ 'with-dark-theme': hasDarkTheme }">
-        {{ getTimer }}
+        {{ timer }}
       </strong>
     </span>
   </section>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
+<script lang="ts" setup>
+  import { useFormatSecondsToNow } from '@/composables/formatTime';
 
-  export default defineComponent({
-    name: 'ALTimerDisplay',
-    props: {
-      timeInSeconds: {
-        type: Number,
-        default: 0,
-      },
-
-      hasDarkTheme: {
-        type: Boolean,
-        required: true,
-      },
+  const props = defineProps({
+    timeInSeconds: {
+      type: Number,
+      default: 0,
     },
 
-    computed: {
-      getTimer(): string {
-        return new Date(this.timeInSeconds * 1000).toISOString().substring(11, 19);
-      },
+    hasDarkTheme: {
+      type: Boolean,
+      required: true,
     },
   });
+
+  const timer = useFormatSecondsToNow({ seconds: props.timeInSeconds });
 </script>
 
 <style scoped>

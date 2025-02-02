@@ -3,11 +3,20 @@
     v-model="show_modal"
     persistent
   >
-    <q-card :style="{'min-width': ! $q.screen.gt.xs ? '100%' : '450px'}">
-      <q-card-section>
+    <q-card :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }">
+      <q-card-section class="row items-center q-pb-md q-pt-sm">
         <div class="text-h6">
           Delete project
         </div>
+
+        <q-space />
+
+        <q-btn
+          icon="close"
+          flat
+          class="q-pa-none"
+          v-close-popup
+        />
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -17,12 +26,8 @@
         </p>
       </q-card-section>
 
-      <q-card-actions
-        align="right"
-        class="text-primary"
-      >
+      <q-card-actions align="right">
         <q-btn
-          flat
           label="Cancel"
           no-caps
           v-close-popup

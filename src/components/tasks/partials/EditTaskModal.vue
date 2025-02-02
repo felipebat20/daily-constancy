@@ -4,7 +4,7 @@
     :show="show_modal"
   >
     <q-card
-      :style="{'min-width': ! $q.screen.gt.xs ? '100%' : '450px'}"
+      :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }"
       class="column"
     >
       <q-card-section class="row items-center q-pb-md q-pt-sm">

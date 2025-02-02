@@ -220,8 +220,7 @@
   });
 
   const handleDeleteButtonClick = (task: TaskInterface) => {
-    selected_task.value = task;
-    deleteTaskModal.value.openModal();
+    deleteTaskModal.value.openModal(task);
   };
 </script>
 

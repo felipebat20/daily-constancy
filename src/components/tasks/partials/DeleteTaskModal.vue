@@ -1,53 +1,67 @@
 <template>
-  <Modal :show="show_modal">
-    <template #header>
-      <p class="modal-card-title mb-0">
-        Warning
-      </p>
+  <q-dialog
+    v-model="show_modal"
+    persistent
+  >
+    <q-card :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }">
+      <q-card-section class="row items-center q-pb-md q-pt-sm">
+        <p class="text-base m-0">
+          Delete task
+        </p>
 
-      <button
-        class="delete"
-        aria-label="close"
-        @click="closeModal"
-      />
-    </template>
+        <q-space />
 
-    <template #body>
-      <p>
-        Are you sure you want to delete this task?
-      </p>
+        <q-btn
+          icon="close"
+          flat
+          round
+          dense
+          v-close-popup
+        />
+      </q-card-section>
 
-      <p>
-        You already spent {{ formatTimer(getTaskTime(task)) }} of total time, this progress cannot be recovered.
-      </p>
-    </template>
+      <q-card-section class="q-pt-none">
+        <p>
+          Are you sure you want to delete this task?
+        </p>
 
-    <template #footer>
-      <q-btn
-        :loading="request_pending"
-        @click="deleteTask"
-        class="button is-danger"
-        no-caps
+        <p>
+          You already spent
+          <q-badge color="red">
+            {{ formatTimer(getTaskTime()) }}
+          </q-badge>
+
+          of total time, this progress cannot be recovered.
+        </p>
+      </q-card-section>
+
+      <q-card-actions
+        align="right"
       >
-        Delete task
-      </q-btn>
+        <q-btn
+          label="Cancel"
+          no-caps
+          class="button"
+          @click="closeModal"
+        />
 
-      <button
-        class="button"
-        @click="closeModal"
-      >
-        Cancel
-      </button>
-    </template>
-  </Modal>
+        <q-btn
+          label="Delete task"
+          :loading="request_pending"
+          color="negative"
+          no-caps
+          @click="deleteTask"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts" setup>
-  import { defineProps, PropType, ref, defineExpose } from 'vue';
+  import { ref, defineExpose } from 'vue';
+  import type { Ref } from 'vue';
 
   import TaskInterface from '@/interfaces/Task.interface';
-
-  import Modal from '@/components/shared/Modal.vue';
 
   import { useStore } from '@/store';
 
@@ -55,23 +69,19 @@
   import { DELETE_TASK } from '@/store/types/actions';
 
   const store = useStore();
-  const props = defineProps({
-    task: {
-      type: Object as PropType<TaskInterface>,
-      required: true,
-    }
-  });
+
+  const task: Ref<TaskInterface> = ref({} as TaskInterface);
 
   const show_modal = ref(false);
   const request_pending = ref(false);
 
-  const getTaskTime = (task: TaskInterface) => {
-    return task.total_time_spent || task.time_spent || 0;
+  const getTaskTime = () => {
+    return task.value.total_time_spent || task.value.time_spent || 0;
   };
 
   const deleteTask = async () => {
     request_pending.value = true;
-    await store.dispatch(DELETE_TASK, props.task);
+    await store.dispatch(DELETE_TASK, task.value);
     closeModal();
 
     return request_pending.value = false;
@@ -81,8 +91,9 @@
     show_modal.value = false;
   };
 
-  const openModal = () => {
+  const openModal = (state_task: TaskInterface) => {
     show_modal.value = true;
+    task.value = state_task;
   };
 
   defineExpose({
