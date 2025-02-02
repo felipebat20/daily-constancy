@@ -96,88 +96,81 @@
   </div>
 
   <div v-else>
-    <div class="row q-col-gutter-md q-mt-xs">
-      <div
+    <div class="flex flex-col gap-4">
+      <DSCard
         v-for="streak in rows"
         :key="streak.id"
-        class="col-12"
       >
-        <q-card>
-          <q-card-section class="q-py-sm">
-            <div class="row items-center q-gutter-x-sm">
-              <StreakOffensive :offensive="getStreakOffensive(streak)" />
+        <template #title>
+          <div class="flex items-center gap-2">
+            <StreakOffensive :offensive="getStreakOffensive(streak)" />
 
-              <span class="text-base">
-                {{ streak.name }}
-              </span>
-            </div>
-          </q-card-section>
+            <span class="text-base">
+              {{ streak.name }}
+            </span>
+          </div>
+        </template>
 
-          <q-separator />
+        <template #content>
+          <p class="m-0 text-base pb-1">
+            Projects:
+          </p>
 
-          <q-card-section class="q-py-sm">
-            <p class="m-0 text-base pb-1">
-              Projects:
-            </p>
+          <div class="row q-gutter-x-sm q-mb-sm">
+            <q-badge
+              v-if="! streak.projects.length"
+              label="N/D"
+              class="text-caption"
+              rounded
+            />
 
-            <div class="row q-gutter-x-sm q-mb-sm">
-              <q-badge
-                v-if="! streak.projects.length"
-                label="N/D"
-                class="text-caption"
-                rounded
-              />
+            <q-badge
+              v-for="project in streak.projects"
+              :key="project.name"
+              :label="project.name"
+              class="text-caption"
+              color="positive"
+              rounded
+            />
+          </div>
 
-              <q-badge
-                v-for="project in streak.projects"
-                :key="project.name"
-                :label="project.name"
-                class="text-caption"
-                color="positive"
-                rounded
-              />
-            </div>
+          <div class="text-caption text-grey">
+            Criado em: {{ formatDate(new Date(streak.createdAt)) }}
+          </div>
+        </template>
 
-            <div class="text-caption text-grey">
-              Criado em: {{ formatDate(new Date(streak.createdAt)) }}
-            </div>
-          </q-card-section>
+        <template #footer>
+          <q-btn
+            :to="`/streaks/${streak.id}`"
+            text-color="primary"
+            icon="visibility"
+            no-caps
+            outline
+          >
+            <q-tooltip>Ver streak</q-tooltip>
+          </q-btn>
 
-          <q-separator />
+          <q-btn
+            @click="handleEditStreakButtonClick(streak)"
+            text-color="secondary"
+            icon="edit"
+            no-caps
+            outline
+          >
+            <q-tooltip>Editar</q-tooltip>
+          </q-btn>
 
-          <q-card-actions class="justify-center q-px-md">
-            <q-btn
-              :to="`/streaks/${streak.id}`"
-              text-color="primary"
-              icon="visibility"
-              no-caps
-              outline
-            >
-              <q-tooltip>Ver streak</q-tooltip>
-            </q-btn>
-
-            <q-btn
-              @click="handleEditStreakButtonClick(streak)"
-              text-color="secondary"
-              icon="edit"
-              no-caps
-              outline
-            >
-              <q-tooltip>Editar</q-tooltip>
-            </q-btn>
-
-            <q-btn
-              @click="handleDeleteButtonClick(streak)"
-              text-color="deep-orange"
-              icon="delete"
-              no-caps
-              outline
-            >
-              <q-tooltip>Excluir</q-tooltip>
-            </q-btn>
-          </q-card-actions>
-        </q-card>
-      </div>
+          <q-btn
+            @click="handleDeleteButtonClick(streak)"
+            text-color="deep-orange"
+            icon="delete"
+            no-caps
+            outline
+          >
+            <q-tooltip>Excluir</q-tooltip>
+          </q-btn>
+        </template>
+      </DSCard>
     </div>
 
     <div class="row justify-center q-pa-md">
@@ -205,6 +198,7 @@
   import DCEditStreak from '@/components/streaks/partials/DCEditStreak.vue';
   import StreakInterface from '@/interfaces/Streak.interface';
   import StreakOffensive from '@/design-system/StreakOffensive.vue';
+  import DSCard from '@/components/shared/DSCard.vue';
 
   import formatDate from '@/hooks/formatDate';
 

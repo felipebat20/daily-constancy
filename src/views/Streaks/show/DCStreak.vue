@@ -54,11 +54,13 @@
               >
                 <q-date
                   v-model="getDays[month_label]"
-                  :class="{ 'full-width': ! $q.screen.gt.xs, 'no-shadow': ! $q.screen.gt.xs }"
+                  class="no-shadow"
+                  :class="{ 'full-width': ! $q.screen.gt.xs }"
                   multiple
                   today-btn
                   minimal
                   dense
+                  bordered
                   :years-in-month-view="false"
                   :default-year-month="month_label"
                   :navigation-min-year-month="month_label"

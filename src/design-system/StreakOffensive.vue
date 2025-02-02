@@ -1,5 +1,5 @@
 <template>
-  <div
+  <span
     class="offensive"
     :class="{ 'on-fire': offensive.today_is_in_streak }"
   >
@@ -15,7 +15,7 @@
         {{ offensive.days }}
       </span>
     </div>
-  </div>
+  </span>
 </template>
 
 <script lang="ts" setup>
@@ -31,9 +31,6 @@
 
 <style scoped lang="scss">
   .offensive {
-    display: flex;
-    justify-content: center;
-    align-items: end;
     gap: 4px;
     font-size: 15px;
     font-weight: 700;
