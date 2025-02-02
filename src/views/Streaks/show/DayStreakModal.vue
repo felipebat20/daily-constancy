@@ -101,8 +101,6 @@
   const focusedSummary: Ref<FocusSummary> = ref({} as FocusSummary);
 
   const openModal = ({ selected_date, focused_summary }: { selected_date: string, focused_summary: FocusSummary }) => {
-    console.log(selected_date);
-    console.log(focused_summary);
     selectedDate.value = selected_date;
     focusedSummary.value = focused_summary;
 
