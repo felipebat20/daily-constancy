@@ -1,4 +1,3 @@
-import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useStore } from '@/store';

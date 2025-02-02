@@ -123,7 +123,6 @@
   import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
 
   const store = useStore();
-  const emit = defineEmits(['selected-task']);
   const selected_task = ref({} as TaskInterface);
   const deleteTaskModal = ref(DeleteTaskModal);
   const editTaskModal = ref(EditTaskModal);

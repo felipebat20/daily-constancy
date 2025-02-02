@@ -66,11 +66,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineExpose, ref, PropType, computed, defineProps } from 'vue';
+  import { defineExpose, ref, computed } from 'vue';
   import type { Ref } from 'vue';
 
   import TaskInterface from '@/interfaces/Task.interface';
-  import Modal from '@/components/shared/Modal.vue';
   import ProjectsSelect from '@/components/shared/ProjectsSelect.vue';
 
   import { useStore } from '@/store';

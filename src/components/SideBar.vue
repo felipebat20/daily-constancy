@@ -132,16 +132,12 @@
 <script lang="ts">
   import { defineComponent, ref, onBeforeMount } from 'vue';
   import { useQuasar } from 'quasar';
-  import { useRoute, useRouter } from 'vue-router';
 
   import MenuIndex from '@/components/menu/MenuIndex.vue';
 
   import { jwtToken } from '@/hooks/verify_api';
 
-  import { useStore } from '@/store';
-  import { FETCH_PROJECTS, FETCH_TASKS } from '@/store/types/actions';
-
-  import { jwt, dark_theme as dark_theme_key } from '@/static/storage-keys';
+  import { dark_theme as dark_theme_key } from '@/static/storage-keys';
 
   import { handleUserLogout} from './menu/MenuMixin';
 
@@ -163,9 +159,6 @@
       const { logout } = handleUserLogout();
 
       const $q = useQuasar();
-      const route = useRoute();
-      const router = useRouter();
-      const store = useStore();
       const user_is_authenticated = ref(!! jwtToken());
       const dark_theme = ref(false);
 

@@ -88,7 +88,7 @@
   import Task from '@/components/TaskCard.vue';
   import Box from '@/components/shared/Box.vue';
   import TasksTable from '@/components/tasks/TasksTable.vue';
-  import { TableSkeleton, CardSkeleton } from '@/design-system/Skeleton';
+  import { TableSkeleton } from '@/design-system/Skeleton';
 
   import TaskInterface from '@/interfaces/Task.interface';
   import { useStore } from '@/store';

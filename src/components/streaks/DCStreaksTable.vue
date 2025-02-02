@@ -22,20 +22,20 @@
         </q-td>
       </template>
 
-      <template #body-cell-projects="props">
+      <template #body-cell-projects="props_row">
         <q-td
           :style="{ 'width': '35%' }"
           class="text-left"
         >
           <q-badge
-            v-if="! props.value.length"
+            v-if="! props_row.value.length"
             label="N/D"
             class="text-caption"
             rounded
           />
 
           <q-badge
-            v-for="project in props.value"
+            v-for="project in props_row.value"
             :key="project"
             :label="project"
             class="text-caption"

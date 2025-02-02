@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, computed, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import type { QTableProps } from 'quasar';
 
   import formatDate from '@/hooks/formatDate';
@@ -56,7 +56,7 @@
   const deleteProjectModal = ref(DeleteProjectModal);
 
   import { useStore } from '@/store';
-  import { FETCH_PROJECTS, DELETE_PROJECT } from '@/store/types/actions';
+  import { FETCH_PROJECTS } from '@/store/types/actions';
 
   const store = useStore();
 

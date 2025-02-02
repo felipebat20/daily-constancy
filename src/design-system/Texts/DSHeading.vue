@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { useSlots, computed } from 'vue';
+  import { computed } from 'vue';
 
   const props = defineProps({
     level: {

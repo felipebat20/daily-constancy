@@ -40,7 +40,6 @@
 </template>
 
 <script lang="ts">
-  import { AxiosResponse } from 'axios';
   import { computed, defineComponent, ref, watch } from 'vue';
 
   import Timer from './Timer.vue';
@@ -51,7 +50,6 @@
     CREATE_NEW_TASK,
     FETCH_PROJECTS,
     FINISH_TASK_SESSION,
-    CREATE_TASK_SESSION
   } from '@/store/types/actions';
   import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
 
