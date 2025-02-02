@@ -87,11 +87,18 @@
 
       const stopTimer = (): void => {
         emit('timeIsFinished', timeInSeconds.value);
-        handleClearTimer();
+        handleTimeIsFinished();
       };
 
       const createTask = () => {
         emit('startTimer');
+      };
+
+      const handleTimeIsFinished = () => {
+        clearInterval(timer.value);
+        timer.value = 0;
+        timeInSeconds.value = 0;
+        document.title = 'Daily Constancy';
       };
 
       const startTimer = () => {
@@ -105,16 +112,9 @@
 
       onBeforeUnmount(() => {
         if (timer.value) {
-          stopTimer();
+          handleTimeIsFinished();
         }
       });
-
-      const handleClearTimer = () => {
-        clearInterval(timer.value);
-        timer.value = 0;
-        timeInSeconds.value = 0;
-        document.title = 'Daily Constancy';
-      };
 
       watch(active_task, (state, prev_state) => {
         if (state.id && state.id !== prev_state.id) {
@@ -124,7 +124,7 @@
         }
 
         if (! state.id) {
-          handleClearTimer();
+          handleTimeIsFinished();
         }
       });
 
