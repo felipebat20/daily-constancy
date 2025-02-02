@@ -23,14 +23,18 @@
         <q-td style="width: 170px">
           <div class="flex items-center gap-4 justify-end">
             <q-btn
-              color="primary"
+              class="button"
+              text-color="primary"
+              outline
               icon="edit"
               @click="handleEditProject(props.row)"
             />
 
             <q-btn
+              class="button"
               icon="delete"
-              color="red"
+              outline
+              text-color="red"
               @click="handleDeleteProject(props.row)"
             />
           </div>

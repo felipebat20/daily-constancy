@@ -10,9 +10,11 @@
       />
     </div>
 
-    <span class="days">
-      {{ offensive.days }}
-    </span>
+    <div>
+      <span class="days text-base">
+        {{ offensive.days }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -31,12 +33,15 @@
   .offensive {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: end;
     gap: 4px;
     font-size: 15px;
     font-weight: 700;
 
     &.on-fire { color: rgb(255, 171, 51); }
-    .days { margin-top: 2px; }
+    .days {
+      display: inline;
+      vertical-align: baseline;
+    }
   }
 </style>

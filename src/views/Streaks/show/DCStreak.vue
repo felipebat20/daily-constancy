@@ -34,11 +34,15 @@
 
       <div>
         <div class="q-pa-md">
-          <div class="calendar-container">
+          <div
+            class="calendar-container gap-4"
+            :class="{ 'justify-center': ! $q.screen.gt.xs }"
+          >
             <template v-if="request_pending">
               <DateSkeleton
                 v-for="n in 3"
                 :key="n"
+                :class="{ 'full-width': ! $q.screen.gt.xs }"
               />
             </template>
 
@@ -46,9 +50,11 @@
               <div
                 v-for="month_label in getDateLabels"
                 :key="month_label"
+                :class="{ 'w-full': ! $q.screen.gt.xs }"
               >
                 <q-date
                   v-model="getDays[month_label]"
+                  :class="{ 'full-width': ! $q.screen.gt.xs, 'no-shadow': ! $q.screen.gt.xs }"
                   multiple
                   today-btn
                   minimal
@@ -362,7 +368,6 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    gap: 10px;
     flex-wrap: wrap;
 
     > div {

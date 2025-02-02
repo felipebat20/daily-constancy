@@ -1,10 +1,14 @@
 <template>
-  <div class="card p-2 rounded">
-    <header class="card-header">
-      <p class="card-header-title">
-        <slot name="title" />
-      </p>
-    </header>
+  <q-card class="q-pa-sm">
+    <q-card-section class="q-pa-none">
+      <header class="card-header">
+        <p class="m-0 card-header-title">
+          <slot name="title" />
+        </p>
+      </header>
+    </q-card-section>
+
+    <q-separator />
 
     <div class="card-content p-2">
       <div class="content">
@@ -12,19 +16,17 @@
       </div>
     </div>
 
-    <footer class="card-footer mb-0 mt-auto">
+    <q-separator />
+
+    <q-card-actions class="justify-center q-px-md">
       <slot name="footer" />
-    </footer>
-  </div>
+    </q-card-actions>
+  </q-card>
 </template>
 
 <script setup lang="ts" />
 
 <style scoped>
-  .card {
-    background: #FAF0CA;
-    color: #000;
-  }
-
+  .card { color: #000; }
   .card-footer { border-color: #adb5bd; }
 </style>

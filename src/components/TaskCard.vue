@@ -1,7 +1,9 @@
 <template>
   <DSCard class="task-card">
     <template #title>
-      {{ task.description }}
+      <span class="text-base">
+        {{ task.description }}
+      </span>
     </template>
 
     <template #content>
@@ -28,58 +30,44 @@
     </template>
 
     <template #footer>
-      <div class="footer-container">
-        <div>
-          <q-btn
-            class="button"
-            color="white"
-            text-color="black"
-            :loading="isRequestPending(task)"
-            @click="handleInitTask(task)"
-          >
-            <span class="icon is-small">
-              <i :class="getTaskIcon(task)" />
-            </span>
+      <q-btn
+        class="button"
+        color="white"
+        text-color="primary"
+        :loading="isRequestPending(task)"
+        outline
+        :icon="getTaskIcon(task)"
+        @click="handleInitTask(task)"
+      >
+        <q-tooltip>
+          Play
+        </q-tooltip>
+      </q-btn>
 
-            <q-tooltip>
-              Play
-            </q-tooltip>
-          </q-btn>
-        </div>
+      <q-btn
+        class="button"
+        @click="handleEditButtonClick"
+        color="white"
+        text-color="green-5"
+        icon="edit"
+        outline
+      >
+        <q-tooltip>
+          Edit
+        </q-tooltip>
+      </q-btn>
 
-        <div>
-          <q-btn
-            class="button"
-            @click="handleEditButtonClick"
-            color="white"
-            text-color="black"
-          >
-            <span class="icon is-small">
-              <i class="fas fa-pencil-alt" />
-            </span>
-
-            <q-tooltip>
-              Edit
-            </q-tooltip>
-          </q-btn>
-        </div>
-
-        <div>
-          <q-btn
-            color="white"
-            text-color="negative"
-            @click="handleDeleteButtonClick"
-          >
-            <span class="icon is-small">
-              <i class="fas fa-trash" />
-            </span>
-
-            <q-tooltip>
-              Delete
-            </q-tooltip>
-          </q-btn>
-        </div>
-      </div>
+      <q-btn
+        color="white"
+        text-color="negative"
+        outline
+        icon="delete"
+        @click="handleDeleteButtonClick"
+      >
+        <q-tooltip>
+          Delete
+        </q-tooltip>
+      </q-btn>
     </template>
   </DSCard>
 
@@ -171,6 +159,7 @@
     display: flex;
     flex-direction: column;
   }
+
   .footer-container {
     display: flex;
     flex-direction: row;
