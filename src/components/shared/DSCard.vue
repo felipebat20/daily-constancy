@@ -2,9 +2,8 @@
   <q-card
     bordered
     :class="{ 'no-shadow': $q.dark.isActive }"
-    class="q-pa-sm"
   >
-    <q-card-section class="q-pa-none q-pb-sm q-px-none">
+    <q-card-section class="q-pa-sm h-full">
       <header class="card-header">
         <p class="m-0 card-header-title">
           <slot name="title" />
@@ -12,17 +11,17 @@
       </header>
     </q-card-section>
 
-    <q-separator class="margin-top-1" />
+    <q-separator class="margin-top-1 q-mx-sm" />
 
-    <div class="q-pa-none q-py-sm q-px-none">
+    <div class="q-pa-none q-py-sm q-px-none q-pb-sm q-px-sm">
       <div class="content">
         <slot name="content" />
       </div>
     </div>
 
-    <q-separator class="margin-top-1" />
+    <q-separator class="margin-top-1 q-mx-sm" />
 
-    <q-card-actions class="justify-center q-px-md">
+    <q-card-actions class="justify-center q-pb-sm q-px-sm">
       <slot name="footer" />
     </q-card-actions>
   </q-card>

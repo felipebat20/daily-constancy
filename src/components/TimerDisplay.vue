@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed } from 'vue';
   import { useFormatSecondsToNow } from '@/composables/formatTime';
 
   const props = defineProps({
@@ -30,7 +31,7 @@
     },
   });
 
-  const timer = useFormatSecondsToNow({ seconds: props.timeInSeconds });
+  const timer = computed(() => useFormatSecondsToNow({ seconds: props.timeInSeconds }));
 </script>
 
 <style scoped>
