@@ -13,7 +13,7 @@
 
     <q-separator class="margin-top-1 q-mx-sm" />
 
-    <div class="q-pa-none q-py-sm q-px-none q-pb-sm q-px-sm">
+    <div class="q-px-sm q-py-xs">
       <div class="content">
         <slot name="content" />
       </div>
