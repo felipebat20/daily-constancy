@@ -1,97 +1,85 @@
 <template>
-  <div class="row full-width">
-    <div class="col-12 full-width tables">
-      <q-table
-        v-for="(tasks_aggregate, index) in getTasksAggregate"
-        :key="index"
-        style="max-height: 400px; width: 100%"
-        flat
-        bordered
-        :title="tasks_aggregate[0]"
+  <div class="tasks-table">
+    <div
+      v-for="(tasks_aggregate, index) in getTasksAggregate"
+      :key="index"
+      class="tasks-table__group"
+    >
+      <h3 class="tasks-table__group-title">
+        {{ tasks_aggregate[0] }}
+      </h3>
+
+      <DSTable
         :rows="tasks_aggregate[1]"
-        class="my-sticky-header-table"
         :columns="columns"
-        row-key="id"
-        dense
-        virtual-scroll
-        v-model:pagination="pagination"
+        :loading="false"
         :rows-per-page-options="[0]"
+        dense
+        sticky-header
+        :max-height="'400px'"
+        class="tasks-table__table"
       >
         <template #body-cell-continue="props">
-          <q-td
-            key="continue"
-            :props="props"
-            style="width: 40px"
-          >
-            <q-btn
-              class="custom-border is-inline-block"
-              unelevated
+          <q-td :props="props">
+            <DSButton
               :loading="isRequestPending(props.row)"
+              :icon="getTaskIcon(props.row)"
+              variant="outline"
+              size="sm"
               @click="handleInitTask(props.row)"
-            >
-              <span class="icon is-small">
-                <i :class="getTaskIcon(props.row)" />
-              </span>
-            </q-btn>
+            />
           </q-td>
         </template>
 
         <template #body-cell-project="props">
-          <q-td
-            key="project"
-            :props="props"
-            style="width: 150px"
-          >
-            <q-badge
-              color="green"
-              rounded
-              class="py-1 px-2"
-            >
-              {{ props.row.project?.name || 'N/D' }}
-            </q-badge>
+          <q-td :props="props">
+            <DSBadge
+              v-if="props.row.project?.name"
+              :label="props.row.project.name"
+              variant="secondary"
+              size="sm"
+            />
+            <DSBadge
+              v-else
+              label="No project"
+              variant="info"
+              size="sm"
+            />
           </q-td>
         </template>
 
         <template #body-cell-total_time_spent="props">
-          <q-td
-            key="total_time_spent"
-            :props="props"
-          >
-            <q-badge
-              color="primary"
-              rounded
-              class="py-1 px-2"
-            >
-              {{ formatTimer(getTaskTime(props.row)) }}
-            </q-badge>
+          <q-td :props="props">
+            <DSBadge
+              :label="formatTimer(getTaskTime(props.row))"
+              variant="primary"
+              size="sm"
+            />
           </q-td>
         </template>
 
         <template #body-cell-actions="props">
-          <q-td
-            key="actions"
-            style="width: 100px"
-          >
-            <q-btn
-              class="custom-border is-inline-block"
-              color="primary"
-              unelevated
-              @click="selectTask(props.row)"
-            >
-              <span class="icon is-small">
-                <i class="fas fa-pencil-alt" />
-              </span>
-            </q-btn>
+          <q-td :props="props">
+            <div class="tasks-table__actions">
+              <DSButton
+                icon="edit"
+                variant="outline"
+                size="sm"
+                @click="selectTask(props.row)"
+                aria-label="Edit task"
+              />
 
-            <q-btn
-              class="button ml-2 is-danger"
-              color="red"
-              icon="delete"
-              @click="handleDeleteButtonClick(props.row)"
-            />
+              <DSButton
+                icon="delete"
+                variant="danger"
+                size="sm"
+                @click="handleDeleteButtonClick(props.row)"
+                aria-label="Delete task"
+              />
+            </div>
           </q-td>
         </template>
-      </q-table>
+      </DSTable>
     </div>
   </div>
 
@@ -107,175 +95,134 @@
 </template>
 
 <script setup lang="ts">
-  import type { QTableProps } from 'quasar';
-  import { ref, computed } from 'vue';
-  import { groupBy, orderBy } from 'lodash';
+import type { QTableProps } from 'quasar';
+import { ref, computed } from 'vue';
+import { groupBy, orderBy } from 'lodash';
 
-  import DeleteTaskModal from '@/components/tasks/partials/DeleteTaskModal.vue';
-  import EditTaskModal from '@/components/tasks/partials/EditTaskModal.vue';
+import DeleteTaskModal from '@/components/tasks/partials/DeleteTaskModal.vue';
+import EditTaskModal from '@/components/tasks/partials/EditTaskModal.vue';
 
-  import { useStore } from '@/store';
+import DSTable from '@/design-system/DSTable.vue';
+import DSButton from '@/design-system/DSButton.vue';
+import DSBadge from '@/design-system/DSBadge.vue';
 
-  import TaskInterface from '@/interfaces/Task.interface';
-  import formatTimer from '@/hooks/formatTimer';
+import { useStore } from '@/store';
 
-  import { CREATE_TASK_SESSION, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
-  import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
+import TaskInterface from '@/interfaces/Task.interface';
+import formatTimer from '@/hooks/formatTimer';
 
-  const store = useStore();
-  const selected_task = ref({} as TaskInterface);
-  const deleteTaskModal = ref(DeleteTaskModal);
-  const editTaskModal = ref(EditTaskModal);
+import { CREATE_TASK_SESSION, FINISH_TASK_SESSION, SET_ACTIVE_TASK } from '@/store/types/actions';
+import { NEW_ACTIVE_TASK } from '@/store/types/mutations';
 
-  const tasks = computed(() => store.state.task.tasks);
+const store = useStore();
+const selected_task = ref({} as TaskInterface);
+const deleteTaskModal = ref(DeleteTaskModal);
+const editTaskModal = ref(EditTaskModal);
 
-  const columns: QTableProps['columns'] = [
-    {
-      name: 'continue',
-      align: 'left',
-      label: '',
-      field: '',
-    },
-    {
-      name: 'description',
-      required: true,
-      label: 'Task',
-      align: 'left',
-      field: 'description',
-      sortable: true,
-      style: 'width: 100%',
-    },
-    {
-      name: 'project',
-      align: 'left',
-      label: 'Project',
-      field: '',
-      style: 'min-width: 250px',
-    },
-    {
-      name: 'total_time_spent',
-      label: 'Time spent',
-      align: 'left',
-      field: '',
-      style: 'min-width: 150px',
-    },
-    {
-      name: 'actions',
-      align: 'center',
-      label: '',
-      field: '',
-      sortable: true,
-    },
-  ];
+const tasks = computed(() => store.state.task.tasks);
 
-  const request_pending = ref([] as number[]);
+const columns: QTableProps['columns'] = [
+  {
+    name: 'continue',
+    align: 'left',
+    label: '',
+    field: '',
+  },
+  {
+    name: 'description',
+    required: true,
+    label: 'Task',
+    align: 'left',
+    field: 'description',
+    sortable: true,
+  },
+  {
+    name: 'project',
+    align: 'left',
+    label: 'Project',
+    field: '',
+  },
+  {
+    name: 'total_time_spent',
+    label: 'Time spent',
+    align: 'left',
+    field: '',
+  },
+  {
+    name: 'actions',
+    align: 'center',
+    label: '',
+    field: '',
+  },
+];
 
-  const pagination = ref({
-    rowsPerPage: 0
-  });
+const request_pending = ref([] as number[]);
 
-  const isRequestPending = (task: TaskInterface) => {
-    return request_pending.value.includes(task.id);
-  };
+const isRequestPending = (task: TaskInterface) => {
+  return request_pending.value.includes(task.id);
+};
 
-  const handleTask = async (task: TaskInterface) => {
-    if (task.lastSessionStartedAt) {
-      await store.dispatch(FINISH_TASK_SESSION, task);
+const handleTask = async (task: TaskInterface) => {
+  if (task.lastSessionStartedAt) {
+    await store.dispatch(FINISH_TASK_SESSION, task);
+    return store.commit(NEW_ACTIVE_TASK, {});
+  }
 
-      return store.commit(NEW_ACTIVE_TASK, {});
-    }
+  const new_task = await store.dispatch(CREATE_TASK_SESSION, task);
+  await store.dispatch(SET_ACTIVE_TASK, new_task);
+};
 
-    const new_task = await store.dispatch(CREATE_TASK_SESSION, task);
-    await store.dispatch(SET_ACTIVE_TASK, new_task);
-  };
+const handleInitTask = async (task: TaskInterface) => {
+  request_pending.value.push(task.id);
+  await handleTask(task);
+  request_pending.value = request_pending.value.filter((task_id: string | number) => task_id !== task.id);
+};
 
-  const handleInitTask = async (task: TaskInterface) => {
-    request_pending.value.push(task.id);
+const getTaskIcon = (task: TaskInterface) => {
+  return task.lastSessionStartedAt ? 'pause' : 'play_arrow';
+};
 
-    await handleTask(task);
+const getTaskTime = (task: TaskInterface) => {
+  return task.total_time_spent || task.time_spent || 0;
+};
 
-    request_pending.value = request_pending.value.filter((task_id: string | number) => task_id !== task.id);
-  };
+const selectTask = (task: TaskInterface) => {
+  editTaskModal.value.openModal(task);
+};
 
-  const getTaskIcon = (task: TaskInterface) => {
-    if (task.lastSessionStartedAt) {
-      return 'fas fa-pause';
-    }
+const getTasksAggregate = computed(() => {
+  const day = (task: TaskInterface) => new Date(task.createdAt || (+task.id)).toDateString();
+  return Object.entries(groupBy(orderBy(tasks.value, ['createdAt', 'id'], ['desc', 'desc']), day));
+});
 
-    return 'fas fa-play';
-  };
-
-  const getTaskTime = (task: TaskInterface) => {
-    return task.total_time_spent || task.time_spent || 0;
-  };
-
-  const selectTask = (task: TaskInterface) => {
-    editTaskModal.value.openModal(task);
-  };
-
-  const getTasksAggregate = computed(() => {
-    const day = (task: TaskInterface) => new Date(task.createdAt || (+task.id)).toDateString();
-
-    return Object.entries(groupBy(orderBy(tasks.value, ['createdAt', 'id'], ['desc', 'desc']), day));
-  });
-
-  const handleDeleteButtonClick = (task: TaskInterface) => {
-    deleteTaskModal.value.openModal(task);
-  };
+const handleDeleteButtonClick = (task: TaskInterface) => {
+  deleteTaskModal.value.openModal(task);
+};
 </script>
 
-<style lang="sass">
-.my-sticky-header-table
-  /* height or max-height is important */
-  max-height: 400px
-  background-color: var(--accent-background) !important
-  border-color: var(--border-color) !important
-  color: var(--text-primary) !important
+<style scoped lang="scss">
+.tasks-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 
-  .q-table__top,
-  .q-table__bottom,
-  thead tr:first-child th
-    /* bg color is important for th; just specify one */
-    background-color: var(--accent-background)
-    color: var(--text-primary)
-    border-color: var(--border-color) !important
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
 
-  thead tr th
-    position: sticky
-    z-index: 1
-  thead tr:first-child th
-    top: 0
+  &__group-title {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    padding: 0 var(--space-4);
+  }
 
-  /* this is when the loading indicator appears */
-  &.q-table--loading thead tr:last-child th
-    /* height of all previous header rows */
-    top: 48px
-
-  /* prevent scrolling behind sticky top row on focus */
-  tbody
-    /* height of all previous header rows */
-    scroll-margin-top: 48px
-
-  tr, td
-    border-color: var(--border-color) !important
-
-.tables
-  display: flex
-  gap: 10px
-  flex-direction: column
-
-.row-item
-  display: flex
-  align-items: center
-  height: 100%
-  width: 500px
-  white-space: pre-wrap
-
-.button
-  color: var(--text-primary)
-  background-color: var(--accent-background)
-  border-color: var(--border-color)
-
-.custom-border
-  border: 1px solid var(--border-color) !important
+  &__actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+}
 </style>

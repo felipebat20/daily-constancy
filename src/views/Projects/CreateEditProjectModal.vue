@@ -1,50 +1,28 @@
 <template>
-  <q-dialog
+  <DSModal
     v-model="show_modal"
-    persistent
+    :title="project.id ? 'Edit Project' : 'New Project'"
+    :loading="request_pending"
+    :confirm-label="project.id ? 'Save' : 'Create'"
+    @confirm="handleSubmit"
+    @cancel="handleCancel"
   >
-    <q-card :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }">
-      <q-card-section>
-        <div class="text-h6">
-          {{ project.id ? 'Edit project' : 'New project' }}
-        </div>
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        <q-input
-          v-model="project_name"
-          autofocus
-          label="Project name"
-          color="deep-orange-5"
-          :disable="request_pending"
-          @keyup.enter="handleSubmit"
-        />
-      </q-card-section>
-
-      <q-card-actions
-        align="right"
-        class="text-primary"
-      >
-        <q-btn
-          flat
-          label="Cancel"
-          no-caps
-          v-close-popup
-        />
-
-        <q-btn
-          :label="project.id ? 'Save' : 'Create project'"
-          no-caps
-          color="green-5"
-          :loading="request_pending"
-          @click="handleSubmit"
-        />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+    <template #body>
+      <DSTextField
+        v-model="project_name"
+        label="Project Name"
+        placeholder="Enter project name"
+        icon="folder"
+        autofocus
+        :disabled="request_pending"
+        @keyup.enter="handleSubmit"
+        aria-label="Project name"
+      />
+    </template>
+  </DSModal>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref, defineExpose } from 'vue';
 import type { Ref } from 'vue';
 import { useQuasar } from 'quasar';
@@ -55,18 +33,16 @@ import {
 } from '@/store/types/actions';
 
 import ProjectInterface from '@/interfaces/Project.interface';
+import DSModal from '@/design-system/DSModal.vue';
+import DSTextField from '@/design-system/DSTextField.vue';
 
 const store = useStore();
 const $q = useQuasar();
 
 const show_modal = ref(false);
-const project : Ref<ProjectInterface> = ref({} as ProjectInterface);
+const project: Ref<ProjectInterface> = ref({} as ProjectInterface);
 const project_name = ref('');
 const request_pending = ref(false);
-
-if (project.value) {
-  project_name.value = project.value.name;
-}
 
 const handleSubmit = async () => {
   if (!project_name.value) return;
@@ -77,7 +53,7 @@ const handleSubmit = async () => {
     if (project.value.id) {
       await store.dispatch(EDIT_PROJECT, {
         id: project.value.id,
-        name: project_name.value
+        name: project_name.value,
       });
     } else {
       await store.dispatch(CREATE_NEW_PROJECT, project_name.value);
@@ -96,6 +72,11 @@ const handleSubmit = async () => {
   } finally {
     request_pending.value = false;
   }
+};
+
+const handleCancel = () => {
+  project_name.value = '';
+  show_modal.value = false;
 };
 
 const showModal = (edit_project?: ProjectInterface) => {

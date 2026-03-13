@@ -1,33 +1,24 @@
 <template>
-  <div class="streaks">
-    <div class="heading-container py-2">
-      <Heading
-        level="h1"
-        class="text-2xl font-bold"
-      >
-        Your streaks
-      </Heading>
-
-      <q-btn
-        no-caps
-        label="Create new streak"
-        class="custom-border"
-        @click="handleCreateButtonClick"
-      >
-        <q-tooltip>
-          Create new streak
-        </q-tooltip>
-      </q-btn>
-    </div>
+  <div class="streaks-index">
+    <DSPageHeader
+      title="Your Streaks"
+    >
+      <template #right>
+        <DSButton
+          icon="add"
+          label="Create New Streak"
+          @click="handleCreateButtonClick"
+        />
+      </template>
+    </DSPageHeader>
 
     <div
       v-if="request_pending"
-      class="flex items-center justify-center"
+      class="streaks-index__loading"
     >
-      <QSpinnerFacebook
-        color="yellow"
-        background-color="purple"
-        size="140"
+      <q-spinner-gears
+        color="primary"
+        size="3rem"
       />
     </div>
 
@@ -40,46 +31,44 @@
 </template>
 
 <script setup lang="ts">
-  import { QSpinnerFacebook } from 'quasar';
-  import { computed, ref } from 'vue';
+import { computed, ref } from 'vue';
 
-  import StreaksTable from '@/components/streaks/DCStreaksTable.vue';
-  import DCStreaksCreate from '@/components/streaks/partials/DCStreaksCreate.vue';
+import StreaksTable from '@/components/streaks/DCStreaksTable.vue';
+import DCStreaksCreate from '@/components/streaks/partials/DCStreaksCreate.vue';
 
-  import { Heading } from '@/design-system/Texts';
+import DSPageHeader from '@/design-system/DSPageHeader.vue';
+import DSButton from '@/design-system/DSButton.vue';
 
-  import { useStore } from '@/store';
-  import { FETCH_STREAKS } from '@/store/types/actions';
+import { useStore } from '@/store';
+import { FETCH_STREAKS } from '@/store/types/actions';
 
-  const store = useStore();
-  const request_pending = computed(() => {
-    const { streak: streak_request_pending = {} } = store.state.requests_pending;
+const store = useStore();
+const request_pending = computed(() => {
+  const { streak: streak_request_pending = {} } = store.state.requests_pending;
+  return streak_request_pending.fetch_all;
+});
 
-    return streak_request_pending.fetch_all;
-  });
+store.dispatch(FETCH_STREAKS);
 
-  store.dispatch(FETCH_STREAKS);
+const streaks = computed(() => store.state.streak.streaks);
+const createStreakModal = ref(DCStreaksCreate);
 
-  const streaks = computed(() => store.state.streak.streaks);
-
-  const createStreakModal = ref(DCStreaksCreate);
-
-  const handleCreateButtonClick = () => createStreakModal.value.show_modal = true;
+const handleCreateButtonClick = () => {
+  createStreakModal.value.show_modal = true;
+};
 </script>
 
 <style scoped lang="scss">
-.streaks {
-  padding: 1.125rem;
+.streaks-index {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 
-  .heading-container {
+  &__loading {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    button { height: fit-content }
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12);
   }
-
-  .title { color: var(--text-primary); }
-  .custom-border { border: 1px solid var(--border-color); }
 }
 </style>

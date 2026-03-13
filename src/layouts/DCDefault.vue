@@ -1,20 +1,14 @@
 <template>
-  <main
-    class="is-flex is-flex-direction-row"
-    :class="{'dark-theme': dark_theme }"
-  >
-    <div
-      ref="side_bar"
-      class="content-side-bar"
-    >
-      <SideBar @on-switch-theme="switchDarkTheme" />
-    </div>
+  <main class="app-layout">
+    <aside class="app-sidebar">
+      <SideBar />
+    </aside>
 
     <div
-      class="content-side-bar active-tab"
+      class="app-content"
       :class="{
-        'margin-menu': $q.screen.gt.xs,
-        'mobile': ! $q.screen.gt.xs,
+        'app-content--desktop': $q.screen.gt.xs,
+        'app-content--mobile': ! $q.screen.gt.xs,
       }"
     >
       <Notification />
@@ -24,8 +18,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useQuasar } from 'quasar';
+  import { onMounted } from 'vue';
 
   import SideBar from '../components/SideBar.vue';
   import Notification from '../components/Notifications.vue';
@@ -33,47 +26,45 @@
   import { useStore } from '../store';
   import { VERIFY_API } from '../store/types/actions';
 
-  const dark_theme = ref(false);
-
   document.title = 'Daily Constancy';
+
   const store = useStore();
-  const $q = useQuasar();
 
-  store.dispatch(VERIFY_API);
-
-  const switchDarkTheme = (theme: boolean) => dark_theme.value = theme;
+  onMounted(() => {
+    store.dispatch(VERIFY_API);
+  });
 </script>
 
 <style scoped>
-  main {
+  .app-layout {
+    display: flex;
+    flex-direction: row;
     min-height: 100vh;
-    --bg-primary: #FFF;
-    --text-primary: #000;
-    --accent-background: #FFF;
-    --placeholder-color: rgba(54, 54, 54, .3);
-    --border-color: rgba(0, 0, 0, .12);
-  }
-
-  main.dark-theme {
-    --bg-primary: #181a1b;
-    --text-primary: #e8e6e3;
-    --border-color: rgba(140, 130, 115, 0.12);
-    --placeholder-color: rgb(232, 230, 227);
-    --accent-background: rgb(24, 26, 27)
-  }
-
-  .content-side-bar {
     background-color: var(--bg-primary);
     color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  .margin-menu {
-    padding-left: 4rem;
-    width: 100%;
+  .app-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 100;
   }
 
-  .active-tab { min-height: 100vh; }
-  .mobile {
+  .app-content {
+    flex: 1;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+  }
+
+  .app-content--desktop {
+    margin-left: 4rem;
+    padding: var(--space-6);
+  }
+
+  .app-content--mobile {
     width: 100%;
     padding-top: 56px;
     padding-bottom: 60px;
