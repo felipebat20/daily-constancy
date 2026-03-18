@@ -49,10 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
   stopRequestPending: false,
 });
 
-const emit = defineEmits<{
-  'timeIsFinished': [time: number];
-  'startTimer': [];
-}>();
+const emit = defineEmits(['timeIsFinished', 'startTimer']);
 
 const store = useStore();
 const timer = ref(0);
@@ -110,11 +107,18 @@ watch(active_task, (state, prev_state) => {
 .timer {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  background-color: var(--bg-secondary);
-  border-radius: var(--radius-md);
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+  border-radius: var(--radius-xl);
   border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base);
+
+  &:hover {
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-accent-focus);
+  }
 
   @media (min-width: 768px) {
     justify-content: space-between;
@@ -122,7 +126,14 @@ watch(active_task, (state, prev_state) => {
 
   &__actions {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--space-3);
+
+    :deep(.ds-button) {
+      min-width: 100px;
+      height: 44px;
+      font-weight: var(--font-semibold);
+      letter-spacing: 0.01em;
+    }
   }
 }
 </style>

@@ -1,11 +1,9 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
-  import { useQuasar } from 'quasar';
+  import { computed } from 'vue';
 
   import MenuItem from './MenuItem.vue';
   import { jwtToken } from '@/hooks/verify_api';
 
-  const $q = useQuasar();
   const user_is_authenticated = computed(() => !! jwtToken());
 
   const menuItems = computed(() => [

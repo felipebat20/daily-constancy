@@ -29,7 +29,7 @@
 import { computed } from 'vue';
 
 interface Props {
-  variant?: 'primary' | 'secondary' | 'danger' | 'warning' | 'outline' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'danger' | 'warning' | 'outline' | 'ghost' | 'success';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   disabled?: boolean;
@@ -38,6 +38,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  icon: '',
+  label: '',
   variant: 'primary',
   size: 'md',
   loading: false,
@@ -53,6 +55,7 @@ const getVariantColor = computed(() => {
   if (props.variant === 'danger') return 'negative';
   if (props.variant === 'warning') return 'warning';
   if (props.variant === 'secondary') return 'secondary';
+  if (props.variant === 'success') return 'positive';
   return 'primary';
 });
 
@@ -65,5 +68,55 @@ const getSize = computed(() => {
 const classes = computed(() => ({
   'q-px-md': props.size !== 'sm',
   'q-px-sm': props.size === 'sm',
+  'ds-button': true,
+  [`ds-button--${props.variant}`]: true,
+  [`ds-button--${props.size}`]: true,
 }));
 </script>
+
+<style scoped>
+.ds-button {
+  transition: all var(--transition-base);
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.01em;
+}
+
+.ds-button:not(.q-btn--disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ds-button:not(.q-btn--disabled):active {
+  transform: translateY(0);
+}
+
+.ds-button--primary {
+  background: linear-gradient(135deg, var(--primary-accent) 0%, var(--primary-accent-dark) 100%);
+}
+
+.ds-button--success {
+  background: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
+}
+
+.ds-button--danger {
+  background: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
+}
+
+.ds-button--secondary {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+}
+
+.ds-button--lg {
+  height: 48px;
+  font-size: var(--text-base);
+}
+
+.ds-button--md {
+  height: 40px;
+}
+
+.ds-button--sm {
+  height: 32px;
+  font-size: var(--text-sm);
+}
+</style>

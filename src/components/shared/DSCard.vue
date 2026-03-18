@@ -62,6 +62,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  title: '',
   flat: false,
   bordered: true,
   shadow: 'md',

@@ -42,7 +42,7 @@
     min-height: 100vh;
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color var(--transition-slow), color var(--transition-slow);
   }
 
   .app-sidebar {
@@ -56,17 +56,17 @@
   .app-content {
     flex: 1;
     min-height: 100vh;
-    transition: all 0.3s ease;
+    transition: all var(--transition-slow);
   }
 
   .app-content--desktop {
-    margin-left: 4rem;
-    padding: var(--space-6);
+    margin-left: 4.5rem;
+    padding: var(--space-8);
   }
 
   .app-content--mobile {
     width: 100%;
     padding-top: 56px;
-    padding-bottom: 60px;
+    padding-bottom: 64px;
   }
 </style>

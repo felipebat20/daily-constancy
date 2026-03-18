@@ -36,7 +36,7 @@
         :dense="dense"
       >
         <q-item-section>
-          <q-item-label>{{ scope.opt }}</q-item-label>
+          <q-item-label>{{ scope.opt[props.optionLabel] }}</q-item-label>
         </q-item-section>
       </q-item>
     </template>
@@ -52,9 +52,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-interface Props {
-  modelValue: any;
-  options: any[];
+interface Props<T = unknown> {
+  modelValue: T;
+  options: T[];
   label?: string;
   placeholder?: string;
   icon?: string;
@@ -74,6 +74,9 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  label: '',
+  placeholder: '',
+  icon: '',
   outlined: true,
   dense: true,
   disabled: false,
@@ -84,12 +87,12 @@ const props = withDefaults(defineProps<Props>(), {
   optionLabel: 'label',
   optionValue: 'value',
   error: false,
+  errorMessage: '',
+  helperText: '',
   size: 'md',
 });
 
-const emit = defineEmits<{
-  'update:modelValue': [value: any];
-}>();
+const emit = defineEmits(['update:modelValue']);
 
 const internalValue = computed({
   get: () => props.modelValue,
@@ -107,7 +110,62 @@ const classes = computed(() => ({
 <style scoped lang="scss">
 .ds-select {
   :deep(.q-field__control) {
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+  }
+
+  :deep(.q-field--outlined .q-field__control::before) {
+    border-color: var(--border-color);
+    transition: all var(--transition-base);
+  }
+
+  :deep(.q-field--focused .q-field__control::before) {
+    border-color: var(--primary-accent);
+    border-width: 2px;
+  }
+
+  :deep(.q-field__label) {
+    color: var(--text-secondary);
+    font-weight: var(--font-medium);
+    transition: all var(--transition-base);
+  }
+
+  :deep(.q-field__marginal) {
+    color: var(--text-secondary);
+  }
+
+  :deep(.q-field--focused .q-field__label) {
+    color: var(--primary-accent);
+  }
+
+  :deep(.q-field--dark) {
+    .q-field__control::before {
+      border-color: var(--border-color);
+    }
+  }
+
+  :deep(.q-field--dark.q-field--focused .q-field__control::before) {
+    border-color: var(--primary-accent);
+  }
+
+  :deep(.q-menu) {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    margin-top: 8px;
+  }
+
+  :deep(.q-item) {
+    border-radius: var(--radius-md);
+    margin: var(--space-1) var(--space-2);
+    transition: all var(--transition-fast);
+
+    &:hover {
+      background-color: var(--bg-secondary);
+    }
+  }
+
+  :deep(.q-item--active) {
+    background-color: var(--primary-accent-focus);
   }
 
   &--sm {

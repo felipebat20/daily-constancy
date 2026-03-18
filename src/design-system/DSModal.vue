@@ -72,6 +72,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  title: '',
+  message: '',
   persistent: false,
   maximized: false,
   loading: false,
@@ -79,12 +81,7 @@ const props = withDefaults(defineProps<Props>(), {
   hasFooter: true,
 });
 
-const emit = defineEmits<{
-  'update:modelValue': [value: boolean];
-  'confirm': [];
-  'cancel': [];
-  'hide': [];
-}>();
+const emit = defineEmits(['update:modelValue', 'confirm', 'cancel', 'hide']);
 
 const $q = useQuasar();
 

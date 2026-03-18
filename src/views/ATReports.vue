@@ -147,7 +147,7 @@ onMounted(async () => {
 .reports-page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-8);
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
@@ -155,6 +155,16 @@ onMounted(async () => {
   &__chart {
     width: 100%;
     height: 70vh;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+
+    &:hover {
+      box-shadow: var(--shadow-lg);
+    }
   }
 
   &__chart-content {

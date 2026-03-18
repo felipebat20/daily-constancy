@@ -24,7 +24,7 @@ interface ProjectOption {
 const store = useStore();
 const projects = computed(() => store.state.project.projects);
 
-const project_id = defineModel<number | null>('project_id', {
+const internalValue = defineModel<number | null>('project_id', {
   type: Number,
   required: true,
 });

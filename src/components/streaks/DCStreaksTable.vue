@@ -24,17 +24,19 @@
             <div class="streaks-table__badges">
               <DSBadge
                 v-if="! props_row.value.length"
-                label="N/A"
+                label="No projects"
                 variant="info"
                 size="sm"
+                outline
               />
 
               <DSBadge
-                v-for="project in props_row.value"
+                v-for="(project, index) in props_row.value"
                 :key="project"
                 :label="project"
-                variant="secondary"
+                :variant="getProjectVariant(index)"
                 size="sm"
+                class="streaks-table__project-badge"
               />
             </div>
           </q-td>
@@ -45,8 +47,9 @@
             <div class="streaks-table__actions">
               <DSButton
                 icon="visibility"
-                variant="outline"
+                variant="ghost"
                 size="sm"
+                class="streaks-table__action-btn"
                 @click="$router.push(`/streaks/${action_props.value}`)"
                 aria-label="View streak"
               />
@@ -55,6 +58,7 @@
                 icon="edit"
                 variant="secondary"
                 size="sm"
+                class="streaks-table__action-btn"
                 @click="handleEditStreakButtonClick(action_props.row)"
                 aria-label="Edit streak"
               />
@@ -63,6 +67,7 @@
                 icon="delete"
                 variant="danger"
                 size="sm"
+                class="streaks-table__action-btn"
                 @click="handleDeleteButtonClick(action_props.row)"
                 aria-label="Delete streak"
               />
@@ -109,17 +114,19 @@
               <div class="streaks-table__badges">
                 <DSBadge
                   v-if="! streak.projects.length"
-                  label="N/A"
+                  label="No projects"
                   variant="info"
                   size="sm"
+                  outline
                 />
 
                 <DSBadge
-                  v-for="project in streak.projects"
+                  v-for="(project, index) in streak.projects"
                   :key="project.name"
                   :label="project.name"
-                  variant="secondary"
+                  :variant="getProjectVariant(index)"
                   size="sm"
+                  class="streaks-table__project-badge"
                 />
               </div>
 
@@ -133,7 +140,9 @@
             <div class="streaks-table__card-actions">
               <DSButton
                 icon="visibility"
-                variant="outline"
+                variant="ghost"
+                size="sm"
+                class="streaks-table__action-btn"
                 @click="$router.push(`/streaks/${streak.id}`)"
                 aria-label="View streak"
               />
@@ -141,6 +150,8 @@
               <DSButton
                 icon="edit"
                 variant="secondary"
+                size="sm"
+                class="streaks-table__action-btn"
                 @click="handleEditStreakButtonClick(streak)"
                 aria-label="Edit streak"
               />
@@ -148,6 +159,8 @@
               <DSButton
                 icon="delete"
                 variant="danger"
+                size="sm"
+                class="streaks-table__action-btn"
                 @click="handleDeleteButtonClick(streak)"
                 aria-label="Delete streak"
               />
@@ -218,7 +231,6 @@ const columns: QTableProps['columns'] = [
     field: 'name',
     label: 'Name',
     align: 'left',
-    style: 'min-width: 200px',
   },
   {
     name: 'projects',
@@ -238,7 +250,8 @@ const columns: QTableProps['columns'] = [
     name: 'actions',
     field: 'id',
     label: '',
-    style: 'width: auto; min-width: 200px',
+    align: 'right',
+    style: 'width: 160px',
   },
 ];
 
@@ -249,6 +262,11 @@ const getStreakOffensive = (streak: StreakInterface) => {
 
 const handleDeleteButtonClick = (streak: StreakInterface) => deleteStreakModal.value.handleOpenModal(streak);
 const handleEditStreakButtonClick = (streak: StreakInterface) => editStreakModal.value.handleOpenModal(streak);
+
+const getProjectVariant = (index: number): 'primary' | 'secondary' | 'success' | 'warning' => {
+  const variants: Array<'primary' | 'secondary' | 'success' | 'warning'> = ['primary', 'secondary', 'success', 'warning'];
+  return variants[index % variants.length];
+};
 
 const pagination = ref({
   sortBy: 'desc',
@@ -316,18 +334,44 @@ const pagesNumber = computed(() => Math.ceil(rows.value.length / pagination.valu
   &__card-actions {
     display: flex;
     gap: var(--space-2);
-    justify-content: center;
+    justify-content: flex-end;
   }
 
   &__badges {
     display: flex;
     gap: var(--space-2);
     flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &__project-badge {
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
   }
 
   &__actions {
     display: flex;
     gap: var(--space-2);
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  &__action-btn {
+    transition: all 0.2s ease;
+    border-radius: var(--radius-md);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
   &__pagination {

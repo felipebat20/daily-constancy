@@ -62,13 +62,17 @@ const handleCreateButtonClick = () => {
 .streaks-index {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-8);
 
   &__loading {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: var(--space-12);
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+    min-height: 300px;
   }
 }
 </style>

@@ -33,6 +33,72 @@
         </div>
       </div>
 
+      <div class="streak-show__stats">
+        <DSCard class="streak-show__stat-card">
+          <div class="streak-show__stat-content">
+            <div class="streak-show__stat-icon">
+              <q-icon
+                name="local_fire_department"
+                size="32px"
+                color="warning"
+              />
+            </div>
+            <div class="streak-show__stat-info">
+              <span class="streak-show__stat-label">Current Streak</span>
+              <span class="streak-show__stat-value">{{ getCurrentStreak }} days</span>
+            </div>
+          </div>
+        </DSCard>
+
+        <DSCard class="streak-show__stat-card">
+          <div class="streak-show__stat-content">
+            <div class="streak-show__stat-icon">
+              <q-icon
+                name="emoji_events"
+                size="32px"
+                color="warning"
+              />
+            </div>
+            <div class="streak-show__stat-info">
+              <span class="streak-show__stat-label">Longest Streak</span>
+              <span class="streak-show__stat-value">{{ getLongestStreak }} days</span>
+            </div>
+          </div>
+        </DSCard>
+
+        <DSCard class="streak-show__stat-card">
+          <div class="streak-show__stat-content">
+            <div class="streak-show__stat-icon">
+              <q-icon
+                name="calendar_today"
+                size="32px"
+                color="primary"
+              />
+            </div>
+            <div class="streak-show__stat-info">
+              <span class="streak-show__stat-label">Active Days</span>
+              <span class="streak-show__stat-value">{{ getTotalActiveDays }} / {{ focus_summaries.length }}</span>
+            </div>
+          </div>
+        </DSCard>
+
+        <DSCard class="streak-show__stat-card">
+          <div class="streak-show__stat-content">
+            <div class="streak-show__stat-icon">
+              <q-icon
+                name="schedule"
+                size="32px"
+                color="info"
+              />
+            </div>
+            <div class="streak-show__stat-info">
+              <span class="streak-show__stat-label">Avg Focus Time</span>
+              <span class="streak-show__stat-value">{{ getAverageFocusTime }}</span>
+            </div>
+          </div>
+        </DSCard>
+      </div>
+
       <div class="streak-show__calendar">
         <template v-if="request_pending">
           <DateSkeleton
@@ -63,7 +129,16 @@
               color="primary"
               @update:model-value="handleUpdate"
               @click="handleUpdate"
-            />
+            >
+              <template #day="{ date }">
+                <q-icon
+                  v-if="getFocusTimeForDate(date)"
+                  name="fiber_manual_record"
+                  :style="getDayStyle(date)"
+                  size="10px"
+                />
+              </template>
+            </q-date>
           </div>
         </template>
       </div>
@@ -181,6 +256,37 @@ const openDayStreakModal = (params: { selected_date: string, focused_summary: Fo
   dayStreakModal.value.openModal(params);
 };
 
+const getFocusTimeForDate = (date: string): number | null => {
+  const summary = focus_summaries.value.find(s => {
+    const [year, month, day] = s.date.split('-').map(d => parseInt(d, 10));
+    const summary_date = new Date(year, month, day).getTime();
+    const [y, m, d] = date.split('/').map(d => parseInt(d, 10));
+    const target_date = new Date(y, m - 1, d).getTime();
+
+    return Math.abs(summary_date - target_date) < 86400001;
+  });
+
+  return summary ? summary.totalFocusTime : null;
+};
+
+const getDayStyle = (date: string) => {
+  const focus_time = getFocusTimeForDate(date);
+  if (!focus_time) return {};
+
+  const level = getActivityLevel(focus_time);
+  const colors = [
+    'var(--text-tertiary)',
+    'var(--success-light)',
+    'var(--success)',
+    'var(--info)',
+    'var(--primary)',
+  ];
+
+  return {
+    color: colors[level],
+  };
+};
+
 store.dispatch(FETCH_STREAK, streak_id);
 store.dispatch(FETCH_STREAK_FOCUS_SUMMARIES, streak_id);
 
@@ -237,7 +343,10 @@ const getDateLabels = computed(() => {
     months -= first_month_date.getMonth();
     months += last_month_date.getMonth();
 
-    return getMonthsByYearLabels(months + 1, first_month_date);
+    const total_months = months + 1;
+    const month_labels = getMonthsByYearLabels(total_months, first_month_date);
+
+    return month_labels.slice(0, 6);
   }
 
   return [];
@@ -296,6 +405,97 @@ const getSelectedFocusSummary = computed(() => {
     projects: [],
   } as FocusSummary;
 });
+
+const getCurrentStreak = computed(() => {
+  if (!focus_summaries.value.length) return 0;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  let streak = 0;
+  let check_date = today.getTime() - 86400000;
+
+  for (let i = 0; i < focus_summaries.value.length; i++) {
+    const summary_date = getDateFromSummary(focus_summaries.value[i].date).getTime();
+
+    if (Math.abs(summary_date - check_date) < 86400001) {
+      streak++;
+      check_date -= 86400000;
+    } else {
+      break;
+    }
+  }
+
+  return streak;
+});
+
+const getLongestStreak = computed(() => {
+  if (!focus_summaries.value.length) return 0;
+
+  let max_streak = 0;
+  let current_streak = 0;
+  let check_date = null;
+
+  for (let i = focus_summaries.value.length - 1; i >= 0; i--) {
+    const summary = focus_summaries.value[i];
+    const summary_date = getDateFromSummary(summary.date).getTime();
+
+    if (summary.totalFocusTime > 0) {
+      if (check_date === null) {
+        check_date = summary_date;
+        current_streak = 1;
+      } else if (Math.abs(summary_date - check_date) < 86401000) {
+        current_streak++;
+        check_date = summary_date;
+      } else {
+        max_streak = Math.max(max_streak, current_streak);
+        current_streak = 1;
+        check_date = summary_date;
+      }
+    } else {
+      max_streak = Math.max(max_streak, current_streak);
+      current_streak = 0;
+      check_date = null;
+    }
+  }
+
+  max_streak = Math.max(max_streak, current_streak);
+
+  return max_streak;
+});
+
+const getTotalActiveDays = computed(() => {
+  return focus_summaries.value.filter(summary => summary.totalFocusTime > 0).length;
+});
+
+const getAverageFocusTime = computed(() => {
+  const active_summaries = focus_summaries.value.filter(summary => summary.totalFocusTime > 0);
+  if (!active_summaries.length) return '0h 0m';
+
+  const total_seconds = active_summaries.reduce((sum, summary) => sum + summary.totalFocusTime, 0);
+  const average_seconds = total_seconds / active_summaries.length;
+
+  const hours = Math.floor(average_seconds / 3600);
+  const minutes = Math.floor((average_seconds % 3600) / 60);
+
+  return `${hours}h ${minutes}m`;
+});
+
+const getActivityLevel = (focusTime: number): number => {
+  const active_summaries = focus_summaries.value.filter(summary => summary.totalFocusTime > 0);
+  if (!active_summaries.length) return 0;
+
+  const focus_times = active_summaries.map(s => s.totalFocusTime).sort((a, b) => a - b);
+  const p25 = focus_times[Math.floor(focus_times.length * 0.25)] || 0;
+  const p50 = focus_times[Math.floor(focus_times.length * 0.5)] || 0;
+  const p75 = focus_times[Math.floor(focus_times.length * 0.75)] || 0;
+
+  if (focusTime >= p75) return 4;
+  if (focusTime >= p50) return 3;
+  if (focusTime >= p25) return 2;
+  if (focusTime > 0) return 1;
+  return 0;
+};
 </script>
 
 <style scoped lang="scss">
@@ -404,6 +604,50 @@ const getSelectedFocusSummary = computed(() => {
     font-size: var(--text-sm);
     color: var(--text-tertiary);
     font-style: italic;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-4);
+  }
+
+  &__stat-card {
+    border-radius: var(--radius-lg);
+    transition: transform var(--transition-base);
+    cursor: default;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  &__stat-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  &__stat-icon {
+    flex-shrink: 0;
+  }
+
+  &__stat-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  &__stat-label {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-weight: var(--font-medium);
+  }
+
+  &__stat-value {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
   }
 
   @media (max-width: 1024px) {

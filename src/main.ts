@@ -6,6 +6,7 @@ import App from './App.vue';
 import './registerServiceWorker';
 import './index.css';
 import './styles/design-tokens.css';
+import './styles/animations.css';
 
 import router from './router';
 import { store, key } from './store';

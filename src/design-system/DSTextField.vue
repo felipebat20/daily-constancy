@@ -66,6 +66,9 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  label: '',
+  placeholder: '',
+  icon: '',
   type: 'text',
   outlined: true,
   dense: true,
@@ -73,13 +76,12 @@ const props = withDefaults(defineProps<Props>(), {
   readonly: false,
   clearable: false,
   error: false,
+  errorMessage: '',
+  helperText: '',
   size: 'md',
 });
 
-const emit = defineEmits<{
-  'update:modelValue': [value: string | number];
-  'clear': [];
-}>();
+const emit = defineEmits(['update:modelValue', 'clear']);
 
 const internalValue = computed({
   get: () => props.modelValue,
@@ -102,7 +104,42 @@ const classes = computed(() => ({
 <style scoped lang="scss">
 .ds-textfield {
   :deep(.q-field__control) {
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+  }
+
+  :deep(.q-field--outlined .q-field__control::before) {
+    border-color: var(--border-color);
+    transition: all var(--transition-base);
+  }
+
+  :deep(.q-field--focused .q-field__control::before) {
+    border-color: var(--primary-accent);
+    border-width: 2px;
+  }
+
+  :deep(.q-field__label) {
+    color: var(--text-secondary);
+    font-weight: var(--font-medium);
+    transition: all var(--transition-base);
+  }
+
+  :deep(.q-field__marginal) {
+    color: var(--text-secondary);
+  }
+
+  :deep(.q-field--focused .q-field__label) {
+    color: var(--primary-accent);
+  }
+
+  :deep(.q-field--dark) {
+    .q-field__control::before {
+      border-color: var(--border-color);
+    }
+  }
+
+  :deep(.q-field--dark.q-field--focused .q-field__control::before) {
+    border-color: var(--primary-accent);
   }
 
   &--sm {

@@ -62,25 +62,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    color: white;
-    transition: all 0.2s ease;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    color: rgba(255, 255, 255, 0.7);
+    transition: all var(--transition-base);
     text-decoration: none;
+    position: relative;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 255, 255, 0.15);
+      color: white;
+      transform: translateY(-2px);
     }
 
     &--active {
-      background-color: #027BE3;
-      box-shadow: 0 2px 8px rgba(2, 123, 227, 0.4);
+      background: linear-gradient(135deg, var(--primary-accent) 0%, var(--primary-accent-dark) 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+
+      :deep(.q-icon) {
+        transform: scale(1.1);
+      }
     }
 
     &:focus-visible {
       outline: 2px solid white;
       outline-offset: 2px;
+    }
+
+    :deep(.q-icon) {
+      transition: transform var(--transition-base);
     }
   }
 </style>

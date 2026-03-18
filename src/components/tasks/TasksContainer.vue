@@ -93,9 +93,8 @@ import DSTextField from '@/design-system/DSTextField.vue';
 import DSEmptyState from '@/design-system/DSEmptyState.vue';
 import DSButton from '@/design-system/DSButton.vue';
 
-import TaskInterface from '@/interfaces/Task.interface';
 import { useStore } from '@/store';
-import { FETCH_TASKS, UPDATE_TASK } from '@/store/types/actions';
+import { FETCH_TASKS } from '@/store/types/actions';
 
 import {
   isGridLayout,
@@ -110,9 +109,6 @@ const task_filter = ref('');
 const is_grid_layout = ref(isGridLayout());
 const request_pending = computed(() => store.state.requests_pending.tasks?.fetch_user_tasks);
 
-const projects = computed(() => store.state.project.projects);
-const project_id = ref(0);
-
 watch(task_filter, debounce(function () {
   store.dispatch(FETCH_TASKS, task_filter.value);
 }, 700));
@@ -124,26 +120,6 @@ const tasks = computed(() => store.state.task.tasks);
 const getIsGridLayout = computed(() => {
   return is_grid_layout.value && $q.screen.gt.xs;
 });
-
-const selected_task = ref<TaskInterface | null>(null);
-
-const updateSelectedTask = (task: TaskInterface): void => {
-  project_id.value = task.project?.id || 0;
-  selected_task.value = task;
-};
-
-const clearSelectedTask = (): void => {
-  selected_task.value = null;
-};
-
-const updateTask = () => {
-  const project = projects.value.find(proj => proj.id === project_id.value);
-
-  return store.dispatch(UPDATE_TASK, {
-    ...selected_task.value,
-    project,
-  }).then(() => clearSelectedTask());
-};
 
 const updateLayout = () => {
   if (isGridLayout()) {
@@ -167,12 +143,17 @@ const scrollToForm = () => {
 .tasks-container {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-8);
 
   &__toolbar {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
   }
 
   &__search {
@@ -182,6 +163,15 @@ const scrollToForm = () => {
 
   &__view-toggle {
     flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+
+    &:hover {
+      background-color: var(--bg-secondary);
+      transform: translateY(-2px);
+    }
   }
 
   &__loading {
@@ -195,7 +185,7 @@ const scrollToForm = () => {
     &--cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(327px, 1fr));
-      gap: var(--space-4);
+      gap: var(--space-5);
     }
 
     &--table {

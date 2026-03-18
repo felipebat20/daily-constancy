@@ -76,7 +76,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import TimerDisplay from '@/components/TimerDisplay.vue';
 import DeleteTaskModal from '@/components/tasks/partials/DeleteTaskModal.vue';
 import EditTaskModal from '@/components/tasks/partials/EditTaskModal.vue';
 import DSCard from './shared/DSCard.vue';
@@ -143,24 +142,31 @@ const getTaskTime = (task: TaskInterface) => {
 .task-card {
   display: flex;
   flex-direction: column;
+  transition: all var(--transition-base);
+
+  &:hover {
+    transform: translateY(-4px);
+  }
 
   &__description {
-    font-size: var(--text-base);
-    font-weight: var(--font-medium);
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
     color: var(--text-primary);
+    letter-spacing: -0.01em;
+    line-height: 1.4;
   }
 
   &__info {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-4);
   }
 
   &__info-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   &__info-label {
@@ -172,16 +178,19 @@ const getTaskTime = (task: TaskInterface) => {
   &__timer {
     display: flex;
     align-items: center;
-    gap: var(--space-1);
-    font-size: var(--text-sm);
-    font-weight: var(--font-semibold);
-    color: var(--text-primary);
+    gap: var(--space-2);
+    font-size: var(--text-base);
+    font-weight: var(--font-bold);
+    color: var(--primary);
     font-variant-numeric: tabular-nums;
+    background-color: var(--primary-focus);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-md);
   }
 
   &__actions {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--space-3);
     justify-content: center;
   }
 }

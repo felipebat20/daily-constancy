@@ -25,8 +25,9 @@
           <div class="projects-list__actions">
             <DSButton
               icon="edit"
-              variant="outline"
+              variant="secondary"
               size="sm"
+              class="projects-list__action-btn"
               @click="handleEditProject(props.row)"
               aria-label="Edit project"
             />
@@ -35,6 +36,7 @@
               icon="delete"
               variant="danger"
               size="sm"
+              class="projects-list__action-btn"
               @click="handleDeleteProject(props.row)"
               aria-label="Delete project"
             />
@@ -86,12 +88,14 @@ const columns: QTableProps['columns'] = [
     label: 'Created at',
     align: 'left',
     sortable: true,
+    style: 'width: 180px',
   },
   {
     name: 'actions',
     field: 'id',
     label: '',
-    align: 'center',
+    align: 'right',
+    style: 'width: 160px',
   },
 ];
 
@@ -113,11 +117,31 @@ const handleCreateProject = () => {
 .projects-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-8);
+
+  &__table {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
 
   &__actions {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--space-3);
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  &__action-btn {
+    transition: all var(--transition-base);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 }
 </style>

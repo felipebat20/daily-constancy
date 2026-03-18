@@ -33,6 +33,8 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface Props {
   title?: string;
   size?: 'sm' | 'md' | 'lg';
@@ -40,6 +42,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  title: '',
   size: 'md',
   bordered: false,
 });

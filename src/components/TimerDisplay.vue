@@ -32,21 +32,32 @@ const timer = computed(() => useFormatSecondsToNow({ seconds: props.timeInSecond
 .timer-display {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  background-color: var(--bg-primary);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--primary-accent-focus);
+  box-shadow: var(--shadow-primary-accent);
+  transition: all var(--transition-base);
 
   &__icon {
-    color: var(--primary);
+    color: var(--primary-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    background-color: var(--primary-accent-focus);
   }
 
   &__time {
-    font-size: var(--text-lg);
-    font-weight: var(--font-semibold);
-    color: var(--text-primary);
+    font-size: var(--text-3xl);
+    font-weight: var(--font-extrabold);
+    color: var(--primary);
     font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 }
 </style>

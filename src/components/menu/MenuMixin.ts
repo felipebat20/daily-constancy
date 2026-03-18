@@ -1,9 +1,10 @@
 import { useRoute, useRouter } from 'vue-router';
 
+import { useQuasar } from 'quasar';
 import { jwt } from '@/static/storage-keys';
 
 export function handleUserLogout() {
-  const logout = ($q: any) => {
+  const logout = ($q: ReturnType<typeof useQuasar>) => {
     const route = useRoute();
     const router = useRouter();
 

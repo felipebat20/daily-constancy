@@ -35,6 +35,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  label: '',
+  icon: '',
   variant: 'primary',
   size: 'md',
   outline: false,
@@ -78,8 +80,17 @@ const classes = computed(() => ({
 
 <style scoped lang="scss">
 .ds-badge {
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-xs);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
   &__label {
-    font-weight: var(--font-medium);
+    font-weight: var(--font-semibold);
+    letter-spacing: 0.01em;
   }
 }
 </style>

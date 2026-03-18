@@ -39,7 +39,7 @@
 import { computed } from 'vue';
 
 import { useStore } from '@/store';
-import { Notification as NotificationInterface, NotificationType } from '@/interfaces/Notification.interface';
+import { NotificationType } from '@/interfaces/Notification.interface';
 import { DELETE_NOTIFICATION } from '@/store/types/mutations';
 
 const store = useStore();

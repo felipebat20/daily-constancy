@@ -31,14 +31,15 @@ const $q = useQuasar();
 <style scoped lang="scss">
 .tasks-page {
   display: flex;
-  gap: var(--space-6);
+  gap: var(--space-8);
   max-width: 100%;
+  padding-bottom: var(--space-8);
 
   &__main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    gap: var(--space-8);
     min-width: 0;
   }
 
@@ -47,11 +48,18 @@ const $q = useQuasar();
   }
 
   &__sidebar {
-    width: 368px;
+    width: 400px;
     flex-shrink: 0;
 
     :deep(.q-card) {
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      transition: all var(--transition-base);
+
+      &:hover {
+        box-shadow: var(--shadow-xl);
+      }
     }
   }
 }
