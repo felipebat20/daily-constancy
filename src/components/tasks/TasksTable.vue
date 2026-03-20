@@ -1,7 +1,96 @@
 <template>
   <div class="tasks-table">
     <div
-      v-for="(tasks_aggregate, index) in getTasksAggregate"
+      v-if="tasksInProgress.length > 0"
+      class="tasks-table__group"
+    >
+      <h3 class="tasks-table__group-title tasks-table__group-title--in-progress">
+        Currently In Progress
+      </h3>
+
+      <DSTable
+        :rows="tasksInProgress"
+        :columns="columns"
+        :loading="false"
+        :rows-per-page-options="[0]"
+        dense
+        sticky-header
+        :max-height="'400px'"
+        class="tasks-table__table"
+      >
+        <template #body-cell-continue="props">
+          <q-td :props="props">
+            <DSButton
+              :loading="isRequestPending(props.row)"
+              :icon="getTaskIcon(props.row)"
+              variant="ghost"
+              size="sm"
+              class="tasks-table__action-btn"
+              @click="handleInitTask(props.row)"
+              aria-label="Play/Pause task"
+            />
+          </q-td>
+        </template>
+
+        <template #body-cell-project="props">
+          <q-td :props="props">
+            <div class="tasks-table__badges">
+              <DSBadge
+                v-if="props.row.project?.name"
+                :label="props.row.project.name"
+                :variant="getProjectVariant(0)"
+                size="sm"
+                class="tasks-table__project-badge"
+              />
+              <DSBadge
+                v-else
+                label="No project"
+                variant="info"
+                size="sm"
+                outline
+              />
+            </div>
+          </q-td>
+        </template>
+
+        <template #body-cell-actions="props">
+          <q-td :props="props">
+            <div class="tasks-table__actions">
+              <DSButton
+                icon="edit"
+                variant="secondary"
+                size="sm"
+                class="tasks-table__action-btn"
+                @click="selectTask(props.row)"
+                aria-label="Edit task"
+              />
+
+              <DSButton
+                icon="delete"
+                variant="danger"
+                size="sm"
+                class="tasks-table__action-btn"
+                @click="handleDeleteButtonClick(props.row)"
+                aria-label="Delete task"
+              />
+            </div>
+          </q-td>
+        </template>
+
+        <template #body-cell-total_time_spent="props">
+          <q-td :props="props">
+            <DSBadge
+              :label="formatTimer(getTaskTime(props.row))"
+              variant="primary"
+              size="sm"
+            />
+          </q-td>
+        </template>
+      </DSTable>
+    </div>
+
+    <div
+      v-for="(tasks_aggregate, index) in getTasksByDate"
       :key="index"
       class="tasks-table__group"
     >
@@ -203,9 +292,26 @@ const selectTask = (task: TaskInterface) => {
   editTaskModal.value.openModal(task);
 };
 
-const getTasksAggregate = computed(() => {
+const tasksInProgress = computed(() => {
+  return orderBy(
+    tasks.value.filter((task: TaskInterface) => task.lastSessionStartedAt),
+    ['createdAt', 'id'],
+    ['desc', 'desc']
+  );
+});
+
+const getTasksByDate = computed(() => {
   const day = (task: TaskInterface) => new Date(task.createdAt || (+task.id)).toDateString();
-  return Object.entries(groupBy(orderBy(tasks.value, ['createdAt', 'id'], ['desc', 'desc']), day));
+  return Object.entries(
+    groupBy(
+      orderBy(
+        tasks.value.filter((task: TaskInterface) => !task.lastSessionStartedAt),
+        ['createdAt', 'id'],
+        ['desc', 'desc']
+      ),
+      day
+    )
+  );
 });
 
 const handleDeleteButtonClick = (task: TaskInterface) => {
@@ -237,6 +343,10 @@ const getProjectVariant = (index: number): 'primary' | 'secondary' | 'success' |
     color: var(--text-primary);
     padding: 0 var(--space-4);
     letter-spacing: -0.01em;
+
+    &--in-progress {
+      color: var(--color-primary);
+    }
   }
 
   &__table {

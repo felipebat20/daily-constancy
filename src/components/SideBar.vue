@@ -117,6 +117,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, onBeforeMount } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
   import { useQuasar } from 'quasar';
 
   import MenuIndex from '@/components/menu/MenuIndex.vue';
@@ -130,8 +131,10 @@
     components: { MenuIndex },
 
     setup() {
-      const { logout } = handleUserLogout();
       const $q = useQuasar();
+      const route = useRoute();
+      const router = useRouter();
+      const { logout } = handleUserLogout();
       const user_is_authenticated = ref(!! jwtToken());
 
       onBeforeMount(() => {
@@ -153,7 +156,7 @@
       };
 
       const handleLogout = () => {
-        logout($q);
+        logout($q, route, router);
       };
 
       return {

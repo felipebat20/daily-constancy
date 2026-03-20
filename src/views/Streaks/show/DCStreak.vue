@@ -99,6 +99,33 @@
         </DSCard>
       </div>
 
+      <div
+        v-if="total_months > 6"
+        class="streak-show__pagination"
+      >
+        <DSButton
+          variant="ghost"
+          icon="chevron_left"
+          :disabled="pagination_offset <= 0"
+          @click="pagination_offset = Math.max(0, pagination_offset - 6)"
+        >
+          Previous 6 Months
+        </DSButton>
+
+        <span class="streak-show__pagination-info">
+          Displaying {{ Math.min(total_months, pagination_offset + 1) }}-{{ Math.min(total_months, pagination_offset + 6) }} of {{ total_months }} months
+        </span>
+
+        <DSButton
+          variant="ghost"
+          icon="chevron_right"
+          :disabled="pagination_offset + 6 >= total_months"
+          @click="pagination_offset = Math.min(total_months - 6, pagination_offset + 6)"
+        >
+          Next 6 Months
+        </DSButton>
+      </div>
+
       <div class="streak-show__calendar">
         <template v-if="request_pending">
           <DateSkeleton
@@ -110,7 +137,7 @@
 
         <template v-else>
           <div
-            v-for="month_label in getDateLabels"
+            v-for="month_label in getVisibleDateLabels"
             :key="month_label"
             class="streak-show__calendar-month"
           >
@@ -228,7 +255,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { groupBy } from 'lodash';
 
 import DayStreakModal from './DayStreakModal.vue';
@@ -295,8 +322,14 @@ const streak = computed(() => store.state.streak.streak);
 
 const days_for_get_days = ref({} as { [key: string]: string });
 const getDays = computed(() => {
-  getDateLabels.value.forEach(value => Object.assign(days_for_get_days.value, { [value]: getDaysLabels(value) }));
+  getVisibleDateLabels.value.forEach(value => Object.assign(days_for_get_days.value, { [value]: getDaysLabels(value) }));
   return days_for_get_days.value;
+});
+
+const pagination_offset = ref(0);
+
+watch(pagination_offset, () => {
+  days_for_get_days.value = {};
 });
 
 const getDaysLabels = (month_label: string) => {
@@ -346,10 +379,18 @@ const getDateLabels = computed(() => {
     const total_months = months + 1;
     const month_labels = getMonthsByYearLabels(total_months, first_month_date);
 
-    return month_labels.slice(0, 6);
+    return month_labels.reverse();
   }
 
   return [];
+});
+
+const total_months = computed(() => {
+  return getDateLabels.value.length;
+});
+
+const getVisibleDateLabels = computed(() => {
+  return getDateLabels.value.slice(pagination_offset.value, pagination_offset.value + 6);
 });
 
 const getMonthsByYearLabels = (months: number, first_month_date: Date) => {
@@ -535,6 +576,21 @@ const getActivityLevel = (focusTime: number): number => {
   &__title--loading {
     display: flex;
     gap: var(--space-3);
+  }
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+  }
+
+  &__pagination-info {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
   }
 
   &__calendar {
