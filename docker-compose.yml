@@ -1,8 +1,6 @@
-version: '3'
-
 services:
   app:
-    image: node:20.15.0-bullseye
+    image: node:24-bullseye
     container_name: dc-frontend
     command: npm run serve
     working_dir: /var/www/app

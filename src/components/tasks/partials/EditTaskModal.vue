@@ -1,114 +1,106 @@
 <template>
-  <q-dialog
+  <DSModal
     v-model="show_modal"
-    :show="show_modal"
+    title="Edit Task"
+    :loading="request_pending"
+    confirm-label="Save"
+    @confirm="updateTask"
+    @cancel="closeModal"
   >
-    <q-card
-      :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }"
-      class="column"
-    >
-      <q-card-section class="row items-center q-pb-md q-pt-sm">
-        <p class="text-base m-0">
-          Edit your task
-        </p>
-
-        <q-space />
-
-        <q-btn
-          icon="close"
-          flat
-          round
-          dense
-          v-close-popup
-        />
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        <q-input
+    <template #body>
+      <div class="edit-task-modal__fields">
+        <DSTextField
           v-model="task.description"
-          type="text"
           label="Description"
-          class="input"
-          id="projectName"
+          placeholder="Enter task description"
+          icon="task_alt"
           autofocus
-          dense
-          outlined
+          aria-label="Task description"
         />
-      </q-card-section>
 
-      <q-card-section class="q-pt-none">
-        <ProjectsSelect
+        <DSSelect
           v-model="project_id"
-          :project_id="project_id"
+          :options="parsedProjects"
+          label="Project"
+          icon="folder"
+          clearable
+          aria-label="Select project"
         />
-      </q-card-section>
-
-      <q-card-actions align="right">
-        <q-btn
-          no-caps
-          class="button"
-          @click="closeModal"
-        >
-          Cancel
-        </q-btn>
-
-        <q-btn
-          color="green-5"
-          :loading="request_pending"
-          no-caps
-          @click="updateTask"
-        >
-          Save task
-        </q-btn>
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+      </div>
+    </template>
+  </DSModal>
 </template>
 
 <script lang="ts" setup>
-  import { defineExpose, ref, computed } from 'vue';
-  import type { Ref } from 'vue';
+import { defineExpose, ref, computed } from 'vue';
+import type { Ref } from 'vue';
 
-  import TaskInterface from '@/interfaces/Task.interface';
-  import ProjectsSelect from '@/components/shared/ProjectsSelect.vue';
+import TaskInterface from '@/interfaces/Task.interface';
 
-  import { useStore } from '@/store';
-  import { UPDATE_TASK }  from '@/store/types/actions';
+import DSModal from '@/design-system/DSModal.vue';
+import DSTextField from '@/design-system/DSTextField.vue';
+import DSSelect from '@/design-system/DSSelect.vue';
 
-  const show_modal = ref(false);
+import { useStore } from '@/store';
+import { UPDATE_TASK } from '@/store/types/actions';
 
-  const store = useStore();
-  const project_id = ref(0);
+interface ProjectOption {
+  label: string;
+  value: number | null;
+}
 
-  const task: Ref<TaskInterface> = ref({} as TaskInterface);
-  const request_pending = ref(false);
+const store = useStore();
+const show_modal = ref(false);
+const project_id = ref<number | null>(null);
 
-  const projects = computed(() => store.state.project.projects);
-  const openModal = (update_task: TaskInterface) => {
-    task.value = { ...update_task};
-    project_id.value = update_task.project?.id;
+const task: Ref<TaskInterface> = ref({} as TaskInterface);
+const request_pending = ref(false);
 
-    return show_modal.value = true;
-  };
+const projects = computed(() => store.state.project.projects);
 
-  const closeModal = () => show_modal.value = false;
+const parsedProjects = computed<ProjectOption[]>(() => [
+  { label: 'No project', value: null },
+  ...projects.value.map((project) => ({
+    label: project.name,
+    value: project.id,
+  })),
+]);
 
-  const updateTask = async () => {
-    request_pending.value = true;
-    const project = projects.value.find(proj => proj.id === project_id.value);
+const openModal = (update_task: TaskInterface) => {
+  task.value = { ...update_task };
+  project_id.value = update_task.project?.id || null;
+  return show_modal.value = true;
+};
 
-    await store.dispatch(UPDATE_TASK, {
-      ...task.value,
-      project,
-    });
+const closeModal = () => {
+  show_modal.value = false;
+};
 
-    request_pending.value = false;
+const updateTask = async () => {
+  request_pending.value = true;
+  const project = projects.value.find(proj => proj.id === project_id.value);
 
-    return closeModal();
-  };
-
-  defineExpose({
-    openModal,
-    closeModal,
+  await store.dispatch(UPDATE_TASK, {
+    ...task.value,
+    project,
   });
+
+  request_pending.value = false;
+  return closeModal();
+};
+
+defineExpose({
+  openModal,
+  closeModal,
+});
 </script>
+
+<style scoped lang="scss">
+.edit-task-modal {
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+}
+</style>

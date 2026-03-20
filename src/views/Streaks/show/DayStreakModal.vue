@@ -1,132 +1,179 @@
 <template>
-  <q-dialog v-model="show_modal">
-    <q-card :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }">
-      <q-card-section class="q-pb-none">
-        <div class="flex justify-between items-center">
-          <span class="text-h6">
-            Day: {{ getFormattedDate }}
-          </span>
-
-          <q-space />
-
-          <q-btn
-            icon="close"
-            flat
-            class="q-pa-none"
-            v-close-popup
-          />
-        </div>
-      </q-card-section>
-
-      <q-card-section class="q-pb-none">
-        <p class="m-0 text-md">
-          Total time focused: {{ getFormattedDuration }}
+  <DSModal
+    v-model="show_modal"
+    :title="`Day: ${getFormattedDate}`"
+    :has-footer="false"
+  >
+    <template #body>
+      <div class="day-streak-modal__summary">
+        <p class="day-streak-modal__summary-item">
+          <strong>Total time focused:</strong>
+          <span>{{ getFormattedDuration }}</span>
         </p>
 
-        <p class="m-0 text-sm">
-          Total tasks: {{ focusedSummary.totalTasks }}
+        <p class="day-streak-modal__summary-item">
+          <strong>Total tasks:</strong>
+          <span>{{ focusedSummary.totalTasks }}</span>
         </p>
 
-        <p class="m-0 text-sm">
-          Total projects: {{ focusedSummary.totalProjects }}
+        <p class="day-streak-modal__summary-item">
+          <strong>Total projects:</strong>
+          <span>{{ focusedSummary.totalProjects }}</span>
         </p>
-      </q-card-section>
+      </div>
 
-      <q-card-section class="q-pb-none">
-        <p class="m-0 text-14px">
+      <div class="day-streak-modal__section">
+        <h4 class="day-streak-modal__section-title">
           Tasks of the day:
-        </p>
+        </h4>
 
-        <ul class="tasks">
+        <ul class="day-streak-modal__list">
           <template v-if="focusedSummary.tasks.length">
             <li
               v-for="task in focusedSummary.tasks"
               :key="task.id"
-              class="task"
             >
-              <span>
-                - {{ task.description }}
-              </span>
+              <span>{{ task.description }}</span>
             </li>
           </template>
 
           <template v-else>
-            <div>
-              <span>
-                Not found tasks for this day
-              </span>
-            </div>
+            <li class="day-streak-modal__empty">
+              Not found tasks for this day
+            </li>
           </template>
         </ul>
-      </q-card-section>
+      </div>
 
-      <q-card-section>
-        <p class="m-0 pb-1 text-14px">
+      <div class="day-streak-modal__section">
+        <h4 class="day-streak-modal__section-title">
           Projects worked in this day:
-        </p>
+        </h4>
 
-        <div class="projects">
+        <div class="day-streak-modal__badges">
           <template v-if="focusedSummary.projects.length">
-            <q-badge
+            <DSBadge
               v-for="project in focusedSummary.projects"
               :key="project.name"
               :label="project.name"
-              class="text-caption"
-              color="positive"
-              rounded
+              variant="secondary"
             />
           </template>
 
-          <div v-else>
-            <span>
+          <template v-else>
+            <span class="day-streak-modal__empty">
               Not found projects for this day
             </span>
-          </div>
+          </template>
         </div>
-      </q-card-section>
-    </q-card>
-  </q-dialog>
+      </div>
+    </template>
+  </DSModal>
 </template>
 
-<script lang="ts" setup>
-  import { Ref } from 'vue';
-  import { ref, defineExpose, computed } from 'vue';
-  import { useFormatSecondsToNow } from '@/composables/formatTime';
+<script setup lang="ts">
+import { ref, defineExpose, computed } from 'vue';
+import { useFormatSecondsToNow } from '@/composables/formatTime';
+import FocusSummary from '@/interfaces/FocusSummary.interface';
 
-  import FocusSummary from '@/interfaces/FocusSummary.interface';
+import DSModal from '@/design-system/DSModal.vue';
+import DSBadge from '@/design-system/DSBadge.vue';
 
-  const show_modal = ref(false);
-  const selectedDate = ref('');
+const show_modal = ref(false);
+const selectedDate = ref('');
+const focusedSummary = ref({} as FocusSummary);
 
-  const focusedSummary: Ref<FocusSummary> = ref({} as FocusSummary);
+const openModal = ({ selected_date, focused_summary }: { selected_date: string, focused_summary: FocusSummary }) => {
+  selectedDate.value = selected_date;
+  focusedSummary.value = focused_summary;
+  show_modal.value = true;
+};
 
-  const openModal = ({ selected_date, focused_summary }: { selected_date: string, focused_summary: FocusSummary }) => {
-    selectedDate.value = selected_date;
-    focusedSummary.value = focused_summary;
+const getFormattedDuration = computed(() => {
+  return useFormatSecondsToNow({ seconds: focusedSummary.value.totalFocusTime });
+});
 
-    show_modal.value = true;
-  };
+const getFormattedDate = computed(() => {
+  if (selectedDate.value) {
+    let [year, month, date] = selectedDate.value.split('-');
+    month = (+month + 1).toString().padStart(2, '0');
+    date = date.padStart(2, '0');
+    return `${date}/${month}/${year}`;
+  }
 
-  const getFormattedDuration = computed(() => {
-    return useFormatSecondsToNow({ seconds: focusedSummary.value.totalFocusTime });
-  });
+  const current_date = new Date();
+  return `${current_date.getDate()}/${current_date.getMonth() + 1}/${current_date.getFullYear()}`;
+});
 
-  const getFormattedDate = computed(() => {
-    if (selectedDate.value) {
-      let [year, month, date] = selectedDate.value.split('-');
+defineExpose({
+  openModal,
+});
+</script>
 
-      month = (+month + 1).toString().padStart(2, '0');
-      date = date.padStart(2, '0');
+<style scoped lang="scss">
+.day-streak-modal {
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-md);
+  }
 
-      return `${date}/${month}/${year}`;
+  &__summary-item {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+
+    strong {
+      color: var(--text-primary);
     }
 
-    const current_date = new Date();
+    span {
+      font-weight: var(--font-medium);
+    }
+  }
 
-    return `${current_date.getDate()}/${current_date.getMonth() + 1}/${current_date.getFullYear()}`;
-  });
+  &__section {
+    margin-top: var(--space-6);
+  }
 
-  defineExpose({
-    openModal,
-  });
-</script>
+  &__section-title {
+    margin: 0 0 var(--space-3) 0;
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+  }
+
+  &__list {
+    margin: 0;
+    padding-left: var(--space-4);
+    list-style-type: none;
+
+    li {
+      padding: var(--space-2) 0;
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+
+      span {
+        display: block;
+      }
+    }
+  }
+
+  &__badges {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  &__empty {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+}
+</style>

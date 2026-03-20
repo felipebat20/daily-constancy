@@ -1,31 +1,34 @@
 <template>
-  <div
-    v-if="projects.length"
-    class="project-report-container"
-  >
-    <v-chart
-      class="chart"
-      :option="option"
-      autoresize
+  <div class="reports-page">
+    <DSPageHeader
+      title="Reports"
+      subtitle="Time distribution by project"
     />
-  </div>
 
-  <div
-    v-else
-    class="no-projects-container"
-  >
-    <div class="box">
-      <p class="is-size-4">
-        Create a project to see reports
-      </p>
-
-      <router-link
-        :to="{ name: 'Projects'}"
-        class="button is-link"
-      >
-        Go to projects
-      </router-link>
+    <div
+      v-if="projects.length"
+      class="reports-page__chart"
+    >
+      <v-chart
+        class="reports-page__chart-content"
+        :option="option"
+        autoresize
+      />
     </div>
+
+    <DSEmptyState
+      v-else
+      title="No Projects Found"
+      message="Create a project to see reports about your time distribution."
+      icon="bar_chart"
+    >
+      <DSButton
+        icon="folder"
+        label="Go to Projects"
+        variant="primary"
+        @click="$router.push('/projects')"
+      />
+    </DSEmptyState>
   </div>
 </template>
 
@@ -41,7 +44,10 @@ import {
 
 import VChart, { THEME_KEY } from 'vue-echarts';
 import { ref, provide, computed, onMounted } from 'vue';
-import type { Ref } from 'vue';
+
+import DSPageHeader from '@/design-system/DSPageHeader.vue';
+import DSEmptyState from '@/design-system/DSEmptyState.vue';
+import DSButton from '@/design-system/DSButton.vue';
 
 import { useStore } from '@/store';
 import { FETCH_PROJECTS, FETCH_TASKS } from '@/store/types/actions';
@@ -76,7 +82,7 @@ onMounted(async () => {
   ]);
 
   const chart_data = computed(() => {
-    const chart_data_value: Ref<chart_data_interface[]> = ref([]);
+    const chart_data_value: chart_data_interface[] = [];
 
     projects.value.forEach(proj => {
       const total_project_time_spent = tasks.value.reduce((accumulator: number, current_value: TaskInterface) => {
@@ -87,7 +93,7 @@ onMounted(async () => {
         return accumulator + 0;
       }, 0);
 
-      chart_data_value.value.push({ value: total_project_time_spent, name: proj.name });
+      chart_data_value.push({ value: total_project_time_spent, name: proj.name });
     });
 
     return chart_data_value;
@@ -97,6 +103,11 @@ onMounted(async () => {
     title: {
       text: 'Time by project',
       left: 'center',
+      textStyle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#1F2937',
+      },
     },
     tooltip: {
       trigger: 'item',
@@ -130,29 +141,35 @@ onMounted(async () => {
     ],
   };
 });
-
 </script>
 
-<style scoped>
-.chart { height: 70vh; }
-
-.project-report-container {
-  background-color: #100C2A;
-  height: 100vh;
-}
-
-.no-projects-container {
-  display: flex ;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  color: #FFF;
-}
-
-.box {
+<style scoped lang="scss">
+.reports-page {
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-8);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+
+  &__chart {
+    width: 100%;
+    height: 70vh;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+
+    &:hover {
+      box-shadow: var(--shadow-lg);
+    }
+  }
+
+  &__chart-content {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

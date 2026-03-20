@@ -1,12 +1,10 @@
-import { useRoute, useRouter } from 'vue-router';
+import { RouteLocationNormalized, Router } from 'vue-router';
 
+import { useQuasar } from 'quasar';
 import { jwt } from '@/static/storage-keys';
 
 export function handleUserLogout() {
-  const logout = ($q: any) => {
-    const route = useRoute();
-    const router = useRouter();
-
+  const logout = ($q: ReturnType<typeof useQuasar>, route: RouteLocationNormalized, router: Router) => {
     $q.cookies.remove(jwt);
 
     if (route.name !== 'login') {

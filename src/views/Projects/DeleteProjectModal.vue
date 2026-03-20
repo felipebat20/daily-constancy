@@ -1,54 +1,31 @@
 <template>
-  <q-dialog
+  <DSModal
     v-model="show_modal"
-    persistent
+    title="Delete Project"
+    :loading="request_pending"
+    confirm-label="Delete"
+    variant="danger"
+    @confirm="handleDeleteProject"
+    @cancel="handleCancel"
   >
-    <q-card :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }">
-      <q-card-section class="row items-center q-pb-md q-pt-sm">
-        <div class="text-h6">
-          Delete project
-        </div>
+    <template #body>
+      <p class="delete-project-modal__message">
+        Are you sure you want to delete project "{{ project.name }}"?
+      </p>
 
-        <q-space />
-
-        <q-btn
-          icon="close"
-          flat
-          class="q-pa-none"
-          v-close-popup
-        />
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        <p>Are you sure you want to delete the project "{{ project.name }}"?</p>
-        <p class="text-negative">
-          This action cannot be undone.
-        </p>
-      </q-card-section>
-
-      <q-card-actions align="right">
-        <q-btn
-          label="Cancel"
-          no-caps
-          v-close-popup
-        />
-
-        <q-btn
-          label="Delete"
-          color="negative"
-          no-caps
-          :loading="request_pending"
-          @click="handleDeleteProject"
-        />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+      <p class="delete-project-modal__warning">
+        This action cannot be undone.
+      </p>
+    </template>
+  </DSModal>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref, defineExpose } from 'vue';
 import type { Ref } from 'vue';
 import { useQuasar } from 'quasar';
+
+import DSModal from '@/design-system/DSModal.vue';
 
 import { useStore } from '@/store';
 import { DELETE_PROJECT } from '@/store/types/actions';
@@ -59,7 +36,7 @@ const $q = useQuasar();
 
 const show_modal = ref(false);
 const request_pending = ref(false);
-const project : Ref<ProjectInterface> = ref({} as ProjectInterface);
+const project: Ref<ProjectInterface> = ref({} as ProjectInterface);
 
 const handleDeleteProject = async () => {
   request_pending.value = true;
@@ -89,6 +66,10 @@ const handleDeleteProject = async () => {
   }
 };
 
+const handleCancel = () => {
+  show_modal.value = false;
+};
+
 const showModal = (delete_project: ProjectInterface) => {
   project.value = delete_project;
   show_modal.value = true;
@@ -96,3 +77,20 @@ const showModal = (delete_project: ProjectInterface) => {
 
 defineExpose({ showModal });
 </script>
+
+<style scoped lang="scss">
+.delete-project-modal {
+  &__message {
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--text-base);
+    color: var(--text-primary);
+  }
+
+  &__warning {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--danger);
+    font-weight: var(--font-medium);
+  }
+}
+</style>

@@ -3,123 +3,110 @@
     v-if="! $q.screen.gt.xs"
     class="top-bar"
   >
-    <div>
+    <div class="top-bar__left">
       <router-link
-        :style="{ height: '2rem', width: '2rem' }"
         to="/"
+        class="top-bar__logo"
       >
         <q-img
           src="../assets/daily-constancy.png"
-          alt="logo"
-          style="max-width: 2rem;"
+          alt="Daily Constancy logo"
+          class="top-bar__logo-img"
         />
       </router-link>
-    </div>
 
-    <p class="text-white m-0">
-      Daily Constancy
-    </p>
+      <span class="top-bar__title">
+        Daily Constancy
+      </span>
+    </div>
 
     <div>
       <q-btn
-        class="switch-theme button "
+        flat
+        round
+        dense
         @click="switchTheme"
+        aria-label="Toggle theme"
       >
         <q-icon
-          size="24px"
-          v-if="! dark_theme"
-          name="dark_mode"
+          :name="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
           color="white"
-        />
-
-        <q-icon
           size="24px"
-          v-else
-          name="light_mode"
-          color="white"
         />
 
         <q-tooltip
           anchor="center right"
           self="center left"
           :offset="[8, 8]"
-          class="bg-dark"
         >
-          {{ getThemeText }}
+          {{ $q.dark.isActive ? 'Switch to light theme' : 'Switch to dark theme' }}
         </q-tooltip>
       </q-btn>
     </div>
   </div>
 
-  <header :class="{ 'sidebar-mobile': ! $q.screen.gt.xs }">
+  <header :class="['sidebar', { 'sidebar--mobile': ! $q.screen.gt.xs }]">
     <div
       v-if="$q.screen.gt.xs"
-      class="flex justify-center"
+      class="sidebar__logo"
     >
-      <router-link
-        :style="{ height: '2rem', width: '2rem' }"
-        to="/"
-      >
+      <router-link to="/">
         <q-img
           src="../assets/daily-constancy.png"
-          class="q-mt-sm"
-          alt="logo"
-          style="max-width: 2rem;"
+          alt="Daily Constancy logo"
+          class="sidebar__logo-img"
         />
       </router-link>
     </div>
 
-    <MenuIndex />
+    <nav class="sidebar__nav">
+      <MenuIndex />
+    </nav>
 
     <div
       v-if="$q.screen.gt.xs"
-      class="bottom-buttons"
+      class="sidebar__actions"
     >
       <q-btn
-        class="switch-theme button "
+        flat
+        round
+        dense
         @click="switchTheme"
+        aria-label="Toggle theme"
       >
         <q-icon
-          size="24px"
-          v-if="! dark_theme"
-          name="dark_mode"
+          :name="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
           color="white"
-        />
-
-        <q-icon
           size="24px"
-          v-else
-          name="light_mode"
-          color="white"
         />
 
         <q-tooltip
           anchor="center right"
           self="center left"
           :offset="[8, 8]"
-          class="bg-dark"
         >
-          {{ getThemeText }}
+          {{ $q.dark.isActive ? 'Switch to light theme' : 'Switch to dark theme' }}
         </q-tooltip>
       </q-btn>
 
       <q-btn
         v-if="user_is_authenticated"
-        class="switch-theme button"
+        flat
+        round
         dense
         @click="handleLogout"
+        aria-label="Logout"
       >
         <q-icon
-          size="24px"
           name="logout"
           color="white"
+          size="24px"
         />
 
         <q-tooltip
           anchor="center right"
           self="center left"
           :offset="[8, 8]"
-          class="bg-dark"
         >
           Logout
         </q-tooltip>
@@ -130,147 +117,209 @@
 
 <script lang="ts">
   import { defineComponent, ref, onBeforeMount } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
   import { useQuasar } from 'quasar';
 
   import MenuIndex from '@/components/menu/MenuIndex.vue';
 
   import { jwtToken } from '@/hooks/verify_api';
-
   import { dark_theme as dark_theme_key } from '@/static/storage-keys';
-
-  import { handleUserLogout} from './menu/MenuMixin';
+  import { handleUserLogout } from './menu/MenuMixin';
 
   export default defineComponent({
     name: 'SideBar',
-    emits: ['onSwitchTheme'],
     components: { MenuIndex },
-    computed: {
-      getThemeText(): string {
-        if (this.dark_theme) {
-          return 'Switch to light theme';
-        }
 
-        return 'Switch to dark theme';
-      },
-    },
-
-    setup(props, { emit }) {
-      const { logout } = handleUserLogout();
-
+    setup() {
       const $q = useQuasar();
+      const route = useRoute();
+      const router = useRouter();
+      const { logout } = handleUserLogout();
       const user_is_authenticated = ref(!! jwtToken());
-      const dark_theme = ref(false);
 
       onBeforeMount(() => {
         const dark = localStorage.getItem(dark_theme_key);
-
         $q.dark.set(!! dark);
-        dark_theme.value = !! dark;
-        emit('onSwitchTheme', !! dark);
-
-        return dark_theme.value = !! dark;
+        document.body.classList.toggle('body--dark', !! dark);
       });
 
       const switchTheme = () => {
         $q.dark.toggle();
-        dark_theme.value = ! dark_theme.value;
-        emit('onSwitchTheme', dark_theme.value);
-        handleDarkThemeState(dark_theme.value);
-      };
+        const isDark = $q.dark.isActive;
+        document.body.classList.toggle('body--dark', isDark);
 
-      const handleDarkThemeState = (dark: boolean) => {
-        if (dark) {
-          return localStorage.setItem(dark_theme_key, '1');
+        if (isDark) {
+          localStorage.setItem(dark_theme_key, '1');
+        } else {
+          localStorage.removeItem(dark_theme_key);
         }
-
-        return localStorage.removeItem(dark_theme_key);
       };
 
       const handleLogout = () => {
-        logout($q);
+        logout($q, route, router);
       };
 
       return {
-        dark_theme,
-        switchTheme,
         user_is_authenticated,
-        handleLogout
+        switchTheme,
+        handleLogout,
       };
-    },
-
-    methods: {
-      getIsActive(path: string) {
-        return this.$route.path === path;
-      },
     },
   });
 </script>
 
-<style lang="scss" scoped>
-  header {
-    padding: .5rem;
-    background: #0d3b66;
+<style scoped lang="scss">
+  .top-bar {
     position: fixed;
-    height: 100vh;
-    width: 64px;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background-color: var(--primary);
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-4);
+    z-index: 100;
+    transition: background-color var(--transition-slow);
+    box-shadow: var(--shadow-md);
 
-  header h1, header button { text-align: center; }
+    &__left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
 
-  @media only screen and (max-width: 768px) {
-    header {
-      padding: 2.5rem;
-      height: auto;
+    &__logo {
+      display: flex;
+      align-items: center;
+      transition: transform var(--transition-base);
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    &__logo-img {
+      width: 2rem;
+      height: 2rem;
+      max-width: 2rem;
+    }
+
+    &__title {
+      color: white;
+      font-size: var(--text-base);
+      font-weight: var(--font-semibold);
+      letter-spacing: -0.01em;
     }
   }
 
-  .link { color: #fff; }
-  .bottom-buttons {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 72px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: auto;
-    margin-bottom: 30px;
-  }
+    align-items: center;
+    padding: var(--space-5) 0;
+    gap: var(--space-8);
+    z-index: 100;
+    transition: all var(--transition-slow);
+    box-shadow: var(--shadow-xl);
 
-  .sidebar-mobile {
-    bottom: 0;
-    z-index: 3;
-    width: 100%;
-    padding: 6px;
+    &__logo {
+      margin-top: 0;
+      transition: transform var(--transition-base);
+      
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
 
-    .menu {
-      ul {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        gap: 10px;
+    &__logo-img {
+      width: 2.25rem;
+      height: 2.25rem;
+      max-width: 2.25rem;
+    }
 
-        li a {
-          border-radius: 8px;
+    &__nav {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    &__actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    :deep(.q-btn) {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      transition: all var(--transition-base);
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    :deep(.q-icon) {
+      transition: transform var(--transition-base);
+    }
+
+    &--mobile {
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 64px;
+      flex-direction: row;
+      justify-content: center;
+      padding: 0 var(--space-4);
+      gap: 0;
+      background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+
+      .sidebar__logo {
+        display: none;
+      }
+
+      .sidebar__actions {
+        display: none;
+      }
+
+      :deep(.menu) {
+        ul {
+          display: flex;
+          width: 100%;
+          justify-content: space-around;
+          gap: var(--space-2);
+        }
+
+        a {
+          border-radius: var(--radius-lg);
         }
       }
     }
   }
 
-  .top-bar {
-    display: flex;
-    width: 100%;
-    position: fixed;
-    background: #0d3b66;
-    padding: 10px;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 3;
-
-    > div { display: flex; }
-  }
-
-  a.is-active {
-    background-color: #485fc7;
-    color: #fff;
+  @media only screen and (max-width: 768px) {
+    .sidebar:not(.sidebar--mobile) {
+      display: none;
+    }
   }
 </style>

@@ -7,7 +7,7 @@ export const getParsedCookies = () => {
   cookie.split(';').forEach((ck) => {
     const [key, value] = ck.split('=');
 
-    return Object.assign(parsed_cookies, { [key.trim()]: value });
+    Object.assign(parsed_cookies, { [key.trim()]: value });
   });
 
   return parsed_cookies;

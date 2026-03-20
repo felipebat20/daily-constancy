@@ -83,9 +83,30 @@ const cardStyle = computed(() => ({
 
 <style scoped lang="scss">
 .ds-card {
-  border-radius: var(--radius-lg);
-  background-color: var(--bg-primary);
-  transition: all 0.2s ease;
+  border-radius: var(--radius-xl);
+  background-color: var(--bg-card);
+  transition: all var(--transition-base);
+  border: 1px solid var(--border-color);
+
+  &.shadow-sm {
+    box-shadow: var(--shadow-sm);
+  }
+
+  &.shadow-md {
+    box-shadow: var(--shadow-md);
+  }
+
+  &.shadow-lg {
+    box-shadow: var(--shadow-lg);
+  }
+
+  &.shadow-xl {
+    box-shadow: var(--shadow-xl);
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+  }
 
   &__header {
     padding: var(--space-6);
@@ -100,9 +121,10 @@ const cardStyle = computed(() => ({
 
   &__title {
     margin: 0;
-    font-size: var(--text-lg);
-    font-weight: var(--font-semibold);
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
     color: var(--text-primary);
+    letter-spacing: -0.01em;
   }
 
   &__header-actions {
@@ -116,8 +138,9 @@ const cardStyle = computed(() => ({
   }
 
   &__footer {
-    padding: var(--space-4) var(--space-6);
+    padding: var(--space-5) var(--space-6);
     gap: var(--space-3);
+    border-top: 1px solid var(--divider-color);
   }
 
   &--no-divider {

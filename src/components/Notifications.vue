@@ -1,6 +1,6 @@
 <template>
-  <div class="notification">
-    <Notification
+  <div class="notifications-container">
+    <DSNotification
       v-for="notification in notifications"
       :key="notification.id"
       :notification="notification"
@@ -9,42 +9,28 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
-  import Notification from './shared/Notification.vue';
+import DSNotification from '@/design-system/DSNotification.vue';
 
-  import { useStore } from '../store';
+import { useStore } from '../store';
 
-  export default defineComponent({
-    name: 'ATNotifications',
-    components: { Notification },
-    setup() {
-      const store = useStore();
+export default defineComponent({
+  name: 'ATNotifications',
+  components: { DSNotification },
 
-      return {
-        notifications: computed(() => store.state.notifications),
-      };
-    },
-  });
+  setup() {
+    const store = useStore();
+
+    return {
+      notifications: computed(() => store.state.notifications),
+    };
+  },
+});
 </script>
 
 <style scoped>
-  .notification {
-    position: absolute;
-    right: 0;
-    width: 300px;
-    padding: 8px;
-    z-index: 1;
-    background: none;
-  }
-
-  .message-body { position: relative; overflow: hidden; }
-
-  .progress {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-    border-radius: 0;
-  }
+.notifications-container {
+  pointer-events: none;
+}
 </style>

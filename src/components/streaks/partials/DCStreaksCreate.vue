@@ -1,102 +1,99 @@
 <template>
-  <q-dialog
+  <DSModal
     v-model="show_modal"
-    persistent
+    title="New Streak"
+    :loading="request_pending"
+    confirm-label="Create Streak"
+    @confirm="handleCreateStreak"
+    @cancel="handleCancel"
   >
-    <q-card :style="{'min-width': ! $q.screen.gt.xs ? '100%' : '450px'}">
-      <q-card-section>
-        <div class="text-h6">
-          New streak
-        </div>
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        <q-input
+    <template #body>
+      <div class="create-streak-modal__fields">
+        <DSTextField
           v-model="streak_name"
+          label="Streak Name"
+          placeholder="Enter streak name"
+          icon="whatshot"
           autofocus
-          label="Name"
-          color="deep-orange-5"
-          @keyup.enter="show_modal = false"
+          @keyup.enter="handleCreateStreak"
+          aria-label="Streak name"
         />
-      </q-card-section>
 
-      <q-card-section class="q-pt-none">
-        <q-select
-          dense
+        <DSSelect
           v-model="projects_model"
-          multiple
           :options="getParsedProjects"
           label="Projects"
-          color="deep-orange-5"
-          options-dense
+          icon="folder"
+          multiple
           clearable
+          aria-label="Select projects"
         />
-      </q-card-section>
-
-      <q-card-actions
-        align="right"
-        class="text-primary"
-      >
-        <q-btn
-          flat
-          label="Cancel"
-          no-caps
-          v-close-popup
-        />
-
-        <q-btn
-          label="Create streak"
-          color="blue-9"
-          no-caps
-          :loading="request_pending"
-          @click="handleCreateStreak"
-        />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+      </div>
+    </template>
+  </DSModal>
 </template>
 
-<script lang="ts" setup>
-  import { ref, computed, defineExpose } from 'vue';
+<script setup lang="ts">
+import { ref, computed, defineExpose } from 'vue';
 
-  import { useStore } from '@/store';
+import DSModal from '@/design-system/DSModal.vue';
+import DSTextField from '@/design-system/DSTextField.vue';
+import DSSelect from '@/design-system/DSSelect.vue';
 
-  import { CREATE_STREAK } from '@/store/types/actions';
+import { useStore } from '@/store';
+import { CREATE_STREAK } from '@/store/types/actions';
 
-  const store = useStore();
-  const show_modal = ref(false);
-  const streak_name = ref('');
-  const projects_model = ref([] as { label: string, value: string }[]);
-  const request_pending = ref(false);
-  const projects = computed(() => store.state.project.projects);
+interface ProjectOption {
+  label: string;
+  value: number;
+}
 
-  const getParsedProjects = computed(() => {
-    const parsed_projects = [];
+const store = useStore();
+const show_modal = ref(false);
+const streak_name = ref('');
+const projects_model = ref<number[]>([]);
+const request_pending = ref(false);
+const projects = computed(() => store.state.project.projects);
 
-    parsed_projects.push(
-      ...projects.value.map((project) => ({
-        label: project.name,
-        value: project.id,
-      }))
-    );
+const getParsedProjects = computed<ProjectOption[]>(() => {
+  return projects.value.map((project) => ({
+    label: project.name,
+    value: project.id,
+  }));
+});
 
-    return parsed_projects;
-  });
+const handleCreateStreak = async () => {
+  request_pending.value = true;
 
-  const handleCreateStreak = async () => {
-    request_pending.value = true;
+  if (streak_name.value) {
+    await store.dispatch(CREATE_STREAK, {
+      name: streak_name.value,
+      projects: projects_model.value,
+    });
 
-    if (streak_name.value) {
-      await store.dispatch(CREATE_STREAK, {
-        name: streak_name.value,
-        projects: projects_model.value.map(project => project.value),
-      });
+    show_modal.value = false;
+    streak_name.value = '';
+    projects_model.value = [];
+  }
 
-      show_modal.value = false;
-    }
+  request_pending.value = false;
+};
 
-    request_pending.value = false;
-  };
+const handleCancel = () => {
+  show_modal.value = false;
+  streak_name.value = '';
+  projects_model.value = [];
+};
 
-  defineExpose({ show_modal });
+defineExpose({ show_modal });
 </script>
+
+<style scoped lang="scss">
+.create-streak-modal {
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+}
+</style>

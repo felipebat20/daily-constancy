@@ -1,107 +1,106 @@
 <template>
-  <q-dialog
+  <DSModal
     v-model="show_modal"
-    persistent
+    title="Update Streak"
+    :loading="request_pending"
+    confirm-label="Update Streak"
+    @confirm="handleCreateStreak"
+    @cancel="handleCancel"
   >
-    <q-card :style="{ minWidth: $q.screen.width > 450 ? '450px' : '100%' }">
-      <q-card-section>
-        <div class="text-h6">
-          Update streak
-        </div>
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        <q-input
+    <template #body>
+      <div class="edit-streak-modal__fields">
+        <DSTextField
           v-model="streak_name"
+          label="Streak Name"
+          placeholder="Enter streak name"
+          icon="whatshot"
           autofocus
-          label="Name"
-          @keyup.enter="show_modal = false"
+          @keyup.enter="handleCreateStreak"
+          aria-label="Streak name"
         />
-      </q-card-section>
 
-      <q-card-section class="q-pt-none">
-        <q-select
-          dense
+        <DSSelect
           v-model="projects_model"
-          multiple
           :options="getParsedProjects"
           label="Projects"
-          options-dense
+          icon="folder"
+          multiple
           clearable
+          aria-label="Select projects"
         />
-      </q-card-section>
-
-      <q-card-actions align="right">
-        <q-btn
-          no-caps
-          label="Cancel"
-          v-close-popup
-        />
-
-        <q-btn
-          color="green-5"
-          no-caps
-          label="Update streak"
-          :loading="request_pending"
-          @click="handleCreateStreak"
-        />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+      </div>
+    </template>
+  </DSModal>
 </template>
 
-<script lang="ts" setup>
-  import { ref, computed, defineExpose } from 'vue';
+<script setup lang="ts">
+import { ref, computed, defineExpose } from 'vue';
 
-  import StreakInterface from '@/interfaces/Streak.interface';
+import DSModal from '@/design-system/DSModal.vue';
+import DSTextField from '@/design-system/DSTextField.vue';
+import DSSelect from '@/design-system/DSSelect.vue';
 
-  import { useStore } from '@/store';
-  import { EDIT_STREAK } from '@/store/types/actions';
+import StreakInterface from '@/interfaces/Streak.interface';
 
-  const store = useStore();
-  const show_modal = ref(false);
-  const streak_name = ref('');
-  const projects_model = ref([] as { label: string, value: string }[]);
-  const request_pending = ref(false);
-  const projects = computed(() => store.state.project.projects);
-  const streak = ref({} as StreakInterface);
+import { useStore } from '@/store';
+import { EDIT_STREAK } from '@/store/types/actions';
 
-  const getParsedProjects = computed(() => {
-    const parsed_projects = [];
+interface ProjectOption {
+  label: string;
+  value: number;
+}
 
-    parsed_projects.push(
-      ...projects.value.map((project) => ({
-        label: project.name,
-        value: project.id,
-      }))
-    );
+const store = useStore();
+const show_modal = ref(false);
+const streak_name = ref('');
+const projects_model = ref<number[]>([]);
+const request_pending = ref(false);
+const projects = computed(() => store.state.project.projects);
+const streak = ref({} as StreakInterface);
 
-    return parsed_projects;
-  });
+const getParsedProjects = computed<ProjectOption[]>(() => {
+  return projects.value.map((project) => ({
+    label: project.name,
+    value: project.id,
+  }));
+});
 
-  const handleCreateStreak = async () => {
-    request_pending.value = true;
+const handleCreateStreak = async () => {
+  request_pending.value = true;
 
-    if (streak_name.value) {
-      await store.dispatch(EDIT_STREAK, {
-        id: streak.value.id,
-        name: streak_name.value,
-        projects: projects_model.value?.map(project => project.value) || [],
-      });
+  if (streak_name.value) {
+    await store.dispatch(EDIT_STREAK, {
+      id: streak.value.id,
+      name: streak_name.value,
+      projects: projects_model.value,
+    });
 
-      show_modal.value = false;
-    }
+    show_modal.value = false;
+  }
 
-    request_pending.value = false;
-  };
+  request_pending.value = false;
+};
 
-  const handleOpenModal = (updatable_streak: StreakInterface) => {
-    streak.value = updatable_streak;
-    streak_name.value = updatable_streak.name;
-    projects_model.value = updatable_streak.projects.map(project => ({ label: project.name, value: project.id }));
+const handleCancel = () => {
+  show_modal.value = false;
+};
 
-    show_modal.value = true;
-  };
+const handleOpenModal = (updatable_streak: StreakInterface) => {
+  streak.value = updatable_streak;
+  streak_name.value = updatable_streak.name;
+  projects_model.value = updatable_streak.projects.map(project => project.id);
+  show_modal.value = true;
+};
 
-  defineExpose({ show_modal, handleOpenModal });
+defineExpose({ show_modal, handleOpenModal });
 </script>
+
+<style scoped lang="scss">
+.edit-streak-modal {
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+}
+</style>

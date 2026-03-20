@@ -1,140 +1,139 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="flex items-center gap-2 justify-between">
+  <div class="timer">
     <TimerDisplay
       :time-in-seconds="timeInSeconds"
-      :has-dark-theme="true"
     />
 
-    <div class="flex gap-2">
-      <Button
-        :button="getPlayButton"
+    <div class="timer__actions">
+      <DSButton
+        :loading="playRequestPending"
+        :disabled="timeIsRunning"
+        icon="play_arrow"
+        :label="$q.screen.gt.sm ? 'Start' : undefined"
+        variant="success"
         @click="createTask"
+        aria-label="Start timer"
       />
 
-      <Button
-        :button="getStopButton"
+      <DSButton
+        :loading="stopRequestPending"
+        :disabled="! timeIsRunning"
+        icon="stop"
+        :label="$q.screen.gt.sm ? 'Stop' : undefined"
+        variant="danger"
         @click="stopTimer"
+        aria-label="Stop timer"
       />
     </div>
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, computed, watch, ref, onBeforeUnmount } from 'vue';
+<script setup lang="ts">
+import { computed, watch, ref, onBeforeUnmount } from 'vue';
 
-  import TimerDisplay from './TimerDisplay.vue';
-  import Button from './shared/Button.vue';
+import TimerDisplay from './TimerDisplay.vue';
+import DSButton from '@/design-system/DSButton.vue';
 
-  import { useStore } from '@/store';
+import { useStore } from '@/store';
 
-  import ButtonInterface from '../interfaces/Button.interface';
+interface Props {
+  taskName: string;
+  playRequestPending: boolean;
+  stopRequestPending: boolean;
+}
 
-  export default defineComponent({
-    name: 'ATTimer',
-    components: {
-      TimerDisplay,
-      Button,
-    },
+const props = withDefaults(defineProps<Props>(), {
+  taskName: '',
+  playRequestPending: false,
+  stopRequestPending: false,
+});
 
-    props: {
-      taskName: {
-        type: String,
-        default: '',
-      },
+const emit = defineEmits(['timeIsFinished', 'startTimer']);
 
-      playRequestPending: {
-        type: Boolean,
-        default: false,
-      },
+const store = useStore();
+const timer = ref(0);
+const timeInSeconds = ref(0);
 
-      stopRequestPending: {
-        type: Boolean,
-        default: false,
-      }
-    },
+const active_task = computed(() => store.state.task.active_task);
 
-    emits: ['timeIsFinished', 'startTimer'],
-    computed: {
-      getTimeIsRunning(): boolean {
-        return !! this.timer;
-      },
+const timeIsRunning = computed(() => !! timer.value);
 
-      getPlayButton(): ButtonInterface {
-        return {
-          loading: this.playRequestPending,
-          disabled: this.getTimeIsRunning,
-          icon: 'fas fa-play',
-          label: 'Play'
-        };
-      },
+const stopTimer = (): void => {
+  emit('timeIsFinished', timeInSeconds.value);
+  handleTimeIsFinished();
+};
 
-      getStopButton(): ButtonInterface {
-        return {
-          loading: this.stopRequestPending,
-          disabled: ! this.getTimeIsRunning,
-          icon: 'fas fa-stop',
-          label: 'Stop'
-        };
-      },
-    },
+const createTask = () => {
+  emit('startTimer');
+};
 
-    setup(props, { emit }) {
-      const store = useStore();
-      const timer = ref(0);
-      const timeInSeconds = ref(0);
+const handleTimeIsFinished = () => {
+  clearInterval(timer.value);
+  timer.value = 0;
+  timeInSeconds.value = 0;
+  document.title = 'Daily Constancy';
+};
 
-      const active_task = computed(() => store.state.task.active_task);
+const startTimer = () => {
+  timer.value = setInterval(() => {
+    timeInSeconds.value = timeInSeconds.value + 1;
+    const display_timer = new Date(timeInSeconds.value * 1000).toISOString().substring(11, 19);
 
-      const stopTimer = (): void => {
-        emit('timeIsFinished', timeInSeconds.value);
-        handleTimeIsFinished();
-      };
+    document.title = `${display_timer} - ${props.taskName}`;
+  }, 1000);
+};
 
-      const createTask = () => {
-        emit('startTimer');
-      };
+onBeforeUnmount(() => {
+  if (timer.value) {
+    handleTimeIsFinished();
+  }
+});
 
-      const handleTimeIsFinished = () => {
-        clearInterval(timer.value);
-        timer.value = 0;
-        timeInSeconds.value = 0;
-        document.title = 'Daily Constancy';
-      };
+watch(active_task, (state, prev_state) => {
+  if (state.id && state.id !== prev_state.id) {
+    clearInterval(timer.value);
+    timeInSeconds.value = (active_task.value.total_time_spent || active_task.value.time_spent || 0);
+    startTimer();
+  }
 
-      const startTimer = () => {
-        timer.value = setInterval(() => {
-          timeInSeconds.value = timeInSeconds.value + 1;
-          const display_timer = new Date(timeInSeconds.value * 1000).toISOString().substring(11, 19);
-
-          document.title = `${display_timer} - ${props.taskName}`;
-        }, 1000);
-      };
-
-      onBeforeUnmount(() => {
-        if (timer.value) {
-          handleTimeIsFinished();
-        }
-      });
-
-      watch(active_task, (state, prev_state) => {
-        if (state.id && state.id !== prev_state.id) {
-          clearInterval(timer.value);
-          timeInSeconds.value = (active_task.value.total_time_spent || active_task.value.time_spent || 0);
-          startTimer();
-        }
-
-        if (! state.id) {
-          handleTimeIsFinished();
-        }
-      });
-
-      return {
-        stopTimer,
-        startTimer,
-        createTask,
-        timeInSeconds,
-        timer,
-      };
-    },
-  });
+  if (! state.id) {
+    handleTimeIsFinished();
+  }
+});
 </script>
+
+<style scoped lang="scss">
+.timer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base);
+
+  &:hover {
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-accent-focus);
+  }
+
+  @media (min-width: 768px) {
+    justify-content: space-between;
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--space-3);
+
+    :deep(.ds-button) {
+      min-width: 100px;
+      height: 44px;
+      font-weight: var(--font-semibold);
+      letter-spacing: 0.01em;
+    }
+  }
+}
+</style>
